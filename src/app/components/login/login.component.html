@@ -1,0 +1,17 @@
+<div>
+    <div>
+        <p id="errorMsg" *ngIf="showErrorMsg">
+            Greska prilikom unosa podataka! Pokusajte ponovo!
+        </p>
+    </div>
+    <div>
+        <label>Korisnicko Ime:</label><br>
+        <input type="text" [(ngModel)]="username" placeholder="korisnicko ime"><br>
+    </div>
+    <div>
+        <Label>Lozinka:</Label><br>
+        <input type="password" [(ngModel)]="password" placeholder="lozinka"><br>
+    </div>
+        <button (click)="login()"> Prijavljivanje </button><br>
+        <button (click)="register()"> Registracija </button><br>
+</div>

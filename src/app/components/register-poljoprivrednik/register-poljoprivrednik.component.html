@@ -1,0 +1,35 @@
+<div>
+    <div>
+        <label>Ime:</label><br>
+        <input type="text" [(ngModel)]="ime" placeholder="Milan"><br>
+    </div>
+    <div>
+        <label>Prezime:</label><br>
+        <input type="text" [(ngModel)]="prezime" placeholder="Milovanovic"><br>
+    </div>
+    <div>
+        <label>Korisnicko Ime:</label><br>
+        <input type="text" [(ngModel)]="korisnickoIme" placeholder="mmilo123"><br>
+    </div>
+    <div>
+        <label>Lozinka:</label><br>
+        <input type="password" [(ngModel)]="lozinka" placeholder="********"><br>
+    </div>
+    <div>
+        <label>Datum Rodjenja:</label><br>
+        <input type="date" [(ngModel)]="datumRodjenja"><br>
+    </div>
+    <div>
+        <label>Mesto Rodjenja:</label><br>
+        <input type="text" [(ngModel)]="mestoRodjenja" placeholder="Novi Sad"><br>
+    </div>
+    <div>
+        <label>Kontakt Telefon:</label><br>
+        <input type="number" [(ngModel)]="kontaktTelefon" placeholder="0038162478987"><br>
+    </div>
+    <div>
+        <label>email Adresa:</label><br>
+        <input type="email" [(ngModel)]="emailAdresa" placeholder="milo998@gmail.com"><br>
+    </div>
+    <button (click)="register()"> Zavrsi registraciju </button>
+</div>

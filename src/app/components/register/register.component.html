@@ -1,0 +1,20 @@
+<div>
+    <p>
+        Registracija novog korisnika
+    </p>
+    <span class="izbor">
+        <p>
+            Poljoprivrednik
+        </p>
+        <input type="radio" id="poljoprivrednik" (change)="tipKorisnika($event)" name="tipKorisnika"/>
+    </span>
+    <span class="izbor">
+        <p>
+            Preduzece
+        </p>
+        <input type="radio" id="preduzece" (change)="tipKorisnika($event)" name="tipKorisnika"/>
+    </span> <br>
+    <app-register-preduzece *ngIf="showPreduzece"></app-register-preduzece>
+    <app-register-poljoprivrednik *ngIf="showPoljoprivrednik"></app-register-poljoprivrednik>
+    <button (click)="back()">Nazad</button>
+</div>
