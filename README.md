@@ -7,3 +7,5 @@ Frontend: Angular
 Backend: Node.js  
 Middleware: Express  
 Database: Not Determined  
+
+# WORK IN PROGRESS / Learning phase
