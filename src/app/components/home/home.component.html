@@ -1,0 +1,7 @@
+<div>
+    <button (click)='showBooks()'>Books</button>
+    <button (click)='showEvents()'>Events</button>
+    <button *ngIf="isAdmin || isUser" (click)='showProfile()'>Profile</button>
+    <button (click)='logOut()'>{{ logButton }}</button>
+</div>
+<app-profile *ngIf="showProfileBoolean"></app-profile>

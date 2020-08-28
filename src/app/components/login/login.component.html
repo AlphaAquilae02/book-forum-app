@@ -12,6 +12,8 @@
         <Label>Lozinka:</Label><br>
         <input type="password" [(ngModel)]="password" placeholder="lozinka"><br>
     </div>
+        <a (click)="changePassword()">Zaboravio sam lozinku!</a><br>
         <button (click)="login()"> Prijavljivanje </button><br>
         <button (click)="register()"> Registracija </button><br>
+        <button (click)="guest()"> Nastavi kao gost </button><br>
 </div>

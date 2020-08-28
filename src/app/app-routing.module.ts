@@ -1,36 +1,29 @@
 import { NgModule, Component } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AdminComponent } from './components/admin/admin.component';
 import { LoginComponent } from './components/login/login.component';
-import { RegisterPreduzeceComponent } from './components/register-preduzece/register-preduzece.component';
-import { RegisterPoljoprivrednikComponent } from './components/register-poljoprivrednik/register-poljoprivrednik.component';
-import { PreduzeceComponent } from './components/preduzece/preduzece.component';
-import { PoljoprivrednikComponent } from './components/poljoprivrednik/poljoprivrednik.component';
-import { LoginChangePasswordComponent } from './components/login-change-password/login-change-password.component';
 import { RegisterComponent } from './components/register/register.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { HomeComponent } from './components/home/home.component';
 
 /* U sustini ovo je URL nastavak na inicijalnih 'localhost:4200/' i poziv komponente koja odgovara trazenoj stranici */
 const routes: Routes = [
   {
-    path:'' , component: LoginComponent
+    path:'' , redirectTo: 'login', pathMatch: 'full'
   },
   {
-    path:'change/password' , component: LoginChangePasswordComponent
+    path:'login' , component: LoginComponent
   },
   {
-    path:'change' , redirectTo: '', pathMatch: 'full'
+    path:'change' , redirectTo: 'login', pathMatch: 'full'
   },
   {
-    path:'admin' , component: AdminComponent
-  },
-  {
-    path:'preduzece' , component: PreduzeceComponent
-  },
-  {
-    path:'poljoprivrednik' , component: PoljoprivrednikComponent
+    path:'change/password' , component: ChangePasswordComponent
   },
   {
     path:'register' , component:RegisterComponent
+  },
+  {
+    path:'home' , component: HomeComponent
   },
 ];
 

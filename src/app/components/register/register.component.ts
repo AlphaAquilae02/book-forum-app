@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
+import { Korisnik } from 'src/app/modules/Korisnik';
 
 @Component({
   selector: 'app-register',
@@ -7,38 +9,41 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  showPreduzece:boolean;
-  showPoljoprivrednik:boolean;
+  korisnik:Korisnik
 
-  constructor(private router:Router) { 
-    this.showPreduzece = false;
-    this.showPoljoprivrednik = false;
-
+  constructor(private router:Router, private userService:UserService) {
+    this.korisnik = {
+      id: 0,
+      AT: 1,
+      ime: '',
+      prezime:' ',
+      slika: '',
+      korisnickoIme: '',
+      lozinka: '',
+      datumRodjenja: '',
+      grad: '',
+      drzava: '',
+      email: '',
+      procitaneKnjige: [],
+      citamKnjige: [],
+      zaCitanjeKnjige: []
+    }
   }
 
   ngOnInit(): void {
   }
 
-  /* Registruje promenu na radio button elementu i poziva metodu sa prosledjivanjem elementa kroz parametar */
-  tipKorisnika(evt):void {
-    var target = evt.target;
-    let elementId: string = (evt.target as Element).id;
-    if (elementId == "preduzece") {
-      if (target.checked) {
-        this.showPoljoprivrednik = false;
-        this.showPreduzece = true;
-      }
-    }
-    else if (elementId == "poljoprivrednik") {
-      if (target.checked) {
-        this.showPreduzece = false;
-        this.showPoljoprivrednik = true;
-      }
-    }
+  register():void {
+    // Odradi prvo provere sve koje su potrebne nad unetim poljima
+
+    // Nakon provere pozovi servis koji dodaje novog korisnika
+    this.userService.dodajKorisnika(this.korisnik)
+
+    console.log('register')
+    //console.log(this.service.korisnikLista[this.service.korisnikLista.length - 1])
   }
 
   back():void {
-    this.router.navigate(['']);
+    this.router.navigate([''])
   }
-
 }

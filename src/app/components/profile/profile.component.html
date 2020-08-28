@@ -1,0 +1,42 @@
+<div>
+    <img src="https://bit.ly/2G5Fz3u" alt="Girl in a jacket" width="178" height="100"><br>
+    <form action="/action_page.php">
+        <label>Ime: </label>
+        <input type="text" [(ngModel)]="ulogovaniKorisnik.ime" [ngModelOptions]="{standalone: true}" value="{{ ulogovaniKorisnik.ime }}" disabled="{{ editDisabled }}"><br>
+        
+        <label>Prezime: </label>
+        <input type="text" [(ngModel)]="ulogovaniKorisnik.prezime" [ngModelOptions]="{standalone: true}" value="{{ ulogovaniKorisnik.prezime }}" disabled="{{ editDisabled }}"><br>
+        
+        <label>Datum Rodjenja: </label>
+        <input type="text" [(ngModel)]="ulogovaniKorisnik.datumRodjenja" [ngModelOptions]="{standalone: true}" value="{{ ulogovaniKorisnik.datumRodjenja }}" disabled="{{ editDisabled }}"><br>
+        
+        <label>Grad: </label>
+        <input type="text" [(ngModel)]="ulogovaniKorisnik.grad" [ngModelOptions]="{standalone: true}" value="{{ ulogovaniKorisnik.grad }}" disabled="{{ editDisabled }}"><br>
+        
+        <label>email: </label>
+        <input type="text" [(ngModel)]="ulogovaniKorisnik.email" [ngModelOptions]="{standalone: true}" value="{{ ulogovaniKorisnik.email }}" disabled="{{ editDisabled }}"><br>
+        
+        <label>Last Active: OVDE DODAJ KADA JE POSLEDNJI PUT BIO LIVE</label><br>
+        <label>Online: </label><span class="onlineIndicator"></span><br>
+        <button (click)='promeniPodatke()'>Promeni podatke</button>
+      </form>
+      <ul>
+        <label>Procitao:</label>
+        <li *ngFor="let number of ulogovaniKorisnik.procitaneKnjige">
+          <a [routerLink]="" (click)='otvoriKnjigu()'>{{ pokupiImenaKnjiga(number) }}</a>
+        </li>
+      </ul>
+      <ul>
+        <label>Citam:</label>
+        <li *ngFor="let number of ulogovaniKorisnik.citamKnjige">
+          <a [routerLink]="" (click)='otvoriKnjigu()'>{{ pokupiImenaKnjiga(number) }}</a>
+        </li>
+      </ul>
+      <ul>
+        <label>Za citanje:</label>
+        <li *ngFor="let number of ulogovaniKorisnik.zaCitanjeKnjige">
+          <a [routerLink]="" (click)='otvoriKnjigu()'>{{ pokupiImenaKnjiga(number) }}</a>
+          <button (click)='ukloniSaListeZaCitanje(number)'>Ukloni sa liste</button>
+        </li>
+      </ul>
+</div>
