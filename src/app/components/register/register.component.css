@@ -1,3 +1,16 @@
-.izbor {
+.mat-button-base {
+    margin: 8px 8px 8px 0;
+  }
+  
+  .content {
     display: inline-block;
-}
+    width: 70%;
+  }
+  
+  .mat-card {
+    text-align: center;
+  }
+  
+  #mainContent {
+    text-align: center;
+  }

@@ -10,13 +10,11 @@ import { DataService } from 'src/app/services/data.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  showErrorMsg:boolean
   username:string
   password:string
   private validator:Validator
 
   constructor(private router:Router, private userService:UserService, private data:DataService) { 
-    this.showErrorMsg = false
     this.username = ''
     this.password = ''
     this.validator = new Validator()
@@ -43,12 +41,8 @@ export class LoginComponent implements OnInit {
   
   login():void {
     var userFound:boolean = false
-    if ( this.validator.validateUsername(this.username) && this.validator.validatePassword(this.password) ) {
-      this.showErrorMsg = false;
+    if (this.validator.validateUsername(this.username) && this.validator.validatePassword(this.password) ) {
       userFound = this.userService.nadjiKorisnika(this.username, this.password)
-    }
-    else {
-      this.showErrorMsg = true;
     }
     
     if (userFound) {

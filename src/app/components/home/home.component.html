@@ -1,7 +1,14 @@
-<div>
-    <button (click)='showBooks()'>Books</button>
-    <button (click)='showEvents()'>Events</button>
-    <button *ngIf="isAdmin || isUser" (click)='showProfile()'>Profile</button>
-    <button (click)='logOut()'>{{ logButton }}</button>
-</div>
-<app-profile *ngIf="showProfileBoolean"></app-profile>
+<mat-tab-group mat-align-tabs="center">
+    <mat-tab label="Books">
+        <app-book></app-book>
+    </mat-tab>
+    <mat-tab label="Events">Content 2</mat-tab>
+    <mat-tab *ngIf="isAdmin || isUser" label="Profile">
+        <app-profile></app-profile>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <span (click)='logOut()'>{{ logButton }}</span>
+        </ng-template>
+    </mat-tab>
+</mat-tab-group>

@@ -1,40 +1,63 @@
-<div>
-    <div>
-        <label>Ime:</label><br>
-        <input type="text" [(ngModel)]="korisnik.ime" placeholder="Milan"><br>
+<div id="mainContent">
+    <div class="content">
+        <br>
+        <mat-card class="mat-elevation-z8">
+
+            <mat-form-field appearance="legacy">
+                <mat-label>Slika:</mat-label>
+                <input matInput [(ngModel)]="korisnik.slika">
+            </mat-form-field>
+            <br>
+
+            <mat-form-field appearance="legacy">
+                <mat-label>Ime:</mat-label>
+                <input matInput [(ngModel)]="korisnik.ime" placeholder="Milan" required>
+            </mat-form-field>
+
+            <mat-form-field appearance="legacy">
+                <mat-label>Prezime:</mat-label>
+                <input matInput [(ngModel)]="korisnik.prezime" placeholder="Milovanovic" required>
+            </mat-form-field>
+            <br>
+
+            <mat-form-field appearance="legacy">
+                <mat-label>Korisnicko Ime:</mat-label>
+                <input matInput [(ngModel)]="korisnik.korisnickoIme" placeholder="mmilo123" required>
+            </mat-form-field>
+
+            <mat-form-field appearance="legacy">
+                <mat-label>Lozinka:</mat-label>
+                <input matInput [(ngModel)]="korisnik.lozinka" placeholder="********" type="password" required>
+            </mat-form-field>
+            <br>
+
+            <mat-form-field appearance="legacy">
+                <mat-label>Datum Rodjenja:</mat-label>
+                <input matInput [matDatepicker]="picker" [(ngModel)]="korisnik.datumRodjenja" required>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <br>
+
+            <mat-form-field appearance="legacy">
+                <mat-label>Mesto Prebivanja:</mat-label>
+                <input matInput [(ngModel)]="korisnik.grad" placeholder="Novi Sad" required>
+            </mat-form-field>
+
+            <mat-form-field appearance="legacy">
+                <mat-label>Drzava Prebivanja:</mat-label>
+                <input matInput [(ngModel)]="korisnik.drzava" placeholder="Srbija" required>
+            </mat-form-field>
+            <br>
+
+            <mat-form-field appearance="legacy">
+                <mat-label>email Adresa:</mat-label>
+                <input matInput [(ngModel)]="korisnik.email" placeholder="milo998@gmail.com" required>
+            </mat-form-field>
+            <br>
+
+            <button mat-raised-button (click)="register()"> Zavrsi registraciju </button><br>
+            <button mat-raised-button (click)="back()">Nazad</button>
+        </mat-card>
     </div>
-    <div>
-        <label>Prezime:</label><br>
-        <input type="text" [(ngModel)]="korisnik.prezime" placeholder="Milovanovic"><br>
-    </div>
-    <div>
-        <label>Slika:</label><br>
-        <input type="image" [(ngModel)]="korisnik.slika"><br>
-    </div>
-    <div>
-        <label>Korisnicko Ime:</label><br>
-        <input type="text" [(ngModel)]="korisnik.korisnickoIme" placeholder="mmilo123"><br>
-    </div>
-    <div>
-        <label>Lozinka:</label><br>
-        <input type="password" [(ngModel)]="korisnik.lozinka" placeholder="********"><br>
-    </div>
-    <div>
-        <label>Datum Rodjenja:</label><br>
-        <input type="date" [(ngModel)]="korisnik.datumRodjenja"><br>
-    </div>
-    <div>
-        <label>Mesto Prebivanja:</label><br>
-        <input type="text" [(ngModel)]="korisnik.grad" placeholder="Novi Sad"><br>
-    </div>
-    <div>
-        <label>Drzava Prebivanja:</label><br>
-        <input type="text" [(ngModel)]="korisnik.drzava" placeholder="Srbija"><br>
-    </div>
-    <div>
-        <label>email Adresa:</label><br>
-        <input type="email" [(ngModel)]="korisnik.email" placeholder="milo998@gmail.com"><br>
-    </div>
-    <button (click)="register()"> Zavrsi registraciju </button><br>
-    <button (click)="back()">Nazad</button>
 </div>

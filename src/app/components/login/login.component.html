@@ -1,19 +1,21 @@
-<div>
-    <div>
-        <p id="errorMsg" *ngIf="showErrorMsg">
-            Greska prilikom unosa podataka! Pokusajte ponovo!
-        </p>
-    </div>
-    <div>
-        <label>Korisnicko Ime:</label><br>
-        <input type="text" [(ngModel)]="username" placeholder="korisnicko ime"><br>
-    </div>
-    <div>
-        <Label>Lozinka:</Label><br>
-        <input type="password" [(ngModel)]="password" placeholder="lozinka"><br>
-    </div>
-        <a (click)="changePassword()">Zaboravio sam lozinku!</a><br>
-        <button (click)="login()"> Prijavljivanje </button><br>
-        <button (click)="register()"> Registracija </button><br>
-        <button (click)="guest()"> Nastavi kao gost </button><br>
+<div id="mainContent">
+  <div class="content">
+    <br>
+    <mat-card class="mat-elevation-z8">
+      <mat-form-field appearance="legacy">
+        <mat-label>Korisnicko Ime:</mat-label>
+        <input matInput [(ngModel)]="username" required>
+      </mat-form-field>
+      <br>
+      <mat-form-field appearance="legacy">
+        <mat-label>Lozinka:</mat-label>
+        <input matInput [(ngModel)]="password" type="password" required>
+      </mat-form-field><br>
+
+      <a mat-button (click)="changePassword()" target="">Zaboravio sam lozinku!</a><br>
+      <button mat-raised-button (click)="login()">Prijavljivanje</button><br>
+      <button mat-raised-button (click)="register()">Registracija</button><br>
+      <button mat-raised-button (click)="guest()">Nastavi kao gost</button><br>
+    </mat-card>
+  </div>
 </div>

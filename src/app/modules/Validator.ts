@@ -2,7 +2,7 @@ export class Validator {
     private usernameRegEx:RegExp;
 
     constructor () {
-        this.usernameRegEx = new RegExp(/\w{2}/gi) // minimum number of char (8)
+        this.usernameRegEx = new RegExp(/\w{8}/gi) // minimum number of char (8)
     }
 
     onInit() {

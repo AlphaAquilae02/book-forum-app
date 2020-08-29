@@ -9,7 +9,7 @@ export class UserService {
   korisnikLista:Korisnik[]
 
   constructor(private data:DataService) { 
-    this.fillPreduzeceLista(); // temp za punjenje
+    this.fillPreduzeceLista() // temp za punjenje
   }
 
   dodajKorisnika(korisnik:Korisnik):void {
