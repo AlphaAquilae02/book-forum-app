@@ -2,12 +2,12 @@
     <img src="https://bit.ly/2G5Fz3u" alt="ninja" width="178" height="100"><br>
 
     <h3><b>{{ ucitanaKnjiga.naziv }}</b></h3>
-    <div *ngIf="ulogovaniKorisnik.id>0 && ucitanaKnjiga.odobrena">
-        <mat-slide-toggle [(ngModel)]="procitao" [disabled]="procitao">Procitao</mat-slide-toggle>
-        <mat-slide-toggle [(ngModel)]="cita">Trenutno citam</mat-slide-toggle>
-        <mat-slide-toggle [(ngModel)]="zaCitanje">Procitacu je</mat-slide-toggle>
+    <div *ngIf="ulogovaniKorisnik.AT>0 && ucitanaKnjiga.odobrena">
+        <mat-slide-toggle [(ngModel)]="procitao" (ngModelChange)="saveChanges()" [disabled]="procitao">Procitao</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="cita" (ngModelChange)="saveChanges()" [disabled]="procitao">Trenutno citam</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="zaCitanje" (ngModelChange)="saveChanges()" [disabled]="procitao">Procitacu je</mat-slide-toggle>
     </div>
-    <div *ngIf="cita">
+    <div *ngIf="cita && ucitanaKnjiga.odobrena">
         <br>
         <mat-progress-bar mode="determinate" [value]="progressValue/ucitanaKnjiga.brStrana*100"></mat-progress-bar>
         <input matInput type="text" appearance="textfield" [(ngModel)]="progressValue" value="{{ progressValue }}">

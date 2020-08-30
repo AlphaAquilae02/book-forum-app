@@ -12,6 +12,12 @@ export class UserService {
     this.fillPreduzeceLista() // temp za punjenje
   }
 
+  sacuvajKorisnika(korisnik:Korisnik):void {
+    this.korisnikLista.filter(x => x.id == korisnik.id)[0]
+    this.korisnikLista[this.korisnikLista.indexOf(this.korisnikLista.filter(x => x.id == korisnik.id)[0])] = korisnik
+    console.log(this.korisnikLista)
+  }
+
   dodajKorisnika(korisnik:Korisnik):void {
     this.korisnikLista.push(korisnik)
   }

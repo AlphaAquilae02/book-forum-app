@@ -3,31 +3,29 @@
         <br>
         <mat-card class="mat-elevation-z8">
 
-            <mat-form-field appearance="legacy">
-                <mat-label>Slika:</mat-label>
-                <input matInput [(ngModel)]="korisnik.slika">
-            </mat-form-field>
             <br>
 
             <mat-form-field appearance="legacy">
                 <mat-label>Ime:</mat-label>
-                <input matInput [(ngModel)]="korisnik.ime" placeholder="Milan" required>
+                <input matInput [(ngModel)]="korisnik.ime" required>
             </mat-form-field>
 
             <mat-form-field appearance="legacy">
                 <mat-label>Prezime:</mat-label>
-                <input matInput [(ngModel)]="korisnik.prezime" placeholder="Milovanovic" required>
+                <input matInput [(ngModel)]="korisnik.prezime" required>
             </mat-form-field>
             <br>
 
             <mat-form-field appearance="legacy">
                 <mat-label>Korisnicko Ime:</mat-label>
-                <input matInput [(ngModel)]="korisnik.korisnickoIme" placeholder="mmilo123" required>
+                <input matInput [(ngModel)]="korisnik.korisnickoIme" required>
+                <mat-error>Neispravno uneto korisnicko ime</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="legacy">
                 <mat-label>Lozinka:</mat-label>
-                <input matInput [(ngModel)]="korisnik.lozinka" placeholder="********" type="password" required>
+                <input matInput type="password" [(ngModel)]="korisnik.lozinka" required>
+                <mat-error>Neispravno uneta lozinka</mat-error>
             </mat-form-field>
             <br>
 
@@ -41,22 +39,28 @@
 
             <mat-form-field appearance="legacy">
                 <mat-label>Mesto Prebivanja:</mat-label>
-                <input matInput [(ngModel)]="korisnik.grad" placeholder="Novi Sad" required>
+                <input matInput [(ngModel)]="korisnik.grad" required>
             </mat-form-field>
 
             <mat-form-field appearance="legacy">
                 <mat-label>Drzava Prebivanja:</mat-label>
-                <input matInput [(ngModel)]="korisnik.drzava" placeholder="Srbija" required>
+                <input matInput [(ngModel)]="korisnik.drzava" required>
             </mat-form-field>
             <br>
 
             <mat-form-field appearance="legacy">
                 <mat-label>email Adresa:</mat-label>
-                <input matInput [(ngModel)]="korisnik.email" placeholder="milo998@gmail.com" required>
+                <input matInput [(ngModel)]="korisnik.email" required>
+                <mat-error>Neispravno unet email</mat-error>
             </mat-form-field>
             <br>
 
-            <button mat-raised-button (click)="register()"> Zavrsi registraciju </button><br>
+            <div class="captcha">
+                <ngx-recaptcha2 #captchaElem [siteKey]="siteKey" (success)="captchaCheck = true">
+                </ngx-recaptcha2>
+            </div>
+
+            <button mat-raised-button *ngIf="captchaCheck" (click)="register()"> Zavrsi registraciju </button><br>
             <button mat-raised-button (click)="back()">Nazad</button>
         </mat-card>
     </div>

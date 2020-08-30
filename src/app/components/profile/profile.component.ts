@@ -1,11 +1,11 @@
-import { Component, OnInit, ɵNOT_FOUND_CHECK_ONLY_ELEMENT_INJECTOR, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { DataService } from 'src/app/services/data.service';
 import { Korisnik } from 'src/app/modules/Korisnik';
 import { BookService } from 'src/app/services/book.service';
 import { CommentService } from 'src/app/services/comment.service';
 import { Komentar } from 'src/app/modules/Komentar';
 import { Knjiga } from 'src/app/modules/Knjiga';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router'
+import { ActivatedRoute } from '@angular/router'
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -14,20 +14,19 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  korisnik: Korisnik
+  @Output() onBookRequest = new EventEmitter<string>()
+  @Input() korisnik: Korisnik
+
+
   editDisabled: boolean
   commentsTableColumns: string[]
   booksTableReadColumns: string[]
   booksTableReadingColumns: string[]
   booksTableToReadColumns: string[]
 
-  constructor(
-    private data: DataService,
-    private bookService: BookService,
-    private commentService: CommentService,
-    private route: ActivatedRoute,
-    private userService: UserService) 
-    {
+  askedBook: string
+
+  constructor(private data: DataService, private bookService: BookService, private commentService: CommentService) {
     this.editDisabled = true
     this.commentsTableColumns = ['knjigaId', 'komentar', 'ocena', 'zanr']
     this.booksTableReadColumns = ['procitaneKnjige']
@@ -36,11 +35,12 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      if (params['username'] != null)
-        this.korisnik = this.userService.nadjiKorisnika(params['username'])
-      else this.korisnik = this.data.dohvatiKorisnika()
-    })
+    this.prikaziKorisnika()
+  }
+
+  prikaziKorisnika(): void {
+    if (this.korisnik == null)
+      this.korisnik = this.data.dohvatiKorisnika()
   }
 
   promeniPodatke(): void {
@@ -56,10 +56,6 @@ export class ProfileComponent implements OnInit {
     this.data.postaviKorisnika(this.korisnik)
   }
 
-  otvoriKnjigu(): void {
-    console.log('otovori knjigu')
-  }
-
   pokupiKomentare(): Komentar[] {
     return this.commentService.nadjiKorisnikKomentare(this.korisnik)
   }
@@ -73,6 +69,11 @@ export class ProfileComponent implements OnInit {
     if (this.korisnik.id == ulogovaniKorisnik.id)
       return true
     else return false
+  }
+
+  // Sends name of the book user is requesting
+  otvoriKnjigu(naziv: string): void {
+    this.onBookRequest.emit(naziv)
   }
 
 }

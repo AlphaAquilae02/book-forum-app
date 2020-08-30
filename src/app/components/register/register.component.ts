@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
-import { Korisnik } from 'src/app/modules/Korisnik';
+import { Component, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
+import { UserService } from 'src/app/services/user.service'
+import { Korisnik } from 'src/app/modules/Korisnik'
+import { ValidatorService } from 'src/app/services/validator.service'
 
 @Component({
   selector: 'app-register',
@@ -9,9 +10,19 @@ import { Korisnik } from 'src/app/modules/Korisnik';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  siteKey:string
+  captchaCheck:boolean
   korisnik:Korisnik
 
-  constructor(private router:Router, private userService:UserService) {
+  usernameCheck:boolean
+  passwordCheck:boolean
+  emailCheck:boolean
+
+
+  constructor(private router:Router, private userService:UserService, private validatorService: ValidatorService) {
+    this.siteKey = "6Le2UcUZAAAAAHKv4dh2moTO_XPyNeDIbb4pY7ew"
+    this.captchaCheck = false
+    
     this.korisnik = {
       id: 0,
       AT: 1,
@@ -34,16 +45,19 @@ export class RegisterComponent implements OnInit {
   }
 
   register():void {
+    this.usernameCheck = this.validatorService.validateUsername(this.korisnik.korisnickoIme)
+    this.passwordCheck = this.validatorService.validatePassword(this.korisnik.lozinka)
+    this.emailCheck = this.validatorService.validateEmail(this.korisnik.email)
+    
     // Odradi prvo provere sve koje su potrebne nad unetim poljima
-
-    // Nakon provere pozovi servis koji dodaje novog korisnika
-    this.userService.dodajKorisnika(this.korisnik)
-
-    console.log('register')
-    //console.log(this.service.korisnikLista[this.service.korisnikLista.length - 1])
+    if(this.usernameCheck && this.passwordCheck && this.emailCheck) {
+      this.userService.dodajKorisnika(this.korisnik)
+      this.router.navigate(['/login'])
+    }
   }
 
   back():void {
-    this.router.navigate([''])
+    this.router.navigate(['/login'])
   }
+
 }

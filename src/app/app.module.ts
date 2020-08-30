@@ -16,6 +16,7 @@ import { MatDividerModule } from '@angular/material/divider'
 import { MatListModule } from '@angular/material/list'
 import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import { MatProgressBarModule } from '@angular/material/progress-bar'
+import { NgxCaptchaModule } from 'ngx-captcha'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
@@ -29,7 +30,8 @@ import { ProfileComponent } from './components/profile/profile.component'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BookComponent } from './components/book/book.component';
 import { BooksPageComponent } from './components/books-page/books-page.component';
-import { AddBookComponent } from './components/add-book/add-book.component'
+import { AddBookComponent } from './components/add-book/add-book.component';
+import { ProfilesPageComponent } from './components/profiles-page/profiles-page.component'
 
 
 @NgModule({
@@ -45,6 +47,7 @@ import { AddBookComponent } from './components/add-book/add-book.component'
     BookComponent,
     BooksPageComponent,
     AddBookComponent,
+    ProfilesPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -65,7 +68,8 @@ import { AddBookComponent } from './components/add-book/add-book.component'
     MatDividerModule,
     MatListModule,
     MatSlideToggleModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    NgxCaptchaModule
   ],
   providers: [],
   bootstrap: [AppComponent]

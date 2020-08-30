@@ -4,12 +4,12 @@
     <mat-card class="mat-elevation-z8">
       <mat-form-field appearance="legacy">
         <mat-label>Korisnicko Ime:</mat-label>
-        <input matInput [(ngModel)]="username" required>
+        <input matInput [(ngModel)]="username" required (keydown.enter)="login()">
       </mat-form-field>
       <br>
       <mat-form-field appearance="legacy">
         <mat-label>Lozinka:</mat-label>
-        <input matInput [(ngModel)]="password" type="password" required>
+        <input matInput [(ngModel)]="password" type="password" required (keydown.enter)="login()">
       </mat-form-field><br>
 
       <a mat-button (click)="changePassword()" target="">Zaboravio sam lozinku!</a><br>

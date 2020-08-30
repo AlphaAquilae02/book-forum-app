@@ -1,0 +1,14 @@
+<div class="content">
+    <br>
+    <mat-card class="mat-elevation-z8">
+        <mat-form-field appearance="legacy">
+            <mat-label>Pretraga</mat-label>
+            <input matInput [(ngModel)]="searchQuery" value="{{ searchQuery }}" (keydown.enter)="search(searchQuery)">
+            <mat-icon matSuffix>search</mat-icon>
+            <mat-hint>ukucajte korisnicko ime</mat-hint>
+        </mat-form-field>
+    </mat-card>
+    <app-profile *ngIf="showProfile" (onBookRequest)="requestedBook($event)" [korisnik]="korisnik"></app-profile>
+    <br>
+
+</div>

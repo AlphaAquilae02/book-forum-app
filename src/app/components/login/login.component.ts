@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Validator } from '../../modules/Validator';
 import { UserService } from 'src/app/services/user.service';
 import { DataService } from 'src/app/services/data.service';
+import { ValidatorService } from 'src/app/services/validator.service'
 
 @Component({
   selector: 'app-login',
@@ -12,12 +12,11 @@ import { DataService } from 'src/app/services/data.service';
 export class LoginComponent implements OnInit {
   username:string
   password:string
-  private validator:Validator
 
-  constructor(private router:Router, private userService:UserService, private data:DataService) { 
+  constructor(private router:Router, private userService:UserService, private data:DataService,
+    private validatorService: ValidatorService) { 
     this.username = ''
     this.password = ''
-    this.validator = new Validator()
   }
 
   ngOnInit(): void {
@@ -41,7 +40,7 @@ export class LoginComponent implements OnInit {
   
   login():void {
     var userFound:boolean = false
-    if (this.validator.validateUsername(this.username) && this.validator.validatePassword(this.password) ) {
+    if (this.validatorService.validateUsername(this.username) && this.validatorService.validatePassword(this.password) ) {
       userFound = this.userService.korisnikLogIn(this.username, this.password)
     }
     

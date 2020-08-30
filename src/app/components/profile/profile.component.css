@@ -24,5 +24,8 @@
 
 .content {
   margin: auto;
-  width: 70%;
+}
+
+.mat-form-field {
+  margin: 0px 5px 0px 5px;
 }
