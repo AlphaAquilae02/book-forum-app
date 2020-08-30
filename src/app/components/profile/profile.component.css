@@ -23,6 +23,6 @@
 }
 
 .content {
-  display: inline-block;
+  margin: auto;
   width: 70%;
 }

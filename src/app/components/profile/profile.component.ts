@@ -5,9 +5,8 @@ import { BookService } from 'src/app/services/book.service';
 import { CommentService } from 'src/app/services/comment.service';
 import { Komentar } from 'src/app/modules/Komentar';
 import { Knjiga } from 'src/app/modules/Knjiga';
-import { DataSource } from '@angular/cdk/table';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router'
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -15,14 +14,20 @@ import { MatPaginator } from '@angular/material/paginator';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  ulogovaniKorisnik:Korisnik
-  editDisabled:boolean
-  commentsTableColumns:string[]
-  booksTableReadColumns:string[]
-  booksTableReadingColumns:string[]
-  booksTableToReadColumns:string[]
+  korisnik: Korisnik
+  editDisabled: boolean
+  commentsTableColumns: string[]
+  booksTableReadColumns: string[]
+  booksTableReadingColumns: string[]
+  booksTableToReadColumns: string[]
 
-  constructor(private data:DataService, private bookService:BookService, private commentService:CommentService) { 
+  constructor(
+    private data: DataService,
+    private bookService: BookService,
+    private commentService: CommentService,
+    private route: ActivatedRoute,
+    private userService: UserService) 
+    {
     this.editDisabled = true
     this.commentsTableColumns = ['knjigaId', 'komentar', 'ocena', 'zanr']
     this.booksTableReadColumns = ['procitaneKnjige']
@@ -31,32 +36,43 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.ulogovaniKorisnik = this.data.dohvatiKorisnika()
+    this.route.queryParams.subscribe(params => {
+      if (params['username'] != null)
+        this.korisnik = this.userService.nadjiKorisnika(params['username'])
+      else this.korisnik = this.data.dohvatiKorisnika()
+    })
   }
 
-  promeniPodatke():void {
+  promeniPodatke(): void {
     this.editDisabled = !this.editDisabled
   }
 
-  pokupiImenaKnjiga(id:number):string {
-    return this.bookService.nadjiKnjigu(id).naziv
+  pokupiImenaKnjiga(id: number): string {
+    return this.bookService.nadjiKnjiguId(id).naziv
   }
 
-  ukloniSaListeZaCitanje(id:number):void {
-    this.ulogovaniKorisnik.zaCitanjeKnjige.splice(this.ulogovaniKorisnik.zaCitanjeKnjige.findIndex(x => x == id), 1)
-    this.data.postaviKorisnika(this.ulogovaniKorisnik)
+  ukloniSaListeZaCitanje(id: number): void {
+    this.korisnik.zaCitanjeKnjige.splice(this.korisnik.zaCitanjeKnjige.findIndex(x => x == id), 1)
+    this.data.postaviKorisnika(this.korisnik)
   }
 
-  otvoriKnjigu():void {
+  otvoriKnjigu(): void {
     console.log('otovori knjigu')
   }
 
-  pokupiKomentare():Komentar[] {
-    return this.commentService.nadjiKorisnikKomentare(this.ulogovaniKorisnik)
+  pokupiKomentare(): Komentar[] {
+    return this.commentService.nadjiKorisnikKomentare(this.korisnik)
   }
 
-  pokupiKnjigu(id:number):Knjiga {
-    return this.bookService.nadjiKnjigu(id)
+  pokupiKnjigu(id: number): Knjiga {
+    return this.bookService.nadjiKnjiguId(id)
+  }
+
+  authenticateUser(): boolean {
+    var ulogovaniKorisnik = this.data.dohvatiKorisnika()
+    if (this.korisnik.id == ulogovaniKorisnik.id)
+      return true
+    else return false
   }
 
 }

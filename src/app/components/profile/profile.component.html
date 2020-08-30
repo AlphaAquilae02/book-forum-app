@@ -8,45 +8,45 @@
   <mat-card class="mat-elevation-z8">
     <mat-form-field appearance="legacy">
       <mat-label>Ime:</mat-label>
-      <input matInput [(ngModel)]="ulogovaniKorisnik.ime" value="{{ ulogovaniKorisnik.ime }}"
+      <input matInput [(ngModel)]="korisnik.ime" value="{{ korisnik.ime }}"
         disabled="{{ editDisabled }}">
     </mat-form-field>
 
     <mat-form-field appearance="legacy">
       <mat-label>Prezime:</mat-label>
-      <input matInput [(ngModel)]="ulogovaniKorisnik.prezime" value="{{ ulogovaniKorisnik.prezime }}"
+      <input matInput [(ngModel)]="korisnik.prezime" value="{{ korisnik.prezime }}"
         disabled="{{ editDisabled }}">
     </mat-form-field>
     <br>
 
     <mat-form-field appearance="legacy">
       <mat-label>Datum Rodjenja:</mat-label>
-      <input matInput [(ngModel)]="ulogovaniKorisnik.datumRodjenja" value="{{ ulogovaniKorisnik.datumRodjenja }}"
+      <input matInput [(ngModel)]="korisnik.datumRodjenja" value="{{ korisnik.datumRodjenja }}"
         disabled="{{ editDisabled }}">
     </mat-form-field>
 
     <mat-form-field appearance="legacy">
       <mat-label>Grad:</mat-label>
-      <input matInput [(ngModel)]="ulogovaniKorisnik.grad" value="{{ ulogovaniKorisnik.grad }}"
+      <input matInput [(ngModel)]="korisnik.grad" value="{{ korisnik.grad }}"
         disabled="{{ editDisabled }}">
     </mat-form-field>
     <br>
 
     <mat-form-field appearance="legacy">
       <mat-label>email:</mat-label>
-      <input matInput [(ngModel)]="ulogovaniKorisnik.email" value="{{ ulogovaniKorisnik.email }}"
+      <input matInput [(ngModel)]="korisnik.email" value="{{ korisnik.email }}"
         disabled="{{ editDisabled }}">
     </mat-form-field>
     <br>
 
     <label>Last Active: OVDE DODAJ KADA JE POSLEDNJI PUT BIO LIVE</label><br>
     <label>Online: </label><span class="onlineIndicator"></span><br>
-    <button mt-raised-button (click)='promeniPodatke()'>Promeni podatke</button>
+    <button mt-raised-button *ngIf="authenticateUser()" (click)='promeniPodatke()'>Promeni podatke</button>
   </mat-card>
   <br>
 
   <mat-card class="mat-elevation-z8">
-    <table mat-table [dataSource]='ulogovaniKorisnik.procitaneKnjige' class="specialTable">
+    <table mat-table [dataSource]='korisnik.procitaneKnjige' class="specialTable">
 
       <ng-container matColumnDef="procitaneKnjige">
         <th mat-header-cell *matHeaderCellDef> Procitane knjige: </th>
@@ -59,7 +59,7 @@
       <tr mat-row *matRowDef="let row; columns: booksTableReadColumns;"></tr>
     </table>
 
-    <table mat-table [dataSource]='ulogovaniKorisnik.citamKnjige' class="specialTable">
+    <table mat-table [dataSource]='korisnik.citamKnjige' class="specialTable">
 
       <ng-container matColumnDef="citamKnjige">
         <th mat-header-cell *matHeaderCellDef> Trenutno se citaju: </th>
@@ -72,7 +72,7 @@
       <tr mat-row *matRowDef="let row; columns: booksTableReadingColumns;"></tr>
     </table>
 
-    <table mat-table [dataSource]='ulogovaniKorisnik.zaCitanjeKnjige' class="specialTable">
+    <table mat-table [dataSource]='korisnik.zaCitanjeKnjige' class="specialTable">
 
       <ng-container matColumnDef="zaCitanjeKnjige">
         <th mat-header-cell *matHeaderCellDef> Za citanje: </th>

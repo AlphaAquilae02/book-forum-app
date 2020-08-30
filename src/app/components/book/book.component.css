@@ -1,0 +1,20 @@
+.customLabel {
+    padding-left: 5px;
+}
+
+.specialTable {
+    margin: auto;
+}
+
+.mat-header-cell {
+    text-align: center;
+}
+
+.mat-slide-toggle {
+    padding-right: 5px;
+}
+
+.customInput {
+    width: 90%;
+}
+

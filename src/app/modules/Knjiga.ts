@@ -7,4 +7,6 @@ export interface Knjiga {
     zanr:Array<string>
     opis:string
     prosecnaOcena:number
+    brStrana:number
+    odobrena:boolean
 }

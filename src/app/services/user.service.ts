@@ -21,7 +21,15 @@ export class UserService {
     this.korisnikLista.splice(index, 1)
   }
 
-  nadjiKorisnika(username:string, password:string):boolean {
+  nadjiKorisnika(username:string):Korisnik {
+    return this.korisnikLista.filter(x => x.korisnickoIme == username)[0]
+  }
+
+  nadjiKorisnikaId(id:number):Korisnik {
+    return this.korisnikLista.filter(x => x.id == id)[0]
+  }
+
+  korisnikLogIn(username:string, password:string):boolean {
     var userFound = this.korisnikLista.filter(x => x.korisnickoIme == username && x.lozinka == password)
     if (userFound.length > 0) {
       this.data.postaviKorisnika(userFound[0])

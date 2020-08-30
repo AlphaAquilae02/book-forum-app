@@ -11,10 +11,25 @@ export class BookService {
     this.fillKnjigeLista();
   }
 
-  nadjiKnjigu(id:number):Knjiga {
-    var userFound = this.knjigeLista.filter(x => x.id == id)
-    if (userFound.length > 0) {
-      return userFound[0]
+  // knjiga param treba da se posalje u bazu
+  dodajKnjigu(knjiga:Knjiga):void {
+    this.knjigeLista.push(knjiga)
+  }
+
+  nadjiKnjiguId(id:number):Knjiga {
+    var bookFound = this.knjigeLista.filter(x => x.id == id)
+    if (bookFound.length > 0) {
+      return bookFound[0]
+    }
+    else {
+      return null
+    }
+  }
+
+  nadjiKnjiguNaziv(naziv:string):Knjiga {
+    var bookFound = this.knjigeLista.filter(x => x.naziv == naziv)
+    if (bookFound.length > 0) {
+      return bookFound[0]
     }
     else {
       return null
@@ -31,7 +46,9 @@ export class BookService {
         datumIzdavanja: '01/03/1945',
         zanr: ['Istorija', 'Fikcija'],
         opis: 'bla bla bla',
-        prosecnaOcena: 4.5
+        prosecnaOcena: 4.5,
+        brStrana: 574,
+        odobrena: true
       },
       {
         id: 2,
@@ -41,7 +58,9 @@ export class BookService {
         datumIzdavanja: '01/03/2015',
         zanr: ['Fantastika'],
         opis: 'blu blu blu',
-        prosecnaOcena: 4.2
+        prosecnaOcena: 4.2,
+        brStrana: 300,
+        odobrena: true
       },
       {
         id: 3,
@@ -51,7 +70,9 @@ export class BookService {
         datumIzdavanja: '01/03/2020',
         zanr: ['Erotika'],
         opis: 'ble ble ble',
-        prosecnaOcena: 3.2
+        prosecnaOcena: 3.2,
+        brStrana: 800,
+        odobrena: false
       }
     ]
   }

@@ -10,8 +10,12 @@ import { MatTableModule } from '@angular/material/table'
 import { MatCardModule } from '@angular/material/card'
 import { MatPaginatorModule } from '@angular/material/paginator'
 import { MatDatepickerModule } from '@angular/material/datepicker'
-import { MatNativeDateModule } from '@angular/material/core';
-
+import { MatNativeDateModule } from '@angular/material/core'
+import { MatIconModule } from '@angular/material/icon'
+import { MatDividerModule } from '@angular/material/divider'
+import { MatListModule } from '@angular/material/list'
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
+import { MatProgressBarModule } from '@angular/material/progress-bar'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
@@ -23,7 +27,9 @@ import { HomeComponent } from './components/home/home.component'
 import { UserDirective } from './components/user.directive'
 import { ProfileComponent } from './components/profile/profile.component'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BookComponent } from './components/book/book.component'
+import { BookComponent } from './components/book/book.component';
+import { BooksPageComponent } from './components/books-page/books-page.component';
+import { AddBookComponent } from './components/add-book/add-book.component'
 
 
 @NgModule({
@@ -37,6 +43,8 @@ import { BookComponent } from './components/book/book.component'
     UserDirective,
     ProfileComponent,
     BookComponent,
+    BooksPageComponent,
+    AddBookComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,7 +60,12 @@ import { BookComponent } from './components/book/book.component'
     MatCardModule,
     MatPaginatorModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatIconModule,
+    MatDividerModule,
+    MatListModule,
+    MatSlideToggleModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

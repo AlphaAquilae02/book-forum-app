@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Komentar } from '../modules/Komentar';
 import { DataService } from './data.service';
 import { Korisnik } from '../modules/Korisnik';
+import { Knjiga } from '../modules/Knjiga';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +22,17 @@ export class CommentService {
 
   }
 
-  izmeniKomentar():void {
+  izmeniKomentar(komentar:string, ocena:number, korisnikId:number, knjigaId:number):void {
+    this.komentarLista.filter(x => x.korisnikId == korisnikId).filter(y => y.knjigaId == knjigaId)[0].komentar = komentar
+    this.komentarLista.filter(x => x.korisnikId == korisnikId).filter(y => y.knjigaId == knjigaId)[0].ocena = ocena
+  }
 
+  nadjiKomentar(korisnikId:number, knjigaId:number):Komentar {
+    var pronadjeniKomentari = this.komentarLista.filter(x => x.korisnikId == korisnikId).filter(y => y.knjigaId == knjigaId)
+    if (pronadjeniKomentari.length > 0) {
+      return pronadjeniKomentari[0]
+    }
+    else return null
   }
 
   nadjiKorisnikKomentare(korisnik:Korisnik):Komentar[] {
@@ -30,7 +40,15 @@ export class CommentService {
     if (pronadjeniKomentari.length > 0) {
       return pronadjeniKomentari
     }
-    else return null
+    else return []
+  }
+
+  nadjiKnjigaKomentare(knjiga:Knjiga):Komentar[] {
+    var pronadjeniKomentari = this.komentarLista.filter(x => x.knjigaId == knjiga.id)
+    if (pronadjeniKomentari.length > 0) {
+      return pronadjeniKomentari
+    }
+    else return []
   }
 
   fillKomentariLista():void {

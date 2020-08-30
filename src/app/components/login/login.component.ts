@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
   login():void {
     var userFound:boolean = false
     if (this.validator.validateUsername(this.username) && this.validator.validatePassword(this.password) ) {
-      userFound = this.userService.nadjiKorisnika(this.username, this.password)
+      userFound = this.userService.korisnikLogIn(this.username, this.password)
     }
     
     if (userFound) {

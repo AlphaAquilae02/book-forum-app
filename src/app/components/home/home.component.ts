@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    switch(this.data.dohvatiKorisnika().id) {
+    switch(this.data.dohvatiKorisnika().AT) {
       case 1: this.isUser = true
         this.logButton = 'Log Out'
       break
