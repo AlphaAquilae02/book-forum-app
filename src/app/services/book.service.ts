@@ -5,18 +5,18 @@ import { Knjiga } from '../modules/Knjiga';
   providedIn: 'root'
 })
 export class BookService {
-  knjigeLista:Knjiga[]
+  knjigeLista: Knjiga[]
 
-  constructor() { 
-    this.fillKnjigeLista();
+  constructor() {
+    this.fillKnjigeLista()
   }
 
   // knjiga param treba da se posalje u bazu
-  dodajKnjigu(knjiga:Knjiga):void {
+  dodajKnjigu(knjiga: Knjiga): void {
     this.knjigeLista.push(knjiga)
   }
 
-  nadjiKnjiguId(id:number):Knjiga {
+  nadjiKnjiguId(id: number): Knjiga {
     var bookFound = this.knjigeLista.filter(x => x.id == id)
     if (bookFound.length > 0) {
       return bookFound[0]
@@ -26,7 +26,7 @@ export class BookService {
     }
   }
 
-  nadjiKnjiguNaziv(naziv:string):Knjiga {
+  nadjiKnjiguNaziv(naziv: string): Knjiga {
     var bookFound = this.knjigeLista.filter(x => x.naziv == naziv)
     if (bookFound.length > 0) {
       return bookFound[0]
@@ -36,7 +36,17 @@ export class BookService {
     }
   }
 
-  fillKnjigeLista():void {
+  // Returns list of books based on searchQuery where searchQuery matches searchParam.value
+  nadjiKnjigu(searchParam: string, searchQuery: string): Array<Knjiga> {
+    if (Array.isArray(this.knjigeLista[0][searchParam]))
+      return this.knjigeLista.filter(x => x[searchParam].some(element => {
+        return (element == searchQuery)
+      }))
+    else
+      return this.knjigeLista.filter(x => x[searchParam] == searchQuery)
+  }
+
+  fillKnjigeLista(): void {
     this.knjigeLista = [
       {
         id: 1,

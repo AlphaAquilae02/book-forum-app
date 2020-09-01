@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Input, Output, EventEmitter, OnDestroy } 
 import { Korisnik } from 'src/app/modules/Korisnik';
 import { UserService } from 'src/app/services/user.service';
 import { ProfileComponent } from '../profile/profile.component';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-profiles-page',
@@ -9,41 +10,48 @@ import { ProfileComponent } from '../profile/profile.component';
   styleUrls: ['./profiles-page.component.css']
 })
 export class ProfilesPageComponent implements OnInit, OnDestroy {
-  @ViewChild(ProfileComponent) child!: ProfileComponent
-  @Input() requestedUser: string
-  @Output() onDestroy = new EventEmitter<any>()
+  @ViewChild(ProfileComponent) profileChild: ProfileComponent
   @Output() goToBook = new EventEmitter<any>()
 
-  showProfile: boolean
-  searchQuery: string
+  requestedUser: string
   korisnik: Korisnik
 
-  constructor(private userService:UserService) {
-    this.showProfile = true
+  showUser: boolean
+  searchObject: string
+  searchParams: Array<string>
+  linkParam: string
+  
+
+  constructor(private userService:UserService, private data:DataService) {
+    this.showUser = true
+    this.searchObject = "profil"
+    this.searchParams = [
+      "ime", "prezime", "korisnickoIme"
+    ]
+    this.linkParam = this.searchParams[2]
    }
 
   ngOnInit(): void {
-    if (this.requestedUser != undefined) 
-      this.search(this.requestedUser)
+    this.data.requestedUser.subscribe(requestedUser => this.requestedUser = requestedUser)
+    if (this.requestedUser != "")
+      this.openProfile()
   }
 
   ngOnDestroy(): void {
-    this.onDestroy.emit()
+    this.data.changeRequestedUser("")
   }
 
-  // Triggered when user submits searchQuery or when parent calls from profile.component
-  search(query: string): void {
-    var temp = this.userService.nadjiKorisnika(query)
-    if (temp != null) {
-      this.showProfile = true
-      this.korisnik = temp
-      if (this.child)
-        this.child.prikaziKorisnika()
-    }
+  openProfile(): void {
+    console.log(this.korisnik)
+    console.log(this.requestedUser)
+    this.showUser = true
+    this.korisnik = this.userService.nadjiKorisnikaKorisnickoIme(this.requestedUser)
+    console.log(this.korisnik)
+    if (this.profileChild)
+      this.profileChild.prikaziKorisnika()
   }
 
-  requestedBook($event) {
-    this.goToBook.emit($event)
+  openBook() {
+    this.goToBook.emit()
   }
-
 }

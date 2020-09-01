@@ -13,46 +13,26 @@ export class HomeComponent implements OnInit {
   selectedTab = new FormControl(0);
   logButton: string
 
-  requestedUser: string
-  requestedBook: string
+  searchTypes: Array<string>
 
   constructor(private router: Router, private data: DataService) {
+    this.searchTypes = ["knjiga", "profil"]
   }
 
-  // Triggered on component initialization
   ngOnInit(): void {
     this.setTabs()
   }
 
-  // Triggered when user clicks "Log Out" button
   logOut(): void {
     this.router.navigate(['/login']);
   }
 
-  // Triggered when user clicks link to book in profile.component
-  // Triggered when profile.component emits message
-  goToRequestedUser($event) {
-    this.requestedUser = $event
+  goToProfileTab() {
     this.selectedTab.setValue(2)
   }
 
-  // Triggered when profile.component destroys
-  // Triggered when profile.component emits message
-  profileChildDestroyed($event) {
-    this.requestedUser = ""
-  }
-
-  // Triggered when user clicks link to book in profile.component
-  // Triggered when profile.component emits message
-  goToRequestedBook($event) {
-    this.requestedBook = $event
+  goToBookTab() {
     this.selectedTab.setValue(0)
-  }
-
-  // Triggered when books.component destroys
-  // Triggered when books.component emits message
-  bookChildDestroyed($event) {
-    this.requestedBook = ""
   }
 
   // To be called on init 

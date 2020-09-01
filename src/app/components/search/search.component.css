@@ -1,0 +1,15 @@
+.mat-card {
+    text-align: center;
+}
+
+.content {
+    margin: auto;
+}
+
+.mat-form-field {
+    width: 45%;
+}
+
+.mat-radio-button  {
+    margin-left: 15px;
+}

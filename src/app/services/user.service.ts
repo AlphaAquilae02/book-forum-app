@@ -27,8 +27,25 @@ export class UserService {
     this.korisnikLista.splice(index, 1)
   }
 
-  nadjiKorisnika(username:string):Korisnik {
-    return this.korisnikLista.filter(x => x.korisnickoIme == username)[0]
+  nadjiKorisnika(searchParam: string, searchQuery: string): Array<Korisnik> {
+    if (Array.isArray(this.korisnikLista[0][searchParam]))
+      return this.korisnikLista.filter(x => x[searchParam].some(element => {
+        return (element == searchQuery)
+      }))
+    else
+      return this.korisnikLista.filter(x => x[searchParam] == searchQuery)
+  }
+
+  // nadjiKorisnika(username:string):Array<Korisnik> {
+  //   return this.korisnikLista.filter(x => x.korisnickoIme == username)
+  // }
+
+  nadjiKorisnikaKorisnickoIme(korisnickoIme: string): Korisnik {
+    var userFound = this.korisnikLista.filter(x => x.korisnickoIme == korisnickoIme)
+    if (userFound.length > 0)
+      return userFound[0]
+    else
+      return null
   }
 
   nadjiKorisnikaId(id:number):Korisnik {
@@ -71,7 +88,7 @@ export class UserService {
         id: 2,
         AT: 2,
         ime: 'Rory',
-        prezime:' Wolk',
+        prezime:'Wolk',
         slika: 'gay',
         korisnickoIme: 'rorynius',
         lozinka: 'asd',

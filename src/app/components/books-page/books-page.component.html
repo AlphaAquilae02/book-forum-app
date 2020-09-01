@@ -1,16 +1,7 @@
 <div class="content">
-  <br>
-  <mat-card class="mat-elevation-z8">
-    <mat-form-field appearance="legacy">
-      <mat-label>Pretraga</mat-label>
-      <input matInput [(ngModel)]="searchQuery" value="{{ searchQuery }}" (keydown.enter)="search(searchQuery)">
-      <mat-icon matSuffix>search</mat-icon>
-      <mat-hint>ukucajte naziv knjige</mat-hint>
-    </mat-form-field>
-  </mat-card>
-  <br>
+  <app-search (open)="openBook()" [searchObject]="searchObject" [searchParams]="searchParams" [linkParam]="linkParam"></app-search>
   <mat-card *ngIf="showBook" class="mat-elevation-z8">
-    <app-book (onUserRequest)="requestedUser($event)" [ucitanaKnjiga]="ucitanaKnjiga"></app-book>
+    <app-book (openProfile)="openProfile()" [ucitanaKnjiga]="ucitanaKnjiga"></app-book>
   </mat-card>
   <br>
   <mat-card *ngIf="showAddBook && AT!=0" class="mat-elevation-z8">

@@ -14,7 +14,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  @Output() onBookRequest = new EventEmitter<string>()
+  @Output() openBook = new EventEmitter<string>()
   @Input() korisnik: Korisnik
 
 
@@ -71,9 +71,9 @@ export class ProfileComponent implements OnInit {
     else return false
   }
 
-  // Sends name of the book user is requesting
-  otvoriKnjigu(naziv: string): void {
-    this.onBookRequest.emit(naziv)
+  otvoriKnjigu(requestedBook: string): void {
+    this.data.changeRequestedBook(requestedBook)
+    this.openBook.emit()
   }
 
 }
