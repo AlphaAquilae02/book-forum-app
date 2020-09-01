@@ -1,17 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Korisnik } from '../modules/Korisnik';
 import { BehaviorSubject } from 'rxjs';
+import { FormControl } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
-private requestedUserSource = new BehaviorSubject('')
-requestedUser = this.requestedUserSource.asObservable()
+  private requestedUserSource = new BehaviorSubject('')
+  requestedUser = this.requestedUserSource.asObservable()
 
-private requestedBookSource = new BehaviorSubject('')
-requestedBook = this.requestedBookSource.asObservable()
+  private requestedBookSource = new BehaviorSubject('')
+  requestedBook = this.requestedBookSource.asObservable()
+
+  private selectedTabSource = new BehaviorSubject(0)
+  selectedTab = this.selectedTabSource.asObservable()
 
   constructor() {
   }
@@ -20,20 +24,24 @@ requestedBook = this.requestedBookSource.asObservable()
    *  ali obavezno proveri da li tako da odradis jer bi se to pozvalo i prvi put kada podesavas 
    *  session logged user!   
    */
-  postaviKorisnika(korisnik:Korisnik):void {
+  postaviKorisnika(korisnik: Korisnik): void {
     sessionStorage.setItem('ulogovaniKorisnik', JSON.stringify(korisnik))
   }
 
-  dohvatiKorisnika():Korisnik {
+  dohvatiKorisnika(): Korisnik {
     return JSON.parse(sessionStorage.getItem('ulogovaniKorisnik'));
   }
 
-  changeRequestedUser(newRequestedUser:string) {
+  changeRequestedUser(newRequestedUser: string) {
     this.requestedUserSource.next(newRequestedUser)
   }
 
-  changeRequestedBook(newRequestedBook:string) {
+  changeRequestedBook(newRequestedBook: string) {
     this.requestedBookSource.next(newRequestedBook)
+  }
+
+  changeTab(index:number) {
+    this.selectedTabSource.next(index)
   }
 
 }

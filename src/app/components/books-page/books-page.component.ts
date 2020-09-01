@@ -13,7 +13,6 @@ import { Knjiga } from 'src/app/modules/Knjiga';
 
 export class BooksPageComponent implements OnInit, OnDestroy {
   @ViewChild(BookComponent) bookChild: BookComponent
-  @Output() goToUser = new EventEmitter<any>()
 
   requestedBook: string
   ucitanaKnjiga: Knjiga
@@ -52,9 +51,5 @@ export class BooksPageComponent implements OnInit, OnDestroy {
     this.ucitanaKnjiga = this.bookService.nadjiKnjiguNaziv(this.requestedBook)
     if (this.bookChild)
       this.bookChild.prikaziKjigu()
-  }
-
-  openProfile() {
-    this.goToUser.emit()
   }
 }

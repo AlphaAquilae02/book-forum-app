@@ -1,7 +1,7 @@
 <div class="content">
   <app-search (open)="openBook()" [searchObject]="searchObject" [searchParams]="searchParams" [linkParam]="linkParam"></app-search>
   <mat-card *ngIf="showBook" class="mat-elevation-z8">
-    <app-book (openProfile)="openProfile()" [ucitanaKnjiga]="ucitanaKnjiga"></app-book>
+    <app-book [ucitanaKnjiga]="ucitanaKnjiga"></app-book>
   </mat-card>
   <br>
   <mat-card *ngIf="showAddBook && AT!=0" class="mat-elevation-z8">

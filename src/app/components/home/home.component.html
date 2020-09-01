@@ -1,13 +1,13 @@
 <mat-tab-group mat-align-tabs="center" [selectedIndex]="selectedTab.value"
     (selectedIndexChange)="selectedTab.setValue($event)">
     <mat-tab label="Knjige">
-        <app-books-page *ngIf="selectedTab.value == 0" (goToUser)="goToProfileTab()"></app-books-page>
+        <app-books-page *ngIf="selectedTab.value == 0"></app-books-page>
     </mat-tab>
     <mat-tab label="Desavanja">
         <app-search *ngIf="selectedTab.value == 1" [searchObject]="searchTypes[0]"></app-search>
     </mat-tab>
     <mat-tab label="Profil">
-        <app-profiles-page *ngIf="selectedTab.value == 2" (goToBook)="goToBookTab()"></app-profiles-page>
+        <app-profiles-page *ngIf="selectedTab.value == 2"></app-profiles-page>
     </mat-tab>
     <mat-tab>
         <ng-template mat-tab-label>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnChanges, SimpleChanges, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DataService } from 'src/app/services/data.service';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
@@ -16,6 +16,7 @@ export class HomeComponent implements OnInit {
   searchTypes: Array<string>
 
   constructor(private router: Router, private data: DataService) {
+    this.data.selectedTab.subscribe(selectedTab => this.selectedTab.setValue(selectedTab))
     this.searchTypes = ["knjiga", "profil"]
   }
 

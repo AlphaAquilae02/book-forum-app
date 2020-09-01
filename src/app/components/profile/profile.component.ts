@@ -14,9 +14,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  @Output() openBook = new EventEmitter<string>()
   @Input() korisnik: Korisnik
-
 
   editDisabled: boolean
   commentsTableColumns: string[]
@@ -73,7 +71,7 @@ export class ProfileComponent implements OnInit {
 
   otvoriKnjigu(requestedBook: string): void {
     this.data.changeRequestedBook(requestedBook)
-    this.openBook.emit()
+    this.data.changeTab(0)
   }
 
 }

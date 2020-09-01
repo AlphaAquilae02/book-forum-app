@@ -14,7 +14,6 @@ import { Router } from '@angular/router'
   styleUrls: ['./book.component.css']
 })
 export class BookComponent implements OnInit {
-  @Output() openProfile = new EventEmitter<string>()
   @Input() ucitanaKnjiga: Knjiga;
 
   commentsTableColumns: string[]
@@ -67,7 +66,7 @@ export class BookComponent implements OnInit {
   // Sends username of the users profile to be displayed
   otvoriKorisnika(requestedUser: string): void {
     this.data.changeRequestedUser(requestedUser)
-    this.openProfile.emit()
+    this.data.changeTab(2)
   }
 
   saveChanges(): void {

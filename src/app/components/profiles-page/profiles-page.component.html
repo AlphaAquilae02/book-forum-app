@@ -1,6 +1,6 @@
 <div class="content">
     <app-search (open)="openProfile()" [searchObject]="searchObject" [searchParams]="searchParams" [linkParam]="linkParam"></app-search>
   
-    <app-profile *ngIf="showUser" (openBook)="openBook()" [korisnik]="korisnik"></app-profile>
+    <app-profile *ngIf="showUser" [korisnik]="korisnik"></app-profile>
     <br>
 </div>

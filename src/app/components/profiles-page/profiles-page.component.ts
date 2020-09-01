@@ -11,7 +11,6 @@ import { DataService } from 'src/app/services/data.service';
 })
 export class ProfilesPageComponent implements OnInit, OnDestroy {
   @ViewChild(ProfileComponent) profileChild: ProfileComponent
-  @Output() goToBook = new EventEmitter<any>()
 
   requestedUser: string
   korisnik: Korisnik
@@ -49,9 +48,5 @@ export class ProfilesPageComponent implements OnInit, OnDestroy {
     console.log(this.korisnik)
     if (this.profileChild)
       this.profileChild.prikaziKorisnika()
-  }
-
-  openBook() {
-    this.goToBook.emit()
   }
 }
