@@ -33,7 +33,9 @@ import { BookComponent } from './components/book/book.component';
 import { BooksPageComponent } from './components/books-page/books-page.component';
 import { AddBookComponent } from './components/add-book/add-book.component';
 import { ProfilesPageComponent } from './components/profiles-page/profiles-page.component';
-import { SearchComponent } from './components/search/search.component'
+import { SearchComponent } from './components/search/search.component';
+import { EventsPageComponent } from './components/events-page/events-page.component';
+import { TableComponent } from './components/table/table.component'
 
 
 @NgModule({
@@ -51,6 +53,8 @@ import { SearchComponent } from './components/search/search.component'
     AddBookComponent,
     ProfilesPageComponent,
     SearchComponent,
+    EventsPageComponent,
+    TableComponent,
   ],
   imports: [
     BrowserModule,

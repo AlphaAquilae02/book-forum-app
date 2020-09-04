@@ -64,8 +64,8 @@
 
       <ng-container matColumnDef="citamKnjige">
         <th mat-header-cell *matHeaderCellDef> Trenutno se citaju: </th>
-        <td mat-cell *matCellDef="let number">
-          <a [routerLink]="" (click)='otvoriKnjigu(pokupiKnjigu(number).naziv)'>{{ pokupiKnjigu(number).naziv }}</a>
+        <td mat-cell *matCellDef="let array">
+          <a [routerLink]="" (click)='otvoriKnjigu(pokupiKnjigu(array[0]).naziv)'>{{ pokupiKnjigu(array[0]).naziv }}</a>
         </td>
       </ng-container>
 

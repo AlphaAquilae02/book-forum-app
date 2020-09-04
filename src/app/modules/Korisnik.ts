@@ -12,6 +12,6 @@ export interface Korisnik {
     drzava:string
     email:string
     procitaneKnjige: Array<number>
-    citamKnjige: Array<number>
+    citamKnjige: Array<Array<number>>
     zaCitanjeKnjige: Array<number>
 }

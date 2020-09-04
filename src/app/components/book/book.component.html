@@ -36,7 +36,7 @@
     <label class="customLabel">{{ ucitanaKnjiga.prosecnaOcena }}</label>
     <mat-divider></mat-divider><br>
 
-    <table mat-table [dataSource]='pokupiKomentare()' class="specialTable">
+    <table mat-table *ngIf="showTable" [dataSource]='komentari' class="specialTable">
 
         <ng-container matColumnDef="korisnikId">
             <th mat-header-cell *matHeaderCellDef> Korisnik: </th>
@@ -76,4 +76,7 @@
         <button mat-raised-button (click)="sacuvajKomentar()">SACUVAJ</button>
         <br>
     </div>
+
+    <br>
+    <button mat-raised-button *ngIf="ulogovaniKorisnik.AT==2" (click)="odobriKnjigu()">Odobri knjigu</button>
 </div>

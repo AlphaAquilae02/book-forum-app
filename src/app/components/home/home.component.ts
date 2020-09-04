@@ -15,9 +15,11 @@ export class HomeComponent implements OnInit {
 
   searchTypes: Array<string>
 
+  AT:number
+
   constructor(private router: Router, private data: DataService) {
     this.data.selectedTab.subscribe(selectedTab => this.selectedTab.setValue(selectedTab))
-    this.searchTypes = ["knjiga", "profil"]
+    this.AT = this.data.dohvatiKorisnika().AT
   }
 
   ngOnInit(): void {
@@ -40,7 +42,7 @@ export class HomeComponent implements OnInit {
   // Setting up tabs in main/home menu
   setTabs(): void {
     this.selectedTab.setValue(2)
-    if (this.data.dohvatiKorisnika().AT == 0) {
+    if (this.AT == 0) {
       this.logButton = 'Log In'
       this.selectedTab.setValue(0)
     }

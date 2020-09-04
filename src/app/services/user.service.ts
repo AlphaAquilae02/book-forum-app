@@ -72,7 +72,7 @@ export class UserService {
         id: 1,
         AT: 1,
         ime: 'Dusan',
-        prezime:' Tomanic',
+        prezime:'Tomanic',
         slika: 'nah',
         korisnickoIme: 'tduca998',
         lozinka: '1234',
@@ -81,7 +81,7 @@ export class UserService {
         drzava: 'Srbija',
         email: 'tduca998@gmail.com',
         procitaneKnjige: [],
-        citamKnjige: [1, 3],
+        citamKnjige: [[1, 10], [3, 15]],
         zaCitanjeKnjige: []
       },
       {
@@ -97,7 +97,7 @@ export class UserService {
         drzava: 'USA',
         email: 'rory@wolk.com',
         procitaneKnjige: [2, 3],
-        citamKnjige: [1],
+        citamKnjige: [[1, 20]],
         zaCitanjeKnjige: [1]
       }
     ]

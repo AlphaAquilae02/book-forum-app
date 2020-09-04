@@ -5,6 +5,7 @@
 .content {
     margin: auto;
     width: 70%;
+    text-align: center;
 }
 
 .mat-form-field {

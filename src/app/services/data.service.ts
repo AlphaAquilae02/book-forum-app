@@ -14,8 +14,24 @@ export class DataService {
   private requestedBookSource = new BehaviorSubject('')
   requestedBook = this.requestedBookSource.asObservable()
 
+  //changes the selected tab in main header thingy
   private selectedTabSource = new BehaviorSubject(0)
   selectedTab = this.selectedTabSource.asObservable()
+
+  private searchObjectSource = new BehaviorSubject('')
+  searchObject = this.searchObjectSource.asObservable()
+
+  private searchParamsSource = new BehaviorSubject<Array<string>>([])
+  searchParams = this.searchParamsSource.asObservable()
+
+  private searchLinkParamSource = new BehaviorSubject('')
+  searchLinkParam = this.searchLinkParamSource.asObservable()
+
+  private searchTableHeadersParamsSource = new BehaviorSubject<Object>({})
+  searchTableHeadersParams = this.searchTableHeadersParamsSource.asObservable()
+
+  private tableDataSource = new BehaviorSubject<Array<any>>([])
+  tableData = this.tableDataSource.asObservable()
 
   constructor() {
   }
@@ -40,8 +56,27 @@ export class DataService {
     this.requestedBookSource.next(newRequestedBook)
   }
 
-  changeTab(index:number) {
+  changeTab(index: number) {
     this.selectedTabSource.next(index)
   }
 
+  setSearchObject(object: string) {
+    this.searchObjectSource.next(object)
+  }
+
+  setSearchParams(params: Array<string>) {
+    this.searchParamsSource.next(params)
+  }
+
+  setSearchLinkParam(linkParam: string) {
+    this.searchLinkParamSource.next(linkParam)
+  }
+
+  setSearchTableHeadersParams(headerParams: object) {
+    this.searchTableHeadersParamsSource.next(headerParams)
+  }
+
+  setTableData(params: Array<any>) {
+    this.tableDataSource.next(params)
+  }
 }

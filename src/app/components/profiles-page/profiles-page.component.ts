@@ -15,37 +15,37 @@ export class ProfilesPageComponent implements OnInit, OnDestroy {
   requestedUser: string
   korisnik: Korisnik
 
-  showUser: boolean
-  searchObject: string
-  searchParams: Array<string>
-  linkParam: string
+  showUser: Boolean
   
-
   constructor(private userService:UserService, private data:DataService) {
     this.showUser = true
-    this.searchObject = "profil"
-    this.searchParams = [
-      "ime", "prezime", "korisnickoIme"
-    ]
-    this.linkParam = this.searchParams[2]
    }
 
   ngOnInit(): void {
+    this.data.setSearchObject("profil")
+    this.data.setSearchParams(["ime", "prezime", "korisnickoIme"])
+    this.data.setSearchLinkParam("korisnickoIme")
+    this.data.setSearchTableHeadersParams({
+      ime: "Ime",
+      prezime: "Prezime",
+      korisnickoIme: "Korisnicko Ime"
+    })
     this.data.requestedUser.subscribe(requestedUser => this.requestedUser = requestedUser)
     if (this.requestedUser != "")
       this.openProfile()
   }
 
   ngOnDestroy(): void {
+    /*this.data.setSearchObject("")
+    this.data.setSearchParams([""])
+    this.data.setSearchLinkParam("")
+    this.data.setSearchTableHeadersParams({})*/
     this.data.changeRequestedUser("")
   }
 
   openProfile(): void {
-    console.log(this.korisnik)
-    console.log(this.requestedUser)
     this.showUser = true
     this.korisnik = this.userService.nadjiKorisnikaKorisnickoIme(this.requestedUser)
-    console.log(this.korisnik)
     if (this.profileChild)
       this.profileChild.prikaziKorisnika()
   }

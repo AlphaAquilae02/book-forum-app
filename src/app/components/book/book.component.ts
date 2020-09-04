@@ -16,12 +16,14 @@ import { Router } from '@angular/router'
 export class BookComponent implements OnInit {
   @Input() ucitanaKnjiga: Knjiga;
 
+  komentari:Array<Komentar>
   commentsTableColumns: string[]
   ulogovaniKorisnik: Korisnik
 
   procitao: boolean
   cita: boolean
   zaCitanje: boolean
+  showTable: boolean
 
   progressValue: number
   ocena: number
@@ -40,17 +42,31 @@ export class BookComponent implements OnInit {
   // Loads data to display on view
   prikaziKjigu(): void {
     this.procitao = this.ulogovaniKorisnik.procitaneKnjige.includes(this.ucitanaKnjiga.id)
-    this.cita = this.ulogovaniKorisnik.citamKnjige.includes(this.ucitanaKnjiga.id)
+    this.proveriKorisnikCita()
     this.zaCitanje = this.ulogovaniKorisnik.zaCitanjeKnjige.includes(this.ucitanaKnjiga.id)
     if (this.commentService.nadjiKomentar(this.ulogovaniKorisnik.id, this.ucitanaKnjiga.id) != null) {
       this.komentar = this.commentService.nadjiKomentar(this.ulogovaniKorisnik.id, this.ucitanaKnjiga.id).komentar
       this.ocena = this.commentService.nadjiKomentar(this.ulogovaniKorisnik.id, this.ucitanaKnjiga.id).ocena
     }
+    this.pokupiKomentare()
   }
 
-  // Returns all comments for requested(currently loaded) book
+  proveriKorisnikCita(): void {
+    this.ulogovaniKorisnik.citamKnjige.forEach(element => {
+      if (element[0] == this.ucitanaKnjiga.id) {
+        this.progressValue = element[1]
+        this.cita = true
+      }
+    });
+  }
+
   pokupiKomentare(): Komentar[] {
-    return this.commentService.nadjiKnjigaKomentare(this.ucitanaKnjiga)
+    this.komentari = this.commentService.nadjiKnjigaKomentare(this.ucitanaKnjiga)
+    if (this.komentari.length != 0) {
+      this.showTable = true
+    }
+    else { this.showTable = false }
+    return this.komentari
   }
 
   // Returns all names based on param id
@@ -72,6 +88,9 @@ export class BookComponent implements OnInit {
   saveChanges(): void {
     this.ulogovaniKorisnik.zaCitanjeKnjige[this.ulogovaniKorisnik.zaCitanjeKnjige.indexOf(this.ucitanaKnjiga.id)] = 0
     this.userService.sacuvajKorisnika(this.ulogovaniKorisnik)
-    console.log(this.ulogovaniKorisnik)
+  }
+
+  odobriKnjigu() {
+    console.log("Odobri")
   }
 }

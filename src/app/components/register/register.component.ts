@@ -45,6 +45,7 @@ export class RegisterComponent implements OnInit {
   }
 
   register():void {
+    console.log(this.korisnik.datumRodjenja)
     this.usernameCheck = this.validatorService.validateUsername(this.korisnik.korisnickoIme)
     this.passwordCheck = this.validatorService.validatePassword(this.korisnik.lozinka)
     this.emailCheck = this.validatorService.validateEmail(this.korisnik.email)

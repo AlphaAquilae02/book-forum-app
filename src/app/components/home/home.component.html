@@ -4,9 +4,9 @@
         <app-books-page *ngIf="selectedTab.value == 0"></app-books-page>
     </mat-tab>
     <mat-tab label="Desavanja">
-        <app-search *ngIf="selectedTab.value == 1" [searchObject]="searchTypes[0]"></app-search>
+        <app-events-page *ngIf="selectedTab.value == 1"></app-events-page>
     </mat-tab>
-    <mat-tab label="Profil">
+    <mat-tab *ngIf="AT" label="Profil">
         <app-profiles-page *ngIf="selectedTab.value == 2"></app-profiles-page>
     </mat-tab>
     <mat-tab>

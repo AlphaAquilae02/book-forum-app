@@ -20,21 +20,21 @@ export class BooksPageComponent implements OnInit, OnDestroy {
   AT: number
   showBook: boolean
   showAddBook: boolean
-  searchObject: string
-  searchParams: Array<string>
-  linkParam: string
 
   constructor(private location: Location, private bookService: BookService, private data: DataService) {
     this.showBook = false
     this.showAddBook = false
-    this.searchObject = "knjiga"
-    this.searchParams = [
-      "naziv", "autor", "zanr"
-    ]
-    this.linkParam = this.searchParams[0]
   }
 
   ngOnInit(): void {
+    this.data.setSearchObject("knjiga")
+    this.data.setSearchParams(["naziv", "autor", "zanr"])
+    this.data.setSearchLinkParam("naziv")
+    this.data.setSearchTableHeadersParams({
+      naziv: "Naziv",
+      autor: "Autor",
+      zanr: "Zanr"
+    })
     this.data.requestedBook.subscribe(requestedBook => this.requestedBook = requestedBook)
     this.AT = this.data.dohvatiKorisnika().AT
     if (this.requestedBook != "")
@@ -42,6 +42,10 @@ export class BooksPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    /*this.data.setSearchObject("")
+    this.data.setSearchParams([""])
+    this.data.setSearchLinkParam("")
+    this.data.setSearchTableHeadersParams({})*/
     this.data.changeRequestedBook("")
   }
 
@@ -52,4 +56,13 @@ export class BooksPageComponent implements OnInit, OnDestroy {
     if (this.bookChild)
       this.bookChild.prikaziKjigu()
   }
+
+  openAddBook(show:boolean) {
+    this.showAddBook = show
+  }
+
+  dodajKnjige() {
+    console.log("Dodaj knjige")
+  }
+  
 }

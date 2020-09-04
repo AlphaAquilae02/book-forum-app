@@ -28,12 +28,10 @@ export class BookService {
 
   nadjiKnjiguNaziv(naziv: string): Knjiga {
     var bookFound = this.knjigeLista.filter(x => x.naziv == naziv)
-    if (bookFound.length > 0) {
+    if (bookFound.length > 0) 
       return bookFound[0]
-    }
-    else {
+    else 
       return null
-    }
   }
 
   // Returns list of books based on searchQuery where searchQuery matches searchParam.value

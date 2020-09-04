@@ -1,5 +1,5 @@
 <div class="content">
-  <app-search (open)="openBook()" [searchObject]="searchObject" [searchParams]="searchParams" [linkParam]="linkParam"></app-search>
+  <app-search (open)="openBook()" (openSecondary)="showAddBook=$event"></app-search>
   <mat-card *ngIf="showBook" class="mat-elevation-z8">
     <app-book [ucitanaKnjiga]="ucitanaKnjiga"></app-book>
   </mat-card>
@@ -7,5 +7,7 @@
   <mat-card *ngIf="showAddBook && AT!=0" class="mat-elevation-z8">
     <app-add-book></app-add-book>
   </mat-card>
+  <button class="asd" mat-raised-button *ngIf="AT==2" (click)="dodajKnjige()">Dodaj knjige</button>
+  <br>
   <br>
 </div>
