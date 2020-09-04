@@ -1,5 +1,5 @@
+<br>
 <div class="content">
-    <br>
     <mat-card class="mat-elevation-z8">
         <mat-form-field appearance="legacy">
             <mat-label>Pretraga</mat-label>
@@ -13,8 +13,9 @@
                 [checked]="searchParams[0] == string">{{ string }}</mat-radio-button>
         </mat-radio-group>
     </mat-card>
-    <br>
-    <mat-card *ngIf="showTable" class="mat-elevation-z8 specialTable">
+
+    <!--
+    <mat-card *ngIf="false" class="mat-elevation-z8 specialTable">
         <table mat-table [dataSource]='searchResponse' class="specialTable">
 
             <ng-container *ngFor="let string of searchParams" [matColumnDef]="string">
@@ -29,6 +30,5 @@
             <tr mat-header-row *matHeaderRowDef="searchParams"></tr>
             <tr mat-row *matRowDef="let row; columns: searchParams;"></tr>
         </table>
-    </mat-card>
-    <br>
+    </mat-card>-->
 </div>

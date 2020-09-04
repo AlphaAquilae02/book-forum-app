@@ -9,9 +9,7 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent implements OnInit {
-  @Output() open = new EventEmitter<any>()
-  @Output() openSecondary = new EventEmitter<any>()
-  @Output() showTable2 = new EventEmitter<boolean>()
+  @Output() showAddOption = new EventEmitter<any>()
   searchParams: Array<string>
   searchObject: string
   linkParam: string
@@ -20,7 +18,6 @@ export class SearchComponent implements OnInit {
   searchHint: string
   searchResponse: Array<any>
   searchQuery: string
-  showTable: boolean
 
 
   constructor(private userService: UserService, private bookService: BookService, private data: DataService) { }
@@ -30,26 +27,24 @@ export class SearchComponent implements OnInit {
     this.data.searchParams.subscribe(paramList => this.searchParams = paramList)
     this.data.searchLinkParam.subscribe(linkParam => this.linkParam = linkParam)
     this.data.searchTableHeadersParams.subscribe(headerParams => this.headerMap = headerParams)
-    this.showTable = false
     this.searchHint = this.searchParams[0]
   }
 
   search() {
     switch (this.searchObject) {
       case "knjiga": this.searchResponse = this.bookService.nadjiKnjigu(this.searchHint, this.searchQuery)
-        if (this.searchResponse.length == 0)
-          this.openSecondary.emit(true)
+      if (this.searchResponse.length == 0)
+          this.showAddOption.emit(true)
         break
       case "profil": this.searchResponse = this.userService.nadjiKorisnika(this.searchHint, this.searchQuery)
-        break
+        break  
     }
+    this.data.setTableData(this.searchResponse)
     if (this.searchResponse.length != 0) {
-      this.showTable2.emit(true)
-      this.showTable = true
+      this.data.setShowTable(true)
     }
     else {
-      this.showTable2.emit(false)
-      this.showTable = false
+      this.data.setShowTable(false)
     }
   }
 
@@ -59,15 +54,5 @@ export class SearchComponent implements OnInit {
 
   searchResponseData() {
 
-  }
-
-  openSelected(nesto: string) {
-    switch (this.searchObject) {
-      case "knjiga": this.data.changeRequestedBook(nesto)
-        break
-      case "profil": this.data.changeRequestedUser(nesto)
-        break
-    }
-    this.open.emit()
   }
 }

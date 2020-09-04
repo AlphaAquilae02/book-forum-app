@@ -16,10 +16,10 @@ export class ProfilesPageComponent implements OnInit, OnDestroy {
   korisnik: Korisnik
 
   showUser: Boolean
-  
-  constructor(private userService:UserService, private data:DataService) {
+
+  constructor(private userService: UserService, private data: DataService) {
     this.showUser = true
-   }
+  }
 
   ngOnInit(): void {
     this.data.setSearchObject("profil")
@@ -30,6 +30,7 @@ export class ProfilesPageComponent implements OnInit, OnDestroy {
       prezime: "Prezime",
       korisnickoIme: "Korisnicko Ime"
     })
+    this.data.setShowTable(false)
     this.data.requestedUser.subscribe(requestedUser => this.requestedUser = requestedUser)
     if (this.requestedUser != "")
       this.openProfile()

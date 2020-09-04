@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DataService } from 'src/app/services/data.service';
 import { EventService } from 'src/app/services/event.service';
 
@@ -7,8 +7,8 @@ import { EventService } from 'src/app/services/event.service';
   templateUrl: './events-page.component.html',
   styleUrls: ['./events-page.component.css']
 })
-export class EventsPageComponent implements OnInit {
-  showTable:boolean
+export class EventsPageComponent implements OnInit, OnDestroy {
+
 
   constructor(private data:DataService, private eventService:EventService) { }
 
@@ -21,7 +21,11 @@ export class EventsPageComponent implements OnInit {
       aktivno: "Status"
     })
     this.data.setTableData(this.eventService.getAllEvents())
-    this.showTable = true
+    this.data.setShowTable(true)
+  }
+
+  ngOnDestroy(): void {
+    this.data.setShowTable(false)
   }
 
 }

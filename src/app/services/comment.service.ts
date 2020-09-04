@@ -14,19 +14,23 @@ export class CommentService {
     this.fillKomentariLista()
   }
 
-  dodajKomentar(knjigaId:number, komentar:string):void {
+  // Method to add a comment in database
+  dodajKomentar(knjigaId:number, ocena:number, komentar:string):void {
 
   }
 
+  // Method to delete a comment in database
   obrisiKomentar():void {
 
   }
 
+  // Method to edit a comment in database
   izmeniKomentar(komentar:string, ocena:number, korisnikId:number, knjigaId:number):void {
     this.komentarLista.filter(x => x.korisnikId == korisnikId).filter(y => y.knjigaId == knjigaId)[0].komentar = komentar
     this.komentarLista.filter(x => x.korisnikId == korisnikId).filter(y => y.knjigaId == knjigaId)[0].ocena = ocena
   }
 
+  // Method to find the comment in database based on 'user.id' and 'book.id' params
   nadjiKomentar(korisnikId:number, knjigaId:number):Komentar {
     var pronadjeniKomentari = this.komentarLista.filter(x => x.korisnikId == korisnikId).filter(y => y.knjigaId == knjigaId)
     if (pronadjeniKomentari.length > 0) {
@@ -35,6 +39,7 @@ export class CommentService {
     else return null
   }
 
+  // Method returns full list of comments based on 'user.id' param
   nadjiKorisnikKomentare(korisnik:Korisnik):Komentar[] {
     var pronadjeniKomentari = this.komentarLista.filter(x => x.korisnikId == korisnik.id)
     if (pronadjeniKomentari.length > 0) {
@@ -43,6 +48,7 @@ export class CommentService {
     else return []
   }
 
+  // Method returns full list of comments based on 'book' param
   nadjiKnjigaKomentare(knjiga:Knjiga):Komentar[] {
     var pronadjeniKomentari = this.komentarLista.filter(x => x.knjigaId == knjiga.id)
     if (pronadjeniKomentari.length > 0) {
@@ -51,6 +57,7 @@ export class CommentService {
     else return []
   }
 
+  // Temporary method for testing purposes
   fillKomentariLista():void {
     this.komentarLista = [
       {

@@ -1,12 +1,9 @@
 <div class="content">
-  <app-search (open)="openBook()" (openSecondary)="showAddBook=$event"></app-search>
-  <mat-card *ngIf="showBook" class="mat-elevation-z8">
-    <app-book [ucitanaKnjiga]="ucitanaKnjiga"></app-book>
-  </mat-card>
+  <app-search (showAddOption)="showAddBook=$event"></app-search>
+  <app-table (linkClick)="openBook()"></app-table>
+  <app-book *ngIf="showBook" [ucitanaKnjiga]="ucitanaKnjiga"></app-book>
+  <app-add-book *ngIf="showAddBook && AT!=0"></app-add-book>
   <br>
-  <mat-card *ngIf="showAddBook && AT!=0" class="mat-elevation-z8">
-    <app-add-book></app-add-book>
-  </mat-card>
   <button class="asd" mat-raised-button *ngIf="AT==2" (click)="dodajKnjige()">Dodaj knjige</button>
   <br>
   <br>

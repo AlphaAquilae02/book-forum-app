@@ -1,4 +1,5 @@
-<div class="content">
+<br>
+<mat-card class="mat-elevation-z8">
     <mat-form-field appearance="legacy">
         <mat-label>Naziv:</mat-label>
         <input matInput [(ngModel)]="knjiga.naziv" value="{{ knjiga.naziv }}">
@@ -30,5 +31,4 @@
     </mat-form-field>
 
     <button mat-raised-button (click)="dodajKnjigu()">Dodaj knjigu</button>
-    
-</div>
+</mat-card>

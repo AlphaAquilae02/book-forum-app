@@ -1,6 +1,6 @@
 <div class="content">
-    <app-search (open)="openProfile()"></app-search>
-  
+    <app-search></app-search>
+    <app-table (linkClick)="openProfile()"></app-table>
     <app-profile *ngIf="showUser" [korisnik]="korisnik"></app-profile>
     <br>
 </div>

@@ -1,0 +1,12 @@
+.mat-header-cell {
+    text-align: center;
+}
+
+.specialTable {
+    margin: auto;
+}
+
+.mat-cell {
+    width: 30%;
+    text-align: center;
+}

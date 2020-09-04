@@ -21,6 +21,8 @@ export class BooksPageComponent implements OnInit, OnDestroy {
   showBook: boolean
   showAddBook: boolean
 
+  showTable: boolean
+
   constructor(private location: Location, private bookService: BookService, private data: DataService) {
     this.showBook = false
     this.showAddBook = false
@@ -35,6 +37,7 @@ export class BooksPageComponent implements OnInit, OnDestroy {
       autor: "Autor",
       zanr: "Zanr"
     })
+    this.data.setShowTable(false)
     this.data.requestedBook.subscribe(requestedBook => this.requestedBook = requestedBook)
     this.AT = this.data.dohvatiKorisnika().AT
     if (this.requestedBook != "")

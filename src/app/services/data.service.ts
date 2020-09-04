@@ -8,30 +8,43 @@ import { FormControl } from '@angular/forms';
 })
 export class DataService {
 
+  // Holds the data of requested user after clicking the link to the user
   private requestedUserSource = new BehaviorSubject('')
   requestedUser = this.requestedUserSource.asObservable()
 
+  // Holds the data of requested book after clicking the link to the book
   private requestedBookSource = new BehaviorSubject('')
   requestedBook = this.requestedBookSource.asObservable()
 
-  //changes the selected tab in main header thingy
+  // Holds the selected tab index
+  // App changes tab in menu on value change 
   private selectedTabSource = new BehaviorSubject(0)
   selectedTab = this.selectedTabSource.asObservable()
 
+  // Holds the data of which object is requested for search
   private searchObjectSource = new BehaviorSubject('')
   searchObject = this.searchObjectSource.asObservable()
 
+  // Holds the data of params which are to be displayed in table
   private searchParamsSource = new BehaviorSubject<Array<string>>([])
   searchParams = this.searchParamsSource.asObservable()
 
+  // Holds the data which column of table should be rendered as a link
   private searchLinkParamSource = new BehaviorSubject('')
   searchLinkParam = this.searchLinkParamSource.asObservable()
 
+  // Holds the data in object as a form of map to which param should be 
+  // represented in which specifically format(namewise)
   private searchTableHeadersParamsSource = new BehaviorSubject<Object>({})
   searchTableHeadersParams = this.searchTableHeadersParamsSource.asObservable()
 
+  // Holds the data which are to be displayed in table
   private tableDataSource = new BehaviorSubject<Array<any>>([])
   tableData = this.tableDataSource.asObservable()
+
+  // Holds the data which controls if table should be rendered or not
+  private showTableSource = new BehaviorSubject<boolean>(false)
+  showTable = this.showTableSource.asObservable()
 
   constructor() {
   }
@@ -79,4 +92,9 @@ export class DataService {
   setTableData(params: Array<any>) {
     this.tableDataSource.next(params)
   }
+
+  setShowTable(showTable: boolean) {
+    this.showTableSource.next(showTable)
+  }
+
 }

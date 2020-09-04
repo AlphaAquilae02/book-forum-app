@@ -11,6 +11,7 @@ export class EventService {
     this.fillDesavanjaLista()
   }
 
+  // Method returns full list of events based on params
   nadjiDesavanja(searchParam: string, searchQuery: string): Array<Desavanje> {
     if (Array.isArray(this.desavanjeLista[0][searchParam]))
       return this.desavanjeLista.filter(x => x[searchParam].some(element => {
@@ -20,11 +21,12 @@ export class EventService {
       return this.desavanjeLista.filter(x => x[searchParam] == searchQuery)
   }
 
-  // naziv, aktivno, buduca javna desavanja
+  // Method returns full list of events
   getAllEvents(): Array<Desavanje> {
     return this.desavanjeLista
   }
 
+  // Temporary method for testing purposes
   fillDesavanjaLista(): void {
     this.desavanjeLista = [
       {
