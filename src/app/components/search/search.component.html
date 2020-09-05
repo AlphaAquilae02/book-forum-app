@@ -9,26 +9,8 @@
         </mat-form-field>
         <br><br>
         <mat-radio-group aria-label="Select">
-            <mat-radio-button *ngFor="let string of searchParams" [value]="string" (change)="searchTypeSelect($event)"
-                [checked]="searchParams[0] == string">{{ string }}</mat-radio-button>
+            <mat-radio-button *ngFor="let string of hintParams" [value]="string" (change)="searchTypeSelect($event)"
+                [checked]="hintParams[0] == string">{{ string }}</mat-radio-button>
         </mat-radio-group>
     </mat-card>
-
-    <!--
-    <mat-card *ngIf="false" class="mat-elevation-z8 specialTable">
-        <table mat-table [dataSource]='searchResponse' class="specialTable">
-
-            <ng-container *ngFor="let string of searchParams" [matColumnDef]="string">
-                <th mat-header-cell *matHeaderCellDef> {{ headerMap[string] }} </th>
-                <td mat-cell *matCellDef="let Object">
-                    <a *ngIf="string == linkParam" [routerLink]=""
-                        (click)='openSelected(Object[string])'>{{ Object[string] }}</a>
-                    <Label *ngIf="string != linkParam">{{ Object[string] }}</Label>
-                </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="searchParams"></tr>
-            <tr mat-row *matRowDef="let row; columns: searchParams;"></tr>
-        </table>
-    </mat-card>-->
 </div>

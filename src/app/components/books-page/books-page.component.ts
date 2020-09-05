@@ -28,18 +28,20 @@ export class BooksPageComponent implements OnInit, OnDestroy {
     this.showAddBook = false
   }
 
+  // Ova implementacija radi za dugme, i to radi odlicno! Jedino ima problem kod search param choice
   ngOnInit(): void {
     this.data.setSearchObject("knjiga")
-    this.data.setSearchParams(["naziv", "autor", "zanr"])
+    this.data.setSearchParams(["naziv", "autor", "zanr", "button"])
     this.data.setSearchLinkParam("naziv")
     this.data.setSearchTableHeadersParams({
       naziv: "Naziv",
       autor: "Autor",
-      zanr: "Zanr"
+      zanr: "Zanr",
+      button: ""
     })
     this.data.setShowTable(false)
     this.data.requestedBook.subscribe(requestedBook => this.requestedBook = requestedBook)
-    this.AT = this.data.dohvatiKorisnika().AT
+    this.data.loggedUserAT.subscribe(AT => this.AT = AT)
     if (this.requestedBook != "")
       this.openBook()
   }
@@ -66,6 +68,11 @@ export class BooksPageComponent implements OnInit, OnDestroy {
 
   dodajKnjige() {
     console.log("Dodaj knjige")
+  }
+
+  odobriKnjige() {
+    // ovde stavi da kad klikne izadje tabela sa svim neodobrenim knjigama!
+    console.log("Odobri knjige")
   }
   
 }

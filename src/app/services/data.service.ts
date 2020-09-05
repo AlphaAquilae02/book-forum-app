@@ -8,6 +8,10 @@ import { FormControl } from '@angular/forms';
 })
 export class DataService {
 
+  // Holds the authority token of logged user
+  private loggedUserATSource = new BehaviorSubject(0)
+  loggedUserAT = this.loggedUserATSource.asObservable()
+
   // Holds the data of requested user after clicking the link to the user
   private requestedUserSource = new BehaviorSubject('')
   requestedUser = this.requestedUserSource.asObservable()
@@ -53,8 +57,14 @@ export class DataService {
    *  ali obavezno proveri da li tako da odradis jer bi se to pozvalo i prvi put kada podesavas 
    *  session logged user!   
    */
+
+  setLoggedUserAT(at:number):void {
+    this.loggedUserATSource.next(at)
+  }
+
   postaviKorisnika(korisnik: Korisnik): void {
     sessionStorage.setItem('ulogovaniKorisnik', JSON.stringify(korisnik))
+    this.loggedUserATSource.next(korisnik.AT)
   }
 
   dohvatiKorisnika(): Korisnik {

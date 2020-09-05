@@ -7,7 +7,7 @@ import { DataService } from 'src/app/services/data.service';
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit {
-  @Output() linkClick = new EventEmitter() 
+  @Output() linkClick = new EventEmitter()
 
   searchObject: string
   searchParams: Array<string>
@@ -15,14 +15,9 @@ export class TableComponent implements OnInit {
   tableData: Array<any>
   headerMap: Object
   showTable: boolean
-  /* 
-  *  IZBACI TABLE IZ SEARCH KOD KNJIGA I KOD PROFILA I NAMESTI DA SVE IDE KAO STO
-  *  TRENUTNO RADI NA DESAVANJIMA TABU, PROVERI I AKO SI NESTO PROPUSTIO U 
-  *  IMPLEMENTACIJI OVOG NACINA
-  * 
-  *  KOD EMITOVANJA EVENTA ZA OTVARANJE LINKA ISTO SKONTAJ KAKO JE NAJBOLJE
-  *  DA SE NE SJEBE NISTA A DA MINIMALNO IMAS TIH PRACENJA STA GDE IDE
-  */
+  buttonLabel: string
+  AT: number
+
   constructor(private data: DataService) { }
 
   ngOnInit(): void {
@@ -32,7 +27,8 @@ export class TableComponent implements OnInit {
     this.data.searchTableHeadersParams.subscribe(headerParams => this.headerMap = headerParams)
     this.data.tableData.subscribe(tableData => this.tableData = tableData)
     this.data.showTable.subscribe(showTable => this.showTable = showTable)
-    console.log(this.showTable)
+    this.data.loggedUserAT.subscribe(AT => this.AT = AT)
+    this.buttonLabel = "Odobri"
   }
 
   // emits that link inside table is clicked
@@ -47,6 +43,17 @@ export class TableComponent implements OnInit {
         break
     }
     this.linkClick.emit()
+  }
+
+  buttonClick(obj: any) {
+    switch (this.AT) {
+      case 2: console.log("Moderator click")
+        console.log(obj)
+        obj["odobrena"] = true
+        break
+      case 3: console.log("Admin click")
+        console.log(obj)
+    }
   }
 
 }

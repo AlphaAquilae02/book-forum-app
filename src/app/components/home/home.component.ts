@@ -18,8 +18,15 @@ export class HomeComponent implements OnInit {
   AT:number
 
   constructor(private router: Router, private data: DataService) {
+    /* 
+     * Ovo stoji da bi se na reload postavio onaj korisnik koji je zapravo ulogovan
+     * moze i bez toga ali onda svaki refresh zapravo odradi logout, kasnije proveriti
+     * u zavisnosti sta si napravio za validaciju i autentifikaciju trenutno 
+     * ulogovanog korisnika i shodno tome promeni logiku ovoga
+     */
+    this.data.setLoggedUserAT(this.data.dohvatiKorisnika().AT)
     this.data.selectedTab.subscribe(selectedTab => this.selectedTab.setValue(selectedTab))
-    this.AT = this.data.dohvatiKorisnika().AT
+    this.data.loggedUserAT.subscribe(AT => this.AT = AT)
   }
 
   ngOnInit(): void {

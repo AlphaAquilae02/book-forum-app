@@ -11,6 +11,7 @@ import { UserService } from 'src/app/services/user.service';
 export class SearchComponent implements OnInit {
   @Output() showAddOption = new EventEmitter<any>()
   searchParams: Array<string>
+  hintParams: Array<string>
   searchObject: string
   linkParam: string
   headerMap: Object
@@ -28,16 +29,21 @@ export class SearchComponent implements OnInit {
     this.data.searchLinkParam.subscribe(linkParam => this.linkParam = linkParam)
     this.data.searchTableHeadersParams.subscribe(headerParams => this.headerMap = headerParams)
     this.searchHint = this.searchParams[0]
+    this.hintParams = new Array()
+    for (let string of this.searchParams) 
+      this.hintParams.push(string)
+    if (this.hintParams[this.hintParams.length - 1] == "button")
+      this.hintParams.splice(this.hintParams.length - 1, 1)
   }
 
   search() {
     switch (this.searchObject) {
       case "knjiga": this.searchResponse = this.bookService.nadjiKnjigu(this.searchHint, this.searchQuery)
-      if (this.searchResponse.length == 0)
+        if (this.searchResponse.length == 0)
           this.showAddOption.emit(true)
         break
       case "profil": this.searchResponse = this.userService.nadjiKorisnika(this.searchHint, this.searchQuery)
-        break  
+        break
     }
     this.data.setTableData(this.searchResponse)
     if (this.searchResponse.length != 0) {

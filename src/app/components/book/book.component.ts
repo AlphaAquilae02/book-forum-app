@@ -41,7 +41,6 @@ export class BookComponent implements OnInit {
 
   // Loads data to display on view
   prikaziKjigu(): void {
-    console.log(this.ucitanaKnjiga)
     this.procitao = this.ulogovaniKorisnik.procitaneKnjige.includes(this.ucitanaKnjiga.id)
     this.proveriKorisnikCita()
     this.zaCitanje = this.ulogovaniKorisnik.zaCitanjeKnjige.includes(this.ucitanaKnjiga.id)
@@ -89,9 +88,5 @@ export class BookComponent implements OnInit {
   saveChanges(): void {
     this.ulogovaniKorisnik.zaCitanjeKnjige[this.ulogovaniKorisnik.zaCitanjeKnjige.indexOf(this.ucitanaKnjiga.id)] = 0
     this.userService.sacuvajKorisnika(this.ulogovaniKorisnik)
-  }
-
-  odobriKnjigu() {
-    console.log("Odobri")
   }
 }

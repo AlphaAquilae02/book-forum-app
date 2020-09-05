@@ -8,7 +8,8 @@
                 <td mat-cell *matCellDef="let Object">
                     <a *ngIf="string == linkParam" [routerLink]=""
                         (click)='openSelected(Object[string])'>{{ Object[string] }}</a>
-                    <Label *ngIf="string != linkParam">{{ Object[string] }}</Label>
+                    <Label *ngIf="string != linkParam && string != 'button'">{{ Object[string] }}</Label>
+                    <Button *ngIf="string == 'button' && AT > 1 && Object['odobrena'] == false" (click)="buttonClick(Object)">{{ buttonLabel }}</Button>
                 </td>
             </ng-container>
 

@@ -1,10 +1,11 @@
 <div class="content">
+  <br *ngIf="AT==2">
+  <button class="asd" mat-raised-button *ngIf="AT==2" (click)="dodajKnjige()">Dodaj knjige</button>
+  <button class="asd" mat-raised-button *ngIf="AT==2" (click)="odobriKnjige()">Odobri knjige</button>
+  <br *ngIf="AT==2">
   <app-search (showAddOption)="showAddBook=$event"></app-search>
   <app-table (linkClick)="openBook()"></app-table>
   <app-book *ngIf="showBook" [ucitanaKnjiga]="ucitanaKnjiga"></app-book>
   <app-add-book *ngIf="showAddBook && AT!=0"></app-add-book>
-  <br>
-  <button class="asd" mat-raised-button *ngIf="AT==2" (click)="dodajKnjige()">Dodaj knjige</button>
-  <br>
   <br>
 </div>
