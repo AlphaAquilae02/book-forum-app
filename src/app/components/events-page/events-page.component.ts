@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DataService } from 'src/app/services/data.service';
 import { EventService } from 'src/app/services/event.service';
+import { Table } from '../../modules/Table'
 
 @Component({
   selector: 'app-events-page',
@@ -8,24 +9,26 @@ import { EventService } from 'src/app/services/event.service';
   styleUrls: ['./events-page.component.css']
 })
 export class EventsPageComponent implements OnInit, OnDestroy {
+  showEventsTableParams: Table
 
-
-  constructor(private data:DataService, private eventService:EventService) { }
+  constructor(private data: DataService, private eventService: EventService) { }
 
   ngOnInit(): void {
-    this.data.setSearchObject("desavanje")
-    this.data.setSearchParams(["naziv", "aktivno"])
-    this.data.setSearchLinkParam("naziv")
-    this.data.setSearchTableHeadersParams({
-      naziv: "Naziv",
-      aktivno: "Status"
-    })
-    this.data.setTableData(this.eventService.getAllEvents())
-    this.data.setShowTable(true)
+    this.showEventsTableParams = {
+      searchObject: "desavanje",
+      searchParams: ["naziv", "aktivno"],
+      linkParam: "naziv",
+      tableData: this.eventService.getAllEvents(),
+      headerMap: {
+        naziv: "Naziv",
+        aktivno: "Status"
+      },
+      buttonLabel: ""
+    }
   }
 
   ngOnDestroy(): void {
-    this.data.setShowTable(false)
+    //this.data.setShowTable(false)
   }
 
 }

@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Korisnik } from 'src/app/modules/Korisnik';
 import { UserService } from 'src/app/services/user.service';
 import { ProfileComponent } from '../profile/profile.component';
 import { DataService } from 'src/app/services/data.service';
+import { Table } from 'src/app/modules/Table';
 
 @Component({
   selector: 'app-profiles-page',
@@ -15,6 +16,8 @@ export class ProfilesPageComponent implements OnInit, OnDestroy {
   requestedUser: string
   korisnik: Korisnik
 
+  showUserTableParams: Table
+  showUserTable: boolean
   showUser: Boolean
 
   constructor(private userService: UserService, private data: DataService) {
@@ -22,17 +25,24 @@ export class ProfilesPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.data.setSearchObject("profil")
-    this.data.setSearchParams(["ime", "prezime", "korisnickoIme"])
-    this.data.setSearchLinkParam("korisnickoIme")
-    this.data.setSearchTableHeadersParams({
-      ime: "Ime",
-      prezime: "Prezime",
-      korisnickoIme: "Korisnicko Ime"
-    })
+    this.showUserTableParams = {
+      searchObject: "profil", 
+      searchParams: ["ime", "prezime", "korisnickoIme"], 
+      linkParam: "korisnickoIme", 
+      tableData: [],
+      headerMap: {
+        ime: "Ime",
+        prezime: "Prezime",
+        korisnickoIme: "Korisnicko Ime"
+      },
+      buttonLabel: ""
+    }
+    this.data.tableData.subscribe(tableData => this.showUserTableParams.tableData = tableData)
     this.data.setShowTable(false)
+    this.data.showTable.subscribe(showTable => this.showUserTable = showTable)
+
     this.data.requestedUser.subscribe(requestedUser => this.requestedUser = requestedUser)
-    if (this.requestedUser != "")
+    if (this.requestedUser != "") 
       this.openProfile()
   }
 
@@ -42,11 +52,12 @@ export class ProfilesPageComponent implements OnInit, OnDestroy {
     this.data.setSearchLinkParam("")
     this.data.setSearchTableHeadersParams({})*/
     this.data.changeRequestedUser("")
+    this.data.setTableData([])
   }
 
   openProfile(): void {
-    this.showUser = true
     this.korisnik = this.userService.nadjiKorisnikaKorisnickoIme(this.requestedUser)
+    this.showUser = true
     if (this.profileChild)
       this.profileChild.prikaziKorisnika()
   }

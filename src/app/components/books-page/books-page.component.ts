@@ -4,6 +4,7 @@ import { BookService } from 'src/app/services/book.service';
 import { BookComponent } from '../book/book.component';
 import { DataService } from 'src/app/services/data.service';
 import { Knjiga } from 'src/app/modules/Knjiga';
+import { Table } from 'src/app/modules/Table';
 
 @Component({
   selector: 'app-books-page',
@@ -21,7 +22,8 @@ export class BooksPageComponent implements OnInit, OnDestroy {
   showBook: boolean
   showAddBook: boolean
 
-  showTable: boolean
+  showBooksTableParams: Table
+  showBooksTable: boolean
 
   constructor(private location: Location, private bookService: BookService, private data: DataService) {
     this.showBook = false
@@ -30,16 +32,23 @@ export class BooksPageComponent implements OnInit, OnDestroy {
 
   // Ova implementacija radi za dugme, i to radi odlicno! Jedino ima problem kod search param choice
   ngOnInit(): void {
-    this.data.setSearchObject("knjiga")
-    this.data.setSearchParams(["naziv", "autor", "zanr", "button"])
-    this.data.setSearchLinkParam("naziv")
-    this.data.setSearchTableHeadersParams({
-      naziv: "Naziv",
-      autor: "Autor",
-      zanr: "Zanr",
-      button: ""
-    })
+    this.showBooksTableParams = {
+      searchObject: "knjiga", 
+      searchParams: ["naziv", "autor", "zanr", "button"], 
+      linkParam: "naziv", 
+      tableData: [],
+      headerMap: { 
+        naziv: "Naziv",
+        autor: "Autor",
+        zanr: "Zanr",
+        button: ""
+      },
+      buttonLabel: "Odobri"
+    }
+    this.data.tableData.subscribe(tableData => this.showBooksTableParams.tableData = tableData)
     this.data.setShowTable(false)
+    this.data.showTable.subscribe(showTable => this.showBooksTable = showTable)
+    
     this.data.requestedBook.subscribe(requestedBook => this.requestedBook = requestedBook)
     this.data.loggedUserAT.subscribe(AT => this.AT = AT)
     if (this.requestedBook != "")
@@ -52,6 +61,7 @@ export class BooksPageComponent implements OnInit, OnDestroy {
     this.data.setSearchLinkParam("")
     this.data.setSearchTableHeadersParams({})*/
     this.data.changeRequestedBook("")
+    this.data.setTableData([])
   }
 
   openBook(): void {

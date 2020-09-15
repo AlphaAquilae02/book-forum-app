@@ -1,20 +1,23 @@
-<div *ngIf="showTable">
+<div>
     <br>
     <mat-card class="mat-elevation-z8 specialTable">
-        <table mat-table [dataSource]='tableData' class="specialTable">
+        <table mat-table [dataSource]='tableParams.tableData' class="specialTable">
 
-            <ng-container *ngFor="let string of searchParams" [matColumnDef]="string">
-                <th mat-header-cell *matHeaderCellDef> {{ headerMap[string] }} </th>
+            <ng-container *ngFor="let string of tableParams.searchParams" [matColumnDef]="string">
+                <th mat-header-cell *matHeaderCellDef> {{ tableParams.headerMap[string] }} </th>
                 <td mat-cell *matCellDef="let Object">
-                    <a *ngIf="string == linkParam" [routerLink]=""
+                    <a *ngIf="string == tableParams.linkParam" [routerLink]=""
                         (click)='openSelected(Object[string])'>{{ Object[string] }}</a>
-                    <Label *ngIf="string != linkParam && string != 'button'">{{ Object[string] }}</Label>
-                    <Button *ngIf="string == 'button' && AT > 1 && Object['odobrena'] == false" (click)="buttonClick(Object)">{{ buttonLabel }}</Button>
+                    <Label *ngIf="string != tableParams.linkParam && string != 'button'">{{ Object[string] }}</Label>
+                    <Button *ngIf="string == 'button' && AT > 1 && Object['odobrena'] == false"
+                        (click)="buttonClick(Object)">{{ tableParams.buttonLabel }}</Button>
                 </td>
             </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="searchParams"></tr>
-            <tr mat-row *matRowDef="let row; columns: searchParams;"></tr>
+            <tr mat-header-row *matHeaderRowDef="tableParams.searchParams"></tr>
+            <tr mat-row *matRowDef="let row; columns: tableParams.searchParams;"></tr>
         </table>
+        <mat-paginator [length]="tableParams.tableData.length" [pageSize]="tableSizeOptions[1]"
+            [pageSizeOptions]="tableSizeOptions" (page)="onPageChanged($event)"></mat-paginator>
     </mat-card>
 </div>

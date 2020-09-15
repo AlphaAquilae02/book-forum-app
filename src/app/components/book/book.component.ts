@@ -16,7 +16,7 @@ import { Router } from '@angular/router'
 export class BookComponent implements OnInit {
   @Input() ucitanaKnjiga: Knjiga;
 
-  komentari:Array<Komentar>
+  komentari: Array<Komentar>
   commentsTableColumns: string[]
   ulogovaniKorisnik: Korisnik
 
@@ -86,7 +86,27 @@ export class BookComponent implements OnInit {
   }
 
   saveChanges(): void {
-    this.ulogovaniKorisnik.zaCitanjeKnjige[this.ulogovaniKorisnik.zaCitanjeKnjige.indexOf(this.ucitanaKnjiga.id)] = 0
+    console.log(this.procitao)
+    console.log(this.cita)
+
+    var citaValue = [0, this.progressValue]
+    var indexCita;
+    if (this.cita)
+      citaValue[0] = this.ucitanaKnjiga.id
+    for (var i = 0; i < this.ulogovaniKorisnik.citamKnjige.length; i++) {
+      if (this.ulogovaniKorisnik.citamKnjige[i][0] == this.ucitanaKnjiga.id) {
+        indexCita = i
+        this.ulogovaniKorisnik.citamKnjige[indexCita] = citaValue
+      }
+    }
+
+
+    var zaCitanjeValue = 0
+    if (this.zaCitanje)
+      zaCitanjeValue = this.ucitanaKnjiga.id
+    this.ulogovaniKorisnik.zaCitanjeKnjige[this.ulogovaniKorisnik.zaCitanjeKnjige.indexOf(this.ucitanaKnjiga.id)] = zaCitanjeValue
+
     this.userService.sacuvajKorisnika(this.ulogovaniKorisnik)
   }
+
 }

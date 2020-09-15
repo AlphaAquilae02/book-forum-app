@@ -48,7 +48,7 @@
   <br>
 
   <mat-card class="mat-elevation-z8">
-    <table mat-table [dataSource]='korisnik.procitaneKnjige' class="specialTable">
+    <table mat-table [dataSource]='tableDataArray[0]' class="specialTable">
 
       <ng-container matColumnDef="procitaneKnjige">
         <th mat-header-cell *matHeaderCellDef> Procitane knjige: </th>
@@ -61,7 +61,7 @@
       <tr mat-row *matRowDef="let row; columns: booksTableReadColumns;"></tr>
     </table>
 
-    <table mat-table [dataSource]='korisnik.citamKnjige' class="specialTable">
+    <table mat-table [dataSource]='tableDataArray[1]' class="specialTable">
 
       <ng-container matColumnDef="citamKnjige">
         <th mat-header-cell *matHeaderCellDef> Trenutno se citaju: </th>
@@ -74,7 +74,7 @@
       <tr mat-row *matRowDef="let row; columns: booksTableReadingColumns;"></tr>
     </table>
 
-    <table mat-table [dataSource]='korisnik.zaCitanjeKnjige' class="specialTable">
+    <table mat-table [dataSource]='tableDataArray[2]' class="specialTable">
 
       <ng-container matColumnDef="zaCitanjeKnjige">
         <th mat-header-cell *matHeaderCellDef> Za citanje: </th>
@@ -87,7 +87,7 @@
       <tr mat-row *matRowDef="let row; columns: booksTableToReadColumns;"></tr>
     </table>
 
-    <mat-paginator [pageSize]="10" [pageSizeOptions]="[1, 10, 20]">
+    <mat-paginator [length]="tableMaxLength" [pageSize]="tableSizeInitial" [pageSizeOptions]="tableSizeOptions" (page)="onPageChanged($event)">
     </mat-paginator>
   </mat-card>
   <br>
