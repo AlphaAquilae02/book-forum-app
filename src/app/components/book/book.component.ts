@@ -21,52 +21,55 @@ export class BookComponent implements OnInit {
   ulogovaniKorisnik: Korisnik
 
   procitao: boolean
-  cita: boolean
   zaCitanje: boolean
   showTable: boolean
 
-  progressValue: number
   ocena: number
   komentar: string
 
-  constructor(private commentService: CommentService, private data: DataService, private bookService: BookService, private userService: UserService, private router: Router) {
+  isReadingBookInfo: Array<number> // [bookId, progressValue, isReading]
+
+  constructor(private commentService: CommentService, private data: DataService, private userService: UserService) {
     this.commentsTableColumns = ['korisnikId', 'ocena', 'komentar']
-    this.ulogovaniKorisnik = this.data.dohvatiKorisnika()
-    this.progressValue = 0
+    this.ulogovaniKorisnik = this.userService.nadjiKorisnikaId(this.data.dohvatiKorisnika().id)
+    this.isReadingBookInfo = [0, 0, 0]
   }
 
   ngOnInit(): void {
+    this.data.loadedBook.subscribe(book => this.ucitanaKnjiga = book)
     this.prikaziKjigu()
   }
 
   // Loads data to display on view
   prikaziKjigu(): void {
+    // load toggles
     this.procitao = this.ulogovaniKorisnik.procitaneKnjige.includes(this.ucitanaKnjiga.id)
-    this.proveriKorisnikCita()
+    var loaded = false
+    this.ulogovaniKorisnik.citamKnjige.forEach(element => {
+      if (element[0] == this.ucitanaKnjiga.id) {
+        this.isReadingBookInfo = element
+        loaded = true
+      }
+    });
+    if (!loaded)
+      this.isReadingBookInfo = [this.ucitanaKnjiga.id, 0, 0]
     this.zaCitanje = this.ulogovaniKorisnik.zaCitanjeKnjige.includes(this.ucitanaKnjiga.id)
+
+    // load comments for currently loaded book
+    this.komentari = this.commentService.nadjiKnjigaKomentare(this.ucitanaKnjiga)
+    if (this.komentari.length != 0)
+      this.showTable = true
+    else this.showTable = false
+
+    // load existing comment into input fields
     if (this.commentService.nadjiKomentar(this.ulogovaniKorisnik.id, this.ucitanaKnjiga.id) != null) {
       this.komentar = this.commentService.nadjiKomentar(this.ulogovaniKorisnik.id, this.ucitanaKnjiga.id).komentar
       this.ocena = this.commentService.nadjiKomentar(this.ulogovaniKorisnik.id, this.ucitanaKnjiga.id).ocena
     }
-    this.pokupiKomentare()
-  }
-
-  proveriKorisnikCita(): void {
-    this.ulogovaniKorisnik.citamKnjige.forEach(element => {
-      if (element[0] == this.ucitanaKnjiga.id) {
-        this.progressValue = element[1]
-        this.cita = true
-      }
-    });
-  }
-
-  pokupiKomentare(): Komentar[] {
-    this.komentari = this.commentService.nadjiKnjigaKomentare(this.ucitanaKnjiga)
-    if (this.komentari.length != 0) {
-      this.showTable = true
+    else {
+      this.komentar = ""
+      this.ocena = 0
     }
-    else { this.showTable = false }
-    return this.komentari
   }
 
   // Returns all names based on param id
@@ -85,28 +88,67 @@ export class BookComponent implements OnInit {
     this.data.changeTab(2)
   }
 
-  saveChanges(): void {
-    console.log(this.procitao)
-    console.log(this.cita)
+  progressUpdated(): void {
+    this.toggledCita(this.isReadingBookInfo[2])
+  }
 
-    var citaValue = [0, this.progressValue]
-    var indexCita;
-    if (this.cita)
-      citaValue[0] = this.ucitanaKnjiga.id
-    for (var i = 0; i < this.ulogovaniKorisnik.citamKnjige.length; i++) {
-      if (this.ulogovaniKorisnik.citamKnjige[i][0] == this.ucitanaKnjiga.id) {
-        indexCita = i
-        this.ulogovaniKorisnik.citamKnjige[indexCita] = citaValue
-      }
+  toggledCita(event): void {
+    this.isReadingBookInfo[2] = event ? 1 : 0
+
+    // update cita array
+    if (this.ulogovaniKorisnik.citamKnjige.length > 0)
+      this.ulogovaniKorisnik.citamKnjige.forEach(element => {
+        if (element[0] == this.ucitanaKnjiga.id)
+          element = this.isReadingBookInfo
+      });
+    else
+      this.ulogovaniKorisnik.citamKnjige.push(this.isReadingBookInfo)
+
+    this.saveChanges()
+  }
+
+  toggledZaCitanje(): void {
+    // update zaCitanje array
+    if (this.ulogovaniKorisnik.zaCitanjeKnjige.length > 0)
+      this.ulogovaniKorisnik.zaCitanjeKnjige.forEach(element => {
+        if (element == this.ucitanaKnjiga.id) {
+          if (!this.zaCitanje)
+            this.ulogovaniKorisnik.zaCitanjeKnjige.splice(this.ulogovaniKorisnik.zaCitanjeKnjige.indexOf(element), 1)
+        } else
+          this.ulogovaniKorisnik.zaCitanjeKnjige.push(this.ucitanaKnjiga.id)
+      })
+    else
+      this.ulogovaniKorisnik.zaCitanjeKnjige.push(this.ucitanaKnjiga.id)
+
+    this.saveChanges()
+  }
+
+  toggledProcitao(): void {
+    if (this.procitao) {
+      this.isReadingBookInfo[1] = this.ucitanaKnjiga.brStrana
+      this.toggledCita(false)
+      this.zaCitanje = false
+      this.toggledZaCitanje()
     }
 
+    // update procitao array
+    if (this.ulogovaniKorisnik.procitaneKnjige.length > 0)
+      this.ulogovaniKorisnik.procitaneKnjige.forEach(element => {
+        if (element == this.ucitanaKnjiga.id) {
+          if (!this.zaCitanje)
+            this.ulogovaniKorisnik.procitaneKnjige.splice(this.ulogovaniKorisnik.procitaneKnjige.indexOf(element), 1)
+        } else
+          this.ulogovaniKorisnik.procitaneKnjige.push(this.ucitanaKnjiga.id)
+      })
+    else
+      this.ulogovaniKorisnik.procitaneKnjige.push(this.ucitanaKnjiga.id)
 
-    var zaCitanjeValue = 0
-    if (this.zaCitanje)
-      zaCitanjeValue = this.ucitanaKnjiga.id
-    this.ulogovaniKorisnik.zaCitanjeKnjige[this.ulogovaniKorisnik.zaCitanjeKnjige.indexOf(this.ucitanaKnjiga.id)] = zaCitanjeValue
+    this.saveChanges()
+  }
 
+  saveChanges(): void {
     this.userService.sacuvajKorisnika(this.ulogovaniKorisnik)
+    console.log(this.ulogovaniKorisnik)
   }
 
 }

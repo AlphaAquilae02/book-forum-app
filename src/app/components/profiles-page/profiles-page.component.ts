@@ -14,7 +14,6 @@ export class ProfilesPageComponent implements OnInit, OnDestroy {
   @ViewChild(ProfileComponent) profileChild: ProfileComponent
 
   requestedUser: string
-  korisnik: Korisnik
 
   showUserTableParams: Table
   showUserTable: boolean
@@ -26,9 +25,9 @@ export class ProfilesPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.showUserTableParams = {
-      searchObject: "profil", 
-      searchParams: ["ime", "prezime", "korisnickoIme"], 
-      linkParam: "korisnickoIme", 
+      searchObject: "profil",
+      searchParams: ["ime", "prezime", "korisnickoIme"],
+      linkParam: "korisnickoIme",
       tableData: [],
       headerMap: {
         ime: "Ime",
@@ -42,23 +41,22 @@ export class ProfilesPageComponent implements OnInit, OnDestroy {
     this.data.showTable.subscribe(showTable => this.showUserTable = showTable)
 
     this.data.requestedUser.subscribe(requestedUser => this.requestedUser = requestedUser)
-    if (this.requestedUser != "") 
+    if (this.requestedUser != "")
       this.openProfile()
+    else
+      this.data.setLoadedUser(this.userService.nadjiKorisnikaId(this.data.dohvatiKorisnika().id))
   }
 
   ngOnDestroy(): void {
-    /*this.data.setSearchObject("")
-    this.data.setSearchParams([""])
-    this.data.setSearchLinkParam("")
-    this.data.setSearchTableHeadersParams({})*/
     this.data.changeRequestedUser("")
     this.data.setTableData([])
   }
 
   openProfile(): void {
-    this.korisnik = this.userService.nadjiKorisnikaKorisnickoIme(this.requestedUser)
+    this.data.setLoadedUser(this.userService.nadjiKorisnikaKorisnickoIme(this.requestedUser))
     this.showUser = true
-    if (this.profileChild)
+    if (this.profileChild) {
       this.profileChild.prikaziKorisnika()
+    }
   }
 }

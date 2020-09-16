@@ -13,9 +13,8 @@ export class UserService {
   }
 
   sacuvajKorisnika(korisnik:Korisnik):void {
-    this.korisnikLista.filter(x => x.id == korisnik.id)[0]
-    this.korisnikLista[this.korisnikLista.indexOf(this.korisnikLista.filter(x => x.id == korisnik.id)[0])] = korisnik
-    console.log(this.korisnikLista)
+    //this.korisnikLista.filter(x => x.id == korisnik.id)[0]
+    //this.korisnikLista[this.korisnikLista.indexOf(this.korisnikLista.filter(x => x.id == korisnik.id)[0])] = korisnik
   }
 
   dodajKorisnika(korisnik:Korisnik):void {
@@ -81,7 +80,7 @@ export class UserService {
         drzava: 'Srbija',
         email: 'tduca998@gmail.com',
         procitaneKnjige: [],
-        citamKnjige: [[1, 10], [3, 15]],
+        citamKnjige: [[1, 10, 1], [2, 15, 0]],
         zaCitanjeKnjige: []
       },
       {
@@ -97,7 +96,7 @@ export class UserService {
         drzava: 'USA',
         email: 'rory@wolk.com',
         procitaneKnjige: [2, 3],
-        citamKnjige: [[1, 20]],
+        citamKnjige: [[1, 20, 1]],
         zaCitanjeKnjige: [1]
       }
     ]

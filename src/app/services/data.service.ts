@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Korisnik } from '../modules/Korisnik';
 import { BehaviorSubject } from 'rxjs';
 import { FormControl } from '@angular/forms';
+import { Knjiga } from '../modules/Knjiga';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,40 @@ export class DataService {
   private requestedUserSource = new BehaviorSubject('')
   requestedUser = this.requestedUserSource.asObservable()
 
+  // Holds the currently loaded(to be displayed) book
+  private loadedBookSource = new BehaviorSubject<Knjiga>({
+    id: 0,
+    slika: '',
+    naziv: '',
+    autor: [],
+    datumIzdavanja: '',
+    zanr: [],
+    opis: '',
+    prosecnaOcena: 0,
+    brStrana: 0,
+    odobrena: false
+  })
+  loadedBook = this.loadedBookSource.asObservable()
+
+  // Holds the currently loaded(to be displayed) user
+  private loadedUserSource = new BehaviorSubject<Korisnik>({
+    id: 0,
+    AT: 1,
+    ime: '',
+    prezime:'',
+    slika: '',
+    korisnickoIme: '',
+    lozinka: '',
+    datumRodjenja: '',
+    grad: '',
+    drzava: '',
+    email: '',
+    procitaneKnjige: [],
+    citamKnjige: [],
+    zaCitanjeKnjige: []
+  })
+  loadedUser = this.loadedUserSource.asObservable()
+
   // Holds the data of requested book after clicking the link to the book
   private requestedBookSource = new BehaviorSubject('')
   requestedBook = this.requestedBookSource.asObservable()
@@ -26,7 +61,7 @@ export class DataService {
   selectedTab = this.selectedTabSource.asObservable()
 
   // Holds the data of which object is requested for search
-  private searchObjectSource = new BehaviorSubject('')
+  /*private searchObjectSource = new BehaviorSubject('')
   searchObject = this.searchObjectSource.asObservable()
 
   // Holds the data of params which are to be displayed in table
@@ -40,7 +75,7 @@ export class DataService {
   // Holds the data in object as a form of map to which param should be 
   // represented in which specifically format(namewise)
   private searchTableHeadersParamsSource = new BehaviorSubject<Object>({})
-  searchTableHeadersParams = this.searchTableHeadersParamsSource.asObservable()
+  searchTableHeadersParams = this.searchTableHeadersParamsSource.asObservable()*/
 
   // Holds the data which are to be displayed in table
   private tableDataSource = new BehaviorSubject<Array<any>>([])
@@ -79,11 +114,27 @@ export class DataService {
     this.requestedBookSource.next(newRequestedBook)
   }
 
+  setLoadedBook(book: Knjiga) {
+    this.loadedBookSource.next(book)
+  }
+
+  setLoadedUser(user: Korisnik) {
+    this.loadedUserSource.next(user)
+  }
+
   changeTab(index: number) {
     this.selectedTabSource.next(index)
   }
 
-  setSearchObject(object: string) {
+  setTableData(params: Array<any>) {
+    this.tableDataSource.next(params)
+  }
+
+  setShowTable(showTable: boolean) {
+    this.showTableSource.next(showTable)
+  }
+
+  /*setSearchObject(object: string) {
     this.searchObjectSource.next(object)
   }
 
@@ -97,14 +148,6 @@ export class DataService {
 
   setSearchTableHeadersParams(headerParams: object) {
     this.searchTableHeadersParamsSource.next(headerParams)
-  }
-
-  setTableData(params: Array<any>) {
-    this.tableDataSource.next(params)
-  }
-
-  setShowTable(showTable: boolean) {
-    this.showTableSource.next(showTable)
-  }
+  }*/
 
 }

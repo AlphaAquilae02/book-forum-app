@@ -5,7 +5,7 @@
   <br *ngIf="AT==2">
   <app-search [searchParams]="showBooksTableParams" (showAddOption)="showAddBook=$event"></app-search>
   <app-table *ngIf="showBooksTable" [tableParams]="showBooksTableParams" (linkClick)="openBook()"></app-table>
-  <app-book *ngIf="showBook" [ucitanaKnjiga]="ucitanaKnjiga"></app-book>
+  <app-book *ngIf="showBook"></app-book>
   <app-add-book *ngIf="showAddBook && AT!=0"></app-add-book>
   <br>
 </div>

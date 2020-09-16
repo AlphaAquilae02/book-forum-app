@@ -65,9 +65,9 @@ export class BooksPageComponent implements OnInit, OnDestroy {
   }
 
   openBook(): void {
+    this.data.setLoadedBook(this.bookService.nadjiKnjiguNaziv(this.requestedBook))
     this.showBook = true
     this.showAddBook = false
-    this.ucitanaKnjiga = this.bookService.nadjiKnjiguNaziv(this.requestedBook)
     if (this.bookChild)
       this.bookChild.prikaziKjigu()
   }

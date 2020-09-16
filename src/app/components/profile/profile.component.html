@@ -43,7 +43,7 @@
 
     <label>Last Active: OVDE DODAJ KADA JE POSLEDNJI PUT BIO LIVE</label><br>
     <label>Online: </label><span class="onlineIndicator"></span><br>
-    <button mt-raised-button *ngIf="authenticateUser()" (click)='promeniPodatke()'>Promeni podatke</button>
+    <button mt-raised-button *ngIf="authenticateUser()" (click)='promeniPodatke()'>{{ editButtonLabel }}</button>
   </mat-card>
   <br>
 

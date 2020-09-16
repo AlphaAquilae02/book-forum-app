@@ -5,6 +5,7 @@ import { BookService } from 'src/app/services/book.service';
 import { CommentService } from 'src/app/services/comment.service';
 import { Komentar } from 'src/app/modules/Komentar';
 import { Knjiga } from 'src/app/modules/Knjiga';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -21,6 +22,7 @@ export class ProfileComponent implements OnInit {
   booksTableToReadColumns: string[]
 
   askedBook: string
+  editButtonLabel: string
 
   // Variables for listing out books under (read, reading, to be read) tables
   tableDataArray: Array<Array<any>>
@@ -28,7 +30,8 @@ export class ProfileComponent implements OnInit {
   tableSizeInitial: number
   tableMaxLength: number
 
-  constructor(private data: DataService, private bookService: BookService, private commentService: CommentService) {
+  constructor(private userService: UserService, private data: DataService, private bookService: BookService, private commentService: CommentService) {
+    this.editButtonLabel = "Promeni podatke"
     this.editDisabled = true
     this.commentsTableColumns = ['knjigaId', 'komentar', 'ocena', 'zanr']
     this.booksTableReadColumns = ['procitaneKnjige']
@@ -39,15 +42,13 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.data.loadedUser.subscribe(user => this.korisnik = user)
     this.prikaziKorisnika()
   }
 
   prikaziKorisnika(): void {
-    if (this.korisnik == null) {
-      this.korisnik = this.data.dohvatiKorisnika()
-    }
-
     this.tableDataArray = [this.korisnik.procitaneKnjige, this.korisnik.citamKnjige, this.korisnik.zaCitanjeKnjige]
+    this.tableDataArray[1] = this.tableDataArray[1].filter(element => element[2] == 1)
 
     this.tableMaxLength = 0
     this.tableDataArray.forEach(element => {
@@ -59,12 +60,11 @@ export class ProfileComponent implements OnInit {
   // Method to unlock/lock input fields for user params
   promeniPodatke(): void {
     this.editDisabled = !this.editDisabled
+    if (this.editDisabled) 
+      this.editButtonLabel = "Promeni podatke"
+    else 
+      this.editButtonLabel = "Sacuvaj podatke"
   }
-
-  // 
-  /*pokupiImenaKnjiga(id: number): string {
-    return this.bookService.nadjiKnjiguId(id).naziv
-  }*/
 
   //
   pokupiKomentare(): Komentar[] {

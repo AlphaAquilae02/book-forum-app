@@ -1,6 +1,6 @@
 <div class="content">
     <app-search [searchParams]="showUserTableParams"></app-search>
     <app-table *ngIf="showUserTable" [tableParams]="showUserTableParams" (linkClick)="openProfile()"></app-table>
-    <app-profile *ngIf="showUser" [korisnik]="korisnik"></app-profile>
+    <app-profile *ngIf="showUser"></app-profile>
     <br>
 </div>
