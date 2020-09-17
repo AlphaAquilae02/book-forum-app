@@ -21,6 +21,7 @@ export class BookComponent implements OnInit {
   ulogovaniKorisnik: Korisnik
 
   procitao: boolean
+  citam: boolean
   zaCitanje: boolean
   showTable: boolean
 
@@ -31,19 +32,30 @@ export class BookComponent implements OnInit {
 
   constructor(private commentService: CommentService, private data: DataService, private userService: UserService) {
     this.commentsTableColumns = ['korisnikId', 'ocena', 'komentar']
-    this.ulogovaniKorisnik = this.userService.nadjiKorisnikaId(this.data.dohvatiKorisnika().id)
     this.isReadingBookInfo = [0, 0, 0]
   }
 
   ngOnInit(): void {
+    this.ulogovaniKorisnik = this.userService.nadjiKorisnikaId(this.data.dohvatiKorisnika().id)
+    if (this.ulogovaniKorisnik == undefined)
+      this.ulogovaniKorisnik = this.data.dohvatiKorisnika()
+
     this.data.loadedBook.subscribe(book => this.ucitanaKnjiga = book)
+    console.log(this.userService.nadjiKorisnikaId(this.data.dohvatiKorisnika().id))
     this.prikaziKjigu()
   }
 
   // Loads data to display on view
   prikaziKjigu(): void {
-    // load toggles
+    this.loadToggles()
+    this.loadComments()
+    this.loadUserComment()
+  }
+
+  // load toggles
+  loadToggles() {
     this.procitao = this.ulogovaniKorisnik.procitaneKnjige.includes(this.ucitanaKnjiga.id)
+    this.citam = false
     var loaded = false
     this.ulogovaniKorisnik.citamKnjige.forEach(element => {
       if (element[0] == this.ucitanaKnjiga.id) {
@@ -54,14 +66,18 @@ export class BookComponent implements OnInit {
     if (!loaded)
       this.isReadingBookInfo = [this.ucitanaKnjiga.id, 0, 0]
     this.zaCitanje = this.ulogovaniKorisnik.zaCitanjeKnjige.includes(this.ucitanaKnjiga.id)
+  }
 
-    // load comments for currently loaded book
+  // load comments for currently loaded book
+  loadComments() {
     this.komentari = this.commentService.nadjiKnjigaKomentare(this.ucitanaKnjiga)
     if (this.komentari.length != 0)
       this.showTable = true
     else this.showTable = false
+  }
 
-    // load existing comment into input fields
+  // load user comment into input fields
+  loadUserComment() {
     if (this.commentService.nadjiKomentar(this.ulogovaniKorisnik.id, this.ucitanaKnjiga.id) != null) {
       this.komentar = this.commentService.nadjiKomentar(this.ulogovaniKorisnik.id, this.ucitanaKnjiga.id).komentar
       this.ocena = this.commentService.nadjiKomentar(this.ulogovaniKorisnik.id, this.ucitanaKnjiga.id).ocena
@@ -72,14 +88,18 @@ export class BookComponent implements OnInit {
     }
   }
 
+  // Saves freshly edited/added comment
+  saveUserComment(): void {
+    if (this.commentService.nadjiKomentar(this.ulogovaniKorisnik.id, this.ucitanaKnjiga.id) != null)
+      this.commentService.izmeniKomentar(this.komentar, this.ocena, this.ulogovaniKorisnik.id, this.ucitanaKnjiga.id)
+    else 
+      this.commentService.dodajKomentar(this.ulogovaniKorisnik.id, this.ucitanaKnjiga.id, this.ocena, this.komentar)
+    this.loadComments()
+  }
+
   // Returns all names based on param id
   nadjiKorisnika(id: number): string {
     return this.userService.nadjiKorisnikaId(id).korisnickoIme
-  }
-
-  // Saves freshly edited/added comment
-  sacuvajKomentar(): void {
-    this.commentService.izmeniKomentar(this.komentar, this.ocena, this.ulogovaniKorisnik.id, this.ucitanaKnjiga.id)
   }
 
   // Sends username of the users profile to be displayed
@@ -88,60 +108,70 @@ export class BookComponent implements OnInit {
     this.data.changeTab(2)
   }
 
+  // triggers on progressValueChange
   progressUpdated(): void {
-    this.toggledCita(this.isReadingBookInfo[2])
+    this.toggledCita(this.isReadingBookInfo[2], true)
   }
 
-  toggledCita(event): void {
+  toggledCita(event, save:boolean): void {
     this.isReadingBookInfo[2] = event ? 1 : 0
+    if (event) {
+      this.citam = true
+      this.zaCitanje = false
+      this.toggledZaCitanje(false)
+    }
 
     // update cita array
+    var match = false
     if (this.ulogovaniKorisnik.citamKnjige.length > 0)
       this.ulogovaniKorisnik.citamKnjige.forEach(element => {
-        if (element[0] == this.ucitanaKnjiga.id)
+        if (element[0] == this.ucitanaKnjiga.id) {
+          match = true
           element = this.isReadingBookInfo
+        }
       });
-    else
+    if (!match)
       this.ulogovaniKorisnik.citamKnjige.push(this.isReadingBookInfo)
 
-    this.saveChanges()
+      if (save) this.saveChanges()
   }
 
-  toggledZaCitanje(): void {
+  toggledZaCitanje(save: boolean): void {
     // update zaCitanje array
+    var match = false
     if (this.ulogovaniKorisnik.zaCitanjeKnjige.length > 0)
       this.ulogovaniKorisnik.zaCitanjeKnjige.forEach(element => {
         if (element == this.ucitanaKnjiga.id) {
+          match = true
           if (!this.zaCitanje)
             this.ulogovaniKorisnik.zaCitanjeKnjige.splice(this.ulogovaniKorisnik.zaCitanjeKnjige.indexOf(element), 1)
-        } else
-          this.ulogovaniKorisnik.zaCitanjeKnjige.push(this.ucitanaKnjiga.id)
+        }
       })
-    else
+    if (!match)
       this.ulogovaniKorisnik.zaCitanjeKnjige.push(this.ucitanaKnjiga.id)
 
-    this.saveChanges()
+    if (save) this.saveChanges()
   }
 
   toggledProcitao(): void {
-    if (this.procitao) {
-      this.isReadingBookInfo[1] = this.ucitanaKnjiga.brStrana
-      this.toggledCita(false)
-      this.zaCitanje = false
-      this.toggledZaCitanje()
-    }
+    this.isReadingBookInfo[1] = this.ucitanaKnjiga.brStrana
+    this.toggledCita(false, false)
+    if (this.procitao)
+      this.citam = true
+    this.zaCitanje = false
+    this.toggledZaCitanje(false)
+
 
     // update procitao array
+    var match = false
     if (this.ulogovaniKorisnik.procitaneKnjige.length > 0)
       this.ulogovaniKorisnik.procitaneKnjige.forEach(element => {
-        if (element == this.ucitanaKnjiga.id) {
-          if (!this.zaCitanje)
-            this.ulogovaniKorisnik.procitaneKnjige.splice(this.ulogovaniKorisnik.procitaneKnjige.indexOf(element), 1)
-        } else
-          this.ulogovaniKorisnik.procitaneKnjige.push(this.ucitanaKnjiga.id)
+        if (element == this.ucitanaKnjiga.id)
+          match = true
       })
-    else
+    if (!match) {
       this.ulogovaniKorisnik.procitaneKnjige.push(this.ucitanaKnjiga.id)
+    }
 
     this.saveChanges()
   }

@@ -35,10 +35,6 @@ export class UserService {
       return this.korisnikLista.filter(x => x[searchParam] == searchQuery)
   }
 
-  // nadjiKorisnika(username:string):Array<Korisnik> {
-  //   return this.korisnikLista.filter(x => x.korisnickoIme == username)
-  // }
-
   nadjiKorisnikaKorisnickoIme(korisnickoIme: string): Korisnik {
     var userFound = this.korisnikLista.filter(x => x.korisnickoIme == korisnickoIme)
     if (userFound.length > 0)

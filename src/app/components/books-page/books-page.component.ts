@@ -56,10 +56,6 @@ export class BooksPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    /*this.data.setSearchObject("")
-    this.data.setSearchParams([""])
-    this.data.setSearchLinkParam("")
-    this.data.setSearchTableHeadersParams({})*/
     this.data.changeRequestedBook("")
     this.data.setTableData([])
   }

@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Table } from 'src/app/modules/Table';
+import { BookService } from 'src/app/services/book.service';
 import { DataService } from 'src/app/services/data.service';
 
 @Component({
@@ -14,7 +15,7 @@ export class TableComponent implements OnInit {
   AT: number
   tableSizeOptions: Array<number> // Set of options for table size
 
-  constructor(private data: DataService) { }
+  constructor(private data: DataService, private bookService: BookService) { }
 
   ngOnInit(): void {
     this.tableSizeOptions = [1, 5, 15, 50]
@@ -42,6 +43,8 @@ export class TableComponent implements OnInit {
       case 2: console.log("Moderator click")
         console.log(obj)
         obj["odobrena"] = true
+        if (obj["odobrena"])
+          // Sacuvaj knjigu
         break
       case 3: console.log("Admin click")
         console.log(obj)

@@ -15,8 +15,14 @@ export class CommentService {
   }
 
   // Method to add a comment in database
-  dodajKomentar(knjigaId:number, ocena:number, komentar:string):void {
-
+  dodajKomentar(korisnikId:number, knjigaId:number, ocena:number, komentar:string):void {
+    this.komentarLista.push({
+      id: this.komentarLista.length,
+      korisnikId: korisnikId,
+      knjigaId: knjigaId,
+      komentar: komentar,
+      ocena: ocena
+    })
   }
 
   // Method to delete a comment in database
