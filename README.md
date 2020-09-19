@@ -6,6 +6,6 @@ Aplikacija za simulaciju online foruma za obozavaoce knjiga.
 Frontend: Angular  
 Backend: Node.js  
 Middleware: Express  
-Database: Not Determined  
+Database: MySQL  
 
 # WORK IN PROGRESS / Learning phase
