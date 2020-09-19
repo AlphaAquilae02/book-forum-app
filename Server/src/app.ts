@@ -2,7 +2,6 @@ import express from 'express'
 import http from 'http'
 import path from 'path'
 import { Logger } from './middleware/logger'
-import router from './routes/api/users'
 
 const app = express()
 
