@@ -24,38 +24,47 @@ export class RegisterComponent implements OnInit {
     this.captchaCheck = false
     
     this.korisnik = {
-      id: 0,
-      AT: 1,
+      id: '0', // nije bitno sta se salje jer server kreira id
+      AT: 1, // mora da se salje 1 jer je to podrazumevana vrednost autorization tokena
       ime: '',
-      prezime:' ',
-      slika: '',
+      prezime:'',
+      slika: '', // implementirano kao string koji je u sustini path sa servera
       korisnickoIme: '',
       lozinka: '',
       datumRodjenja: '',
       grad: '',
       drzava: '',
       email: '',
-      procitaneKnjige: [],
-      citamKnjige: [],
-      zaCitanjeKnjige: []
+      procitaneKnjige: [], // salje se prazno !
+      citamKnjige: [], // salje se prazno !
+      zaCitanjeKnjige: [] // salje se prazno !
     }
   }
 
   ngOnInit(): void {
   }
 
+  // Ovde menjaj, radi sta hoces
+  // Slika nek se cuva u nekom folderu, nije bitno kako ti namestis ja cu lagano promeniti path
+  // Ime slike mora da bude 'username.format'
+  // this.korisnik.slika u sustini ne mora nista da ima, obrisacu taj parametar kasnije
   register():void {
-    console.log(this.korisnik.datumRodjenja)
-    this.usernameCheck = this.validatorService.validateUsername(this.korisnik.korisnickoIme)
-    this.passwordCheck = this.validatorService.validatePassword(this.korisnik.lozinka)
-    this.emailCheck = this.validatorService.validateEmail(this.korisnik.email)
-    
-    // Odradi prvo provere sve koje su potrebne nad unetim poljima
-    if(this.usernameCheck && this.passwordCheck && this.emailCheck) {
-      this.userService.dodajKorisnika(this.korisnik)
-      this.router.navigate(['/login'])
-    }
+    this.userService.dodajKorisnika(this.korisnik)
+    this.router.navigate(['/login'])
   }
+
+
+  // register():void {
+  //   this.usernameCheck = this.validatorService.validateUsername(this.korisnik.korisnickoIme)
+  //   this.passwordCheck = this.validatorService.validatePassword(this.korisnik.lozinka)
+  //   this.emailCheck = this.validatorService.validateEmail(this.korisnik.email)
+    
+  //   // input validation
+  //   if(this.usernameCheck && this.passwordCheck && this.emailCheck) {
+  //     this.userService.dodajKorisnika(this.korisnik)
+  //     this.router.navigate(['/login'])
+  //   }
+  // }
 
   back():void {
     this.router.navigate(['/login'])

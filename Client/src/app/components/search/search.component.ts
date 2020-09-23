@@ -31,13 +31,13 @@ export class SearchComponent implements OnInit {
       this.hintParams.splice(this.hintParams.length - 1, 1)
   }
 
-  search() {
+  async search() {
     switch (this.searchParams.searchObject) {
-      case "knjiga": this.searchResponse = this.bookService.nadjiKnjigu(this.searchHint, this.searchQuery)
+      case "knjiga": this.searchResponse = await this.bookService.nadjiKnjigu(this.searchHint, this.searchQuery)
         if (this.searchResponse.length == 0)
           this.showAddOption.emit(true)
         break
-      case "profil": this.searchResponse = this.userService.nadjiKorisnika(this.searchHint, this.searchQuery)
+      case "profil": this.searchResponse = await this.userService.nadjiKorisnika(this.searchHint, this.searchQuery)
         break
     }
     

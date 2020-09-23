@@ -1,14 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Knjiga } from '../modules/Knjiga';
+import axios, { AxiosInstance } from 'axios'
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookService {
   knjigeLista: Knjiga[]
+  axiosRequest: AxiosInstance
 
   constructor() {
     this.fillKnjigeLista()
+    this.axiosRequest = axios.create({
+      baseURL: 'http://localhost:5000/',
+      timeout: 1000
+    })
   }
 
   // Method to add a book in database
@@ -17,41 +23,102 @@ export class BookService {
   }
 
   // Method to find the book based on param 'id'
-  nadjiKnjiguId(id: number): Knjiga {
-    var bookFound = this.knjigeLista.filter(x => x.id == id)
-    if (bookFound.length > 0) {
-      return bookFound[0]
-    }
-    else {
-      return null
-    }
+  async nadjiKnjiguId(id: string): Promise<Knjiga> {
+    var tempBook: Knjiga
+    
+    await this.axiosRequest.get(`API/books/${id}`)
+      .then(response => {
+        tempBook = {
+          id: response.data[0].id,
+          slika: response.data[0].slika,
+          naziv: response.data[0].naziv,
+          autor: [ "Leigh Bardugo" ],
+          datumIzdavanja: response.data[0].datumIzdavanja,
+          zanr: [],
+          opis: response.data[0].opis,
+          prosecnaOcena: response.data[0].prosecnaOcena,
+          brStrana: response.data[0].brStrana,
+          odobrena: response.data[0].odobrena
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+      return tempBook
   }
 
   // Method to find the book based on param 'naziv'
-  nadjiKnjiguNaziv(naziv: string): Knjiga {
-    var bookFound = this.knjigeLista.filter(x => x.naziv == naziv)
-    if (bookFound.length > 0) 
-      return bookFound[0]
-    else 
-      return null
+  async nadjiKnjiguNaziv(naziv: string): Promise<Knjiga> {
+    var tempBook: Knjiga
+    
+    await this.axiosRequest.get(`API/books?naziv=${naziv}`)
+      .then(response => {
+        tempBook = {
+          id: response.data[0].id,
+          slika: response.data[0].slika,
+          naziv: response.data[0].naziv,
+          autor: JSON.parse(response.data[0].autor),
+          datumIzdavanja: response.data[0].datumIzdavanja,
+          zanr: JSON.parse(response.data[0].zanr),
+          opis: response.data[0].opis,
+          prosecnaOcena: response.data[0].prosecnaOcena,
+          brStrana: response.data[0].brStrana,
+          odobrena: response.data[0].odobrena
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    return tempBook
   }
 
   // Method returns full list of objects of type 'Knjiga' based on params
   // Returns list of books based on searchQuery where searchQuery matches searchParam.value
-  nadjiKnjigu(searchParam: string, searchQuery: string): Array<Knjiga> {
-    if (Array.isArray(this.knjigeLista[0][searchParam]))
-      return this.knjigeLista.filter(x => x[searchParam].some(element => {
-        return (element == searchQuery)
-      }))
-    else
-      return this.knjigeLista.filter(x => x[searchParam] == searchQuery)
+  async nadjiKnjigu(searchParam: string, searchQuery: string): Promise<Array<Knjiga>> {
+
+    var tempBookList: Array<any> = []
+
+    await this.axiosRequest.get(`API/books?${searchParam}=${searchQuery}`)
+      .then(response => {
+        response.data.forEach(element => {
+          var tempBook: Knjiga = {
+          id: element.id,
+          slika: element.slika,
+          naziv: element.naziv,
+          autor: JSON.parse(element.autor), //[ "Leigh Bardugo" ],
+          datumIzdavanja: element.datumIzdavanja,
+          zanr: JSON.parse(element.autor),
+          opis: element.opis,
+          prosecnaOcena: element.prosecnaOcena,
+          brStrana: element.brStrana,
+          odobrena: element.odobrena
+        }
+        tempBookList.push(tempBook)
+        })
+      })
+      .catch(err => {
+        console.log(err)
+      })
+      return tempBookList
+  }
+
+  async getBookName(knjigaId: string): Promise<string> {
+    var bookName:string = ""
+    await this.axiosRequest.get(`API/books/name/${knjigaId}`)
+    .then(response => {
+      bookName =  response.data.naziv
+    })
+    .catch(err => {
+      console.log(err)
+    })
+    return bookName
   }
 
   // Temporary method for testing purposes
   fillKnjigeLista(): void {
     this.knjigeLista = [
       {
-        id: 1,
+        id: '1',
         slika: 'asd',
         naziv: 'Na drini cuprija',
         autor: ['Ivo Andric'],
@@ -63,7 +130,7 @@ export class BookService {
         odobrena: true
       },
       {
-        id: 2,
+        id: '2',
         slika: 'asd',
         naziv: 'The Revenant',
         autor: ['Leo'],
@@ -75,7 +142,7 @@ export class BookService {
         odobrena: true
       },
       {
-        id: 3,
+        id: '3',
         slika: 'asd',
         naziv: 'What If?',
         autor: ['Neka likusa'],
@@ -87,7 +154,7 @@ export class BookService {
         odobrena: false
       },
       {
-        id: 4,
+        id: '4',
         slika: 'asd',
         naziv: 'Avengers',
         autor: ['MARVEL'],

@@ -12,7 +12,7 @@ export class AddBookComponent implements OnInit {
 
   constructor(private bookService:BookService) {
     this.knjiga = {
-      id: 1,
+      id: '',
       slika: 'asd',
       naziv: '',
       autor: [],

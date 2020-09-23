@@ -15,6 +15,14 @@ import { UserService } from 'src/app/services/user.service';
 export class ProfileComponent implements OnInit {
   @Input() korisnik: Korisnik
 
+  // For user comments display
+  userComments: Array<any>
+  showUserComments: boolean
+
+  // For user books display
+  showUserBooks: boolean
+  tableDataArray: Array<Array<any>>
+
   editDisabled: boolean
   commentsTableColumns: string[]
   booksTableReadColumns: string[]
@@ -24,76 +32,114 @@ export class ProfileComponent implements OnInit {
   askedBook: string
   editButtonLabel: string
 
-  // Variables for listing out books under (read, reading, to be read) tables
-  tableDataArray: Array<Array<any>>
+  showEditButton: boolean
+
+  // Variables for listing out books under (read, reading, to be read) tables>
   tableSizeOptions: Array<number>
   tableSizeInitial: number
   tableMaxLength: number
 
   constructor(private userService: UserService, private data: DataService, private bookService: BookService, private commentService: CommentService) {
+    // For user comments display
+    this.showUserComments = false
+
+    // For user books display
+    this.showUserBooks = false
+    this.tableDataArray = [[], [], []]
+    
     this.editButtonLabel = "Promeni podatke"
     this.editDisabled = true
+    
     this.commentsTableColumns = ['knjigaId', 'komentar', 'ocena', 'zanr']
     this.booksTableReadColumns = ['procitaneKnjige']
     this.booksTableReadingColumns = ['citamKnjige']
     this.booksTableToReadColumns = ['zaCitanjeKnjige']
     this.tableSizeInitial = 5
     this.tableSizeOptions = [1, 5, 15, 50]
-  }
 
-  ngOnInit(): void {
     this.data.loadedUser.subscribe(user => this.korisnik = user)
-    this.prikaziKorisnika()
   }
 
-  prikaziKorisnika(): void {
-    this.tableDataArray = [this.korisnik.procitaneKnjige, this.korisnik.citamKnjige, this.korisnik.zaCitanjeKnjige]
-    this.tableDataArray[1] = this.tableDataArray[1].filter(element => element[2] == 1)
+  ngOnInit() {
+    this.loadUserData()
+  }
 
+  // full pull everything method for data of currently displayed user
+  async loadUserData() {
+    // populates tableDataArray[0] with read books
+    for (var i = 0; i < this.korisnik.procitaneKnjige.length; i++) {
+      this.tableDataArray[0].push({
+        id: this.korisnik.procitaneKnjige[i],
+        naziv: await this.bookService.getBookName(this.korisnik.procitaneKnjige[i])
+      })
+    }
+
+    // populates tableDataArray[1] with currently reading books
+    for (var i = 0; i < this.korisnik.citamKnjige.length; i++) {
+      this.tableDataArray[1].push({
+        id: this.korisnik.citamKnjige[i][0],
+        naziv: await this.bookService.getBookName(this.korisnik.citamKnjige[i][0])
+      })
+    }
+
+    // populates tableDataArray[2] with books to be read
+    for (var i = 0; i < this.korisnik.zaCitanjeKnjige.length; i++) {
+      this.tableDataArray[2].push({
+        id: this.korisnik.zaCitanjeKnjige[i],
+        naziv: await this.bookService.getBookName(this.korisnik.zaCitanjeKnjige[i])
+      })
+    }
+
+    // sets max number for display on paginator
     this.tableMaxLength = 0
     this.tableDataArray.forEach(element => {
       if (element.length > this.tableMaxLength)
         this.tableMaxLength = element.length
-    });
-  }
+    })
+
+    // populates userComments with user personalized comments
+    this.userComments = await this.commentService.getUserComments(this.korisnik.id)
+    
+    // display tables after data has been loaded
+    this.showUserBooks = true
+    this.showUserComments = true
+
+    this.authenticateUser()
+  }  
 
   // Method to unlock/lock input fields for user params
-  promeniPodatke(): void {
+  editBtn(): void {
     this.editDisabled = !this.editDisabled
-    if (this.editDisabled) 
+    if (this.editDisabled) {
+      this.userService.sacuvajKorisnika(this.korisnik)
       this.editButtonLabel = "Promeni podatke"
-    else 
+    }
+    else
       this.editButtonLabel = "Sacuvaj podatke"
   }
 
-  //
-  pokupiKomentare(): Komentar[] {
-    return this.commentService.nadjiKorisnikKomentare(this.korisnik)
-  }
-
-  //
-  pokupiKnjigu(id: number): Knjiga {
-    return this.bookService.nadjiKnjiguId(id)
-  }
-
   // Method of authentification used to change value on field which controls display of "EDIT" button
-  authenticateUser(): boolean {
+  authenticateUser() {
     var ulogovaniKorisnik = this.data.dohvatiKorisnika()
     if (this.korisnik.id == ulogovaniKorisnik.id)
-      return true
-    else return false
+      this.showEditButton = true
+    else this.showEditButton = false
   }
 
+  // OVDE TREBA DA PROVERIS DA LI SVE RADI I KAKO RADI I DA PAZIS NA ASYNC I PREBACIVANJE!!!
   // Method to be called upon clicking on book name link
+  // Ovde je prosledjen ID od trazene knjige
   otvoriKnjigu(requestedBook: string): void {
-    this.data.changeRequestedBook(requestedBook)
-    this.data.changeTab(0)
+    console.log(requestedBook)
+    //this.data.changeRequestedBook(requestedBook)
+    //this.data.changeTab(0)
   }
 
   // Method of pagination event change used to update shown data in table
-  onPageChanged(e) {
-    let firstCut = e.pageIndex * e.pageSize;
-    let secondCut = firstCut + e.pageSize;
+  // OK I FUCKED UP SOMETHING
+  onPageChanged(event: any) {
+    let firstCut = event.pageIndex * event.pageSize;
+    let secondCut = firstCut + event.pageSize;
     this.tableDataArray[0] = this.korisnik.procitaneKnjige.slice(firstCut, secondCut);
     this.tableDataArray[1] = this.korisnik.citamKnjige.slice(firstCut, secondCut);
     this.tableDataArray[2] = this.korisnik.zaCitanjeKnjige.slice(firstCut, secondCut);

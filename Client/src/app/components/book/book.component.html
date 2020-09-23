@@ -37,24 +37,24 @@
     <label class="customLabel">{{ ucitanaKnjiga.prosecnaOcena }}</label>
     <mat-divider></mat-divider><br>
 
-    <table mat-table *ngIf="showTable" [dataSource]='komentari' class="specialTable">
+    <table mat-table *ngIf="showTable" [dataSource]='commentsTableData' class="specialTable">
 
         <ng-container matColumnDef="korisnikId">
             <th mat-header-cell *matHeaderCellDef> Korisnik: </th>
-            <td mat-cell *matCellDef="let Komentar">
-                <a *ngIf="ulogovaniKorisnik.AT!=0" [routerLink]="" (click)='otvoriKorisnika(nadjiKorisnika(Komentar.korisnikId))'>{{ nadjiKorisnika(Komentar.korisnikId) }}</a>
+            <td mat-cell *matCellDef="let obj; index as i">
+                <a *ngIf="ulogovaniKorisnik.AT!=0" [routerLink]="" (click)='openUserTroughComments(obj.korisnikId)'>{{ commentsTableUserData[i] }}</a>
                 <Label *ngIf="ulogovaniKorisnik.AT==0">Anonymous</Label>
             </td>
         </ng-container>
 
         <ng-container matColumnDef="ocena">
             <th mat-header-cell *matHeaderCellDef> Ocena: </th>
-            <td mat-cell *matCellDef="let Komentar"> {{ Komentar.ocena }}</td>
+            <td mat-cell *matCellDef="let obj"> {{ obj.ocena }}</td>
         </ng-container>
 
         <ng-container matColumnDef="komentar">
             <th mat-header-cell *matHeaderCellDef> Komentar: </th>
-            <td mat-cell *matCellDef="let Komentar"> {{ Komentar.komentar }}</td>
+            <td mat-cell *matCellDef="let obj"> {{ obj.komentar }}</td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="commentsTableColumns"></tr>

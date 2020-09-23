@@ -1,5 +1,5 @@
 export interface Knjiga {
-    id:number
+    id:string
     slika:string
     naziv:string
     autor:Array<string>

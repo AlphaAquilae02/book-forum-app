@@ -20,10 +20,10 @@ export class ProfilesPageComponent implements OnInit, OnDestroy {
   showUser: Boolean
 
   constructor(private userService: UserService, private data: DataService) {
-    this.showUser = true
+    this.showUser = false
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.showUserTableParams = {
       searchObject: "profil",
       searchParams: ["ime", "prezime", "korisnickoIme"],
@@ -43,8 +43,9 @@ export class ProfilesPageComponent implements OnInit, OnDestroy {
     this.data.requestedUser.subscribe(requestedUser => this.requestedUser = requestedUser)
     if (this.requestedUser != "")
       this.openProfile()
-    else
-      this.data.setLoadedUser(this.userService.nadjiKorisnikaId(this.data.dohvatiKorisnika().id))
+    else {
+      this.showUser = true
+    }
   }
 
   ngOnDestroy(): void {
@@ -52,11 +53,11 @@ export class ProfilesPageComponent implements OnInit, OnDestroy {
     this.data.setTableData([])
   }
 
-  openProfile(): void {
-    this.data.setLoadedUser(this.userService.nadjiKorisnikaKorisnickoIme(this.requestedUser))
+  async openProfile(): Promise<void> {
+    this.data.setLoadedUser(await this.userService.nadjiKorisnikaKorisnickoIme(this.requestedUser))
     this.showUser = true
     if (this.profileChild) {
-      this.profileChild.prikaziKorisnika()
+      this.profileChild.loadUserData()
     }
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-change-password',
@@ -12,7 +13,7 @@ export class ChangePasswordComponent implements OnInit {
   novaLozinka:string
   novaLozinka2:string
 
-  constructor(private router:Router) {
+  constructor(private router:Router, private userService:UserService) {
     this.emailAuthenticated = false
    }
 
@@ -24,6 +25,11 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   changePassword():void {
+    /*if (novaLozinka == novaLozinka2)
+      await this.userService.updateUser(id{ lozinka: novaLozinka})
+    else 
+      novaLozinka = ""
+      novaLozinka2 = ""*/
     this.back()
   }
 

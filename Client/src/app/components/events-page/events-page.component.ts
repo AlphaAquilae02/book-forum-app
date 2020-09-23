@@ -18,13 +18,18 @@ export class EventsPageComponent implements OnInit, OnDestroy {
       searchObject: "desavanje",
       searchParams: ["naziv", "aktivno"],
       linkParam: "naziv",
-      tableData: this.eventService.getAllEvents(),
+      tableData: [],
       headerMap: {
         naziv: "Naziv",
         aktivno: "Status"
       },
       buttonLabel: ""
     }
+    this.populateEvents()
+  }
+
+  async populateEvents() {
+    this.showEventsTableParams.tableData = await this.eventService.getAllEvents()
   }
 
   ngOnDestroy(): void {

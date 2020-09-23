@@ -3,6 +3,8 @@
         <br>
         <mat-card class="mat-elevation-z8">
 
+            <!-- Ovde ti je input za sliku, ti menjaj ako treba-->
+            <input type="file">
             <br>
 
             <mat-form-field appearance="legacy">
@@ -55,12 +57,13 @@
             </mat-form-field>
             <br>
 
-            <div class="captcha">
+            <!--<div class="captcha">
                 <ngx-recaptcha2 #captchaElem [siteKey]="siteKey" (success)="captchaCheck = true">
                 </ngx-recaptcha2>
-            </div>
+            </div>-->
 
-            <button mat-raised-button *ngIf="captchaCheck" (click)="register()"> Zavrsi registraciju </button><br>
+            <!--<button mat-raised-button *ngIf="captchaCheck" (click)="register()"> Zavrsi registraciju </button><br>-->
+            <button mat-raised-button *ngIf="true" (click)="register()"> Zavrsi registraciju </button><br>
             <button mat-raised-button (click)="back()">Nazad</button>
         </mat-card>
     </div>

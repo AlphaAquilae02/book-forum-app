@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.data.postaviKorisnika({
-      id: 0,
+      id: '0',
       AT: 0,
       ime: '',
       prezime:' ',
@@ -38,10 +38,10 @@ export class LoginComponent implements OnInit {
     });
   }
   
-  login():void {
+  async login():Promise<void> {
     var userFound:boolean = false
     if (this.validatorService.validateUsername(this.username) && this.validatorService.validatePassword(this.password) ) {
-      userFound = this.userService.korisnikLogIn(this.username, this.password)
+      userFound = await this.userService.korisnikLogIn(this.username, this.password)
     }
     
     if (userFound) {

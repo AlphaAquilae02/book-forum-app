@@ -1,6 +1,6 @@
 /* Struktura za cuvanje podataka trenutno ulogovanog korisnika */
 export interface Korisnik {
-    id:number
+    id:string
     AT:number
     ime:string
     prezime:string
@@ -11,7 +11,7 @@ export interface Korisnik {
     grad:string
     drzava:string
     email:string
-    procitaneKnjige: Array<number>
-    citamKnjige: Array<Array<number>>
-    zaCitanjeKnjige: Array<number>
+    procitaneKnjige: Array<string>
+    citamKnjige: Array<Array<any>>
+    zaCitanjeKnjige: Array<string>
 }

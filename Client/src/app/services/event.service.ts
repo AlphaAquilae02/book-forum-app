@@ -1,29 +1,39 @@
 import { Injectable } from '@angular/core';
 import { Desavanje } from '../modules/Desavanje'
+import axios, { AxiosInstance } from 'axios'
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventService {
   desavanjeLista: Desavanje[]
+  axiosRequest: AxiosInstance
 
   constructor() {
     this.fillDesavanjaLista()
-  }
-
-  // Method returns full list of events based on params
-  nadjiDesavanja(searchParam: string, searchQuery: string): Array<Desavanje> {
-    if (Array.isArray(this.desavanjeLista[0][searchParam]))
-      return this.desavanjeLista.filter(x => x[searchParam].some(element => {
-        return (element == searchQuery)
-      }))
-    else
-      return this.desavanjeLista.filter(x => x[searchParam] == searchQuery)
+    this.axiosRequest = axios.create({
+      baseURL: 'http://localhost:5000/',
+      timeout: 1000
+    })
   }
 
   // Method returns full list of events
-  getAllEvents(): Array<Desavanje> {
-    return this.desavanjeLista
+  async getAllEvents(): Promise<Array<Desavanje>> {
+    var tempEventList: Array<Desavanje> = []
+
+    await this.axiosRequest.get(`API/events`)
+      .then(response => {
+        console.log(response)
+          response.data.forEach(element => {
+          tempEventList.push(element)
+        });
+        console.log(tempEventList)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+      console.log(tempEventList)
+      return tempEventList
   }
 
   // Temporary method for testing purposes

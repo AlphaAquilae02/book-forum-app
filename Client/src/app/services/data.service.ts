@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Korisnik } from '../modules/Korisnik';
 import { BehaviorSubject } from 'rxjs';
-import { FormControl } from '@angular/forms';
 import { Knjiga } from '../modules/Knjiga';
 
 @Injectable({
@@ -19,7 +18,7 @@ export class DataService {
 
   // Holds the currently loaded(to be displayed) book
   private loadedBookSource = new BehaviorSubject<Knjiga>({
-    id: 0,
+    id: '0',
     slika: '',
     naziv: '',
     autor: [],
@@ -34,7 +33,7 @@ export class DataService {
 
   // Holds the currently loaded(to be displayed) user
   private loadedUserSource = new BehaviorSubject<Korisnik>({
-    id: 0,
+    id: '0',
     AT: 1,
     ime: '',
     prezime:'',
@@ -59,23 +58,6 @@ export class DataService {
   // App changes tab in menu on value change 
   private selectedTabSource = new BehaviorSubject(0)
   selectedTab = this.selectedTabSource.asObservable()
-
-  // Holds the data of which object is requested for search
-  /*private searchObjectSource = new BehaviorSubject('')
-  searchObject = this.searchObjectSource.asObservable()
-
-  // Holds the data of params which are to be displayed in table
-  private searchParamsSource = new BehaviorSubject<Array<string>>([])
-  searchParams = this.searchParamsSource.asObservable()
-
-  // Holds the data which column of table should be rendered as a link
-  private searchLinkParamSource = new BehaviorSubject('')
-  searchLinkParam = this.searchLinkParamSource.asObservable()
-
-  // Holds the data in object as a form of map to which param should be 
-  // represented in which specifically format(namewise)
-  private searchTableHeadersParamsSource = new BehaviorSubject<Object>({})
-  searchTableHeadersParams = this.searchTableHeadersParamsSource.asObservable()*/
 
   // Holds the data which are to be displayed in table
   private tableDataSource = new BehaviorSubject<Array<any>>([])
@@ -133,21 +115,5 @@ export class DataService {
   setShowTable(showTable: boolean) {
     this.showTableSource.next(showTable)
   }
-
-  /*setSearchObject(object: string) {
-    this.searchObjectSource.next(object)
-  }
-
-  setSearchParams(params: Array<string>) {
-    this.searchParamsSource.next(params)
-  }
-
-  setSearchLinkParam(linkParam: string) {
-    this.searchLinkParamSource.next(linkParam)
-  }
-
-  setSearchTableHeadersParams(headerParams: object) {
-    this.searchTableHeadersParamsSource.next(headerParams)
-  }*/
 
 }

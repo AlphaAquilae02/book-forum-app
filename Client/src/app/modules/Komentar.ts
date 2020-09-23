@@ -1,7 +1,7 @@
 export interface Komentar {
-    id:number
-    korisnikId:number
-    knjigaId:number
+    id:string
+    korisnikId:string
+    knjigaId:string
     komentar:string
     ocena:number
 }
