@@ -25,6 +25,7 @@
     "express": "^4.17.1",
     "material-design-icons": "^3.0.1",
     "ngx-captcha": "^8.0.1",
+    "path": "^0.12.7",
     "rxjs": "~6.6.2",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Korisnik } from '../modules/Korisnik';
 import { DataService } from './data.service';
 import axios, { AxiosInstance } from 'axios'
+import path from 'path';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +42,7 @@ export class UserService {
 
   // Ovde menjaj, radi sta hoces ovo se poziva pri registraciji
   // Mozes i da pravis dva post req, kako god, nije mi bitno
-  dodajKorisnika(korisnik: Korisnik): void {
+  dodajKorisnika(korisnik: Korisnik, file: any): void {
     var tempUser = {
         id: '0',
         AT: 1,
@@ -58,7 +59,14 @@ export class UserService {
         citamKnjige: '[]',
         zaCitanjeKnjige: '[]'
     }
-    this.axiosRequest.post('API/users', korisnik)
+
+    const fd = new FormData();
+    
+    const ext = file.name.split('.').slice(-1)[0];
+    fd.append('image', file, `${korisnik.korisnickoIme}.${ext}`);
+    fd.append('data', JSON.stringify(korisnik));
+
+    this.axiosRequest.post('API/users', fd)
     .then(response => {
       console.log(response)
     })
