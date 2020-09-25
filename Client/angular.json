@@ -123,5 +123,8 @@
       }
     }
   },
-  "defaultProject": "Projekat"
+  "defaultProject": "Projekat",
+  "cli": {
+    "analytics": "2bbb5d83-6be8-4164-89b2-3ff90623c94f"
+  }
 }
