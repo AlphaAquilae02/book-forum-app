@@ -50,6 +50,7 @@ export class RegisterComponent implements OnInit {
   // this.korisnik.slika u sustini ne mora nista da ima, obrisacu taj parametar kasnije
   register():void {
     this.userService.dodajKorisnika(this.korisnik)
+    console.log(this.korisnik)
     this.router.navigate(['/login'])
   }
 

@@ -46,6 +46,7 @@ router.get('', (req, res) => {
                         odobrena: element.odobrena
                     }
                     books.push(book)
+                    console.log(books)
                 })
                 res.json(books)
                 connection.release()

@@ -61,7 +61,7 @@ export class BooksPageComponent implements OnInit, OnDestroy {
   }
 
   async openBook(): Promise<void> {
-    this.data.setLoadedBook( await this.bookService.nadjiKnjiguNaziv(this.requestedBook))
+    this.data.setLoadedBook( await this.bookService.nadjiKnjiguId(this.requestedBook))
     this.showBook = true
     this.showAddBook = false
     if (this.bookChild)

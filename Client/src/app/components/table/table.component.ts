@@ -11,7 +11,7 @@ import { DataService } from 'src/app/services/data.service';
 export class TableComponent implements OnInit {
   @Output() linkClick = new EventEmitter()
   @Input() tableParams: Table
-  
+
   AT: number
   tableSizeOptions: Array<number> // Set of options for table size
 
@@ -27,14 +27,23 @@ export class TableComponent implements OnInit {
   // emits that link inside table is clicked
   // parent should open object of the same type parent class is
   openSelected(nesto: string) {
-    switch (this.tableParams.searchObject) {
-      case "knjiga": this.data.changeRequestedBook(nesto)
-        break
-      case "profil": this.data.changeRequestedUser(nesto)
-        break
-      case "desavanje": console.log("Desavanje " + nesto + " trazeno!")// smisli
-        break
-    }
+    var id: string
+    this.tableParams.tableData.forEach((obj: any) => {
+      switch (this.tableParams.searchObject) {
+        case "knjiga": if (obj['naziv'] == nesto) {
+          id = obj['id']
+          this.data.changeRequestedBook(id)
+        }
+          break
+        case "profil": if (obj['korisnickoIme'] == nesto) {
+          id = obj['id']
+          this.data.changeRequestedUser(id)
+        }
+          break
+        case "desavanje": console.log("Desavanje " + nesto + " trazeno!")// smisli
+          break
+      }
+    })
     this.linkClick.emit()
   }
 
@@ -45,7 +54,7 @@ export class TableComponent implements OnInit {
         obj["odobrena"] = true
         if (obj["odobrena"])
           // Sacuvaj knjigu
-        break
+          break
       case 3: console.log("Admin click")
         console.log(obj)
     }
