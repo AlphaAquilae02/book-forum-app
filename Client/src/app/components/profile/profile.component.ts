@@ -22,6 +22,7 @@ export class ProfileComponent implements OnInit {
   // For user books display
   showUserBooks: boolean
   tableDataArray: Array<Array<any>>
+  tableFullData: Array<Array<any>>
 
   editDisabled: boolean
   commentsTableColumns: string[]
@@ -46,10 +47,11 @@ export class ProfileComponent implements OnInit {
     // For user books display
     this.showUserBooks = false
     this.tableDataArray = [[], [], []]
-    
+    this.tableFullData = [[], [], []]
+
     this.editButtonLabel = "Promeni podatke"
     this.editDisabled = true
-    
+
     this.commentsTableColumns = ['knjigaId', 'komentar', 'ocena', 'zanr']
     this.booksTableReadColumns = ['procitaneKnjige']
     this.booksTableReadingColumns = ['citamKnjige']
@@ -61,11 +63,18 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
+    // If korisnik not requested show currently logged user
+    if (this.korisnik.id == "0")
+      this.korisnik = this.data.dohvatiKorisnika()
     this.loadUserData()
   }
 
   // full pull everything method for data of currently displayed user
   async loadUserData() {
+    this.showUserBooks = false
+    this.showUserComments = false
+    this.tableDataArray = [[], [], []]
+
     // populates tableDataArray[0] with read books
     for (var i = 0; i < this.korisnik.procitaneKnjige.length; i++) {
       this.tableDataArray[0].push({
@@ -90,6 +99,9 @@ export class ProfileComponent implements OnInit {
       })
     }
 
+    // copy pulled data into placeholder
+    this.tableFullData = this.tableDataArray.slice()
+
     // sets max number for display on paginator
     this.tableMaxLength = 0
     this.tableDataArray.forEach(element => {
@@ -99,13 +111,13 @@ export class ProfileComponent implements OnInit {
 
     // populates userComments with user personalized comments
     this.userComments = await this.commentService.getUserComments(this.korisnik.id)
-    
+
     // display tables after data has been loaded
     this.showUserBooks = true
     this.showUserComments = true
 
     this.authenticateUser()
-  }  
+  }
 
   // Method to unlock/lock input fields for user params
   editBtn(): void {
@@ -126,23 +138,19 @@ export class ProfileComponent implements OnInit {
     else this.showEditButton = false
   }
 
-  // OVDE TREBA DA PROVERIS DA LI SVE RADI I KAKO RADI I DA PAZIS NA ASYNC I PREBACIVANJE!!!
   // Method to be called upon clicking on book name link
-  // Ovde je prosledjen ID od trazene knjige
   otvoriKnjigu(requestedBook: string): void {
-    console.log(requestedBook)
-    //this.data.changeRequestedBook(requestedBook)
-    //this.data.changeTab(0)
+    this.data.changeRequestedBook(requestedBook)
+    this.data.changeTab(0)
   }
 
   // Method of pagination event change used to update shown data in table
-  // OK I FUCKED UP SOMETHING
-  onPageChanged(event: any) {
-    let firstCut = event.pageIndex * event.pageSize;
-    let secondCut = firstCut + event.pageSize;
-    this.tableDataArray[0] = this.korisnik.procitaneKnjige.slice(firstCut, secondCut);
-    this.tableDataArray[1] = this.korisnik.citamKnjige.slice(firstCut, secondCut);
-    this.tableDataArray[2] = this.korisnik.zaCitanjeKnjige.slice(firstCut, secondCut);
+  onPageChanged(e) {
+    let firstCut = e.pageIndex * e.pageSize;
+    let secondCut = firstCut + e.pageSize;
+    this.tableDataArray[0] = this.tableFullData[0].slice(firstCut, secondCut);
+    this.tableDataArray[1] = this.tableFullData[1].slice(firstCut, secondCut);
+    this.tableDataArray[2] = this.tableFullData[2].slice(firstCut, secondCut);
   }
 
 }

@@ -52,7 +52,6 @@ export class BookComponent implements OnInit {
 
   // load toggles
   loadToggles() {
-    console.log(this.ucitanaKnjiga)
     this.procitao = this.ulogovaniKorisnik.procitaneKnjige.includes(this.ucitanaKnjiga.id)
     this.citam = false
     var loaded = false
@@ -71,7 +70,6 @@ export class BookComponent implements OnInit {
   async loadComments(): Promise<void> {
     this.commentsTableData = await this.commentService.nadjiKnjigaKomentare(this.ucitanaKnjiga)
     this.commentsTableData.forEach( async (obj) => {
-      console.log(obj.korisnikId)
       var tempUser = await this.userService.nadjiKorisnikaId(obj.korisnikId)
       this.commentsTableUserData.push(tempUser.korisnickoIme)
     })
@@ -181,12 +179,13 @@ export class BookComponent implements OnInit {
   }
 
   saveChanges(): void {
-    this.userService.sacuvajKorisnika(this.ulogovaniKorisnik)
+    //this.userService.sacuvajKorisnika(this.ulogovaniKorisnik)
+    this.userService.saveUpdates(this.ulogovaniKorisnik)
     console.log(this.ulogovaniKorisnik)
   }
 
   async openUserTroughComments(korisnikId: string) {
-    this.otvoriKorisnika(await this.nadjiKorisnika(korisnikId))
+    this.otvoriKorisnika(korisnikId)
   }
 
 }

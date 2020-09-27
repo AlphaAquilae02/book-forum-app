@@ -54,10 +54,9 @@ export class ProfilesPageComponent implements OnInit, OnDestroy {
   }
 
   async openProfile(): Promise<void> {
-    this.data.setLoadedUser(await this.userService.nadjiKorisnikaKorisnickoIme(this.requestedUser))
+    this.data.setLoadedUser(await this.userService.nadjiKorisnikaId(this.requestedUser))
     this.showUser = true
-    if (this.profileChild) {
+    if (this.profileChild) 
       this.profileChild.loadUserData()
-    }
   }
 }

@@ -25,16 +25,16 @@ export class BookService {
   // Method to find the book based on param 'id'
   async nadjiKnjiguId(id: string): Promise<Knjiga> {
     var tempBook: Knjiga
-    
+
     await this.axiosRequest.get(`API/books/${id}`)
       .then(response => {
         tempBook = {
           id: response.data[0].id,
           slika: response.data[0].slika,
           naziv: response.data[0].naziv,
-          autor: [ "Leigh Bardugo" ],
+          autor: JSON.parse(response.data[0].autor),
           datumIzdavanja: response.data[0].datumIzdavanja,
-          zanr: [],
+          zanr: JSON.parse(response.data[0].zanr),
           opis: response.data[0].opis,
           prosecnaOcena: response.data[0].prosecnaOcena,
           brStrana: response.data[0].brStrana,
@@ -44,13 +44,13 @@ export class BookService {
       .catch(err => {
         console.log(err)
       })
-      return tempBook
+    return tempBook
   }
 
   // Method to find the book based on param 'naziv'
   async nadjiKnjiguNaziv(naziv: string): Promise<Knjiga> {
     var tempBook: Knjiga
-    
+
     await this.axiosRequest.get(`API/books?naziv=${naziv}`)
       .then(response => {
         tempBook = {
@@ -82,35 +82,35 @@ export class BookService {
       .then(response => {
         response.data.forEach(element => {
           var tempBook: Knjiga = {
-          id: element.id,
-          slika: element.slika,
-          naziv: element.naziv,
-          autor: JSON.parse(element.autor), //[ "Leigh Bardugo" ],
-          datumIzdavanja: element.datumIzdavanja,
-          zanr: JSON.parse(element.autor),
-          opis: element.opis,
-          prosecnaOcena: element.prosecnaOcena,
-          brStrana: element.brStrana,
-          odobrena: element.odobrena
-        }
-        tempBookList.push(tempBook)
+            id: element.id,
+            slika: element.slika,
+            naziv: element.naziv,
+            autor: JSON.parse(element.autor),
+            datumIzdavanja: element.datumIzdavanja,
+            zanr: JSON.parse(element.autor),
+            opis: element.opis,
+            prosecnaOcena: element.prosecnaOcena,
+            brStrana: element.brStrana,
+            odobrena: element.odobrena
+          }
+          tempBookList.push(tempBook)
         })
       })
       .catch(err => {
         console.log(err)
       })
-      return tempBookList
+    return tempBookList
   }
 
   async getBookName(knjigaId: string): Promise<string> {
-    var bookName:string = ""
+    var bookName: string = ""
     await this.axiosRequest.get(`API/books/name/${knjigaId}`)
-    .then(response => {
-      bookName =  response.data.naziv
-    })
-    .catch(err => {
-      console.log(err)
-    })
+      .then(response => {
+        bookName = response.data.naziv
+      })
+      .catch(err => {
+        console.log(err)
+      })
     return bookName
   }
 

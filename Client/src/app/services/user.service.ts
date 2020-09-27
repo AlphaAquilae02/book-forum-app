@@ -22,60 +22,79 @@ export class UserService {
   sacuvajKorisnika(korisnik: Korisnik): void {
     console.log(korisnik)
     var tempUser = {
-        ime: korisnik.ime,
-        prezime: korisnik.prezime,
-        datumRodjenja: korisnik.datumRodjenja,
-        grad: korisnik.grad,
-        email: korisnik.email
+      ime: korisnik.ime,
+      prezime: korisnik.prezime,
+      datumRodjenja: korisnik.datumRodjenja,
+      grad: korisnik.grad,
+      email: korisnik.email
     }
 
     this.axiosRequest.put(`API/users?id=${korisnik.id}`, tempUser)
-    .then(response => {
-      console.log(response)
-    })
-    .catch(err => {
-      console.log(err)
-    })
+      .then(response => {
+        console.log(response)
+      })
+      .catch(err => {
+        console.log(err)
+      })
 
+  }
+
+  // skontaj ovo u najmladjem if da bi mogao da hvatas razlike
+  // i time saljes update req samo onoga sto je zapravo promenjeno
+  saveUpdates(korisnik: Korisnik): void {
+    console.log(korisnik)
+    var original: Korisnik = this.data.dohvatiKorisnika()
+    console.log(Object.keys(original))
+    var queries: string = ""
+    Object.keys(original).forEach( string => {
+      //console.log(string)
+      if(string != "id" && string != "AT") {
+        if (korisnik[string] != original[string]) {
+          console.log(string)
+          //queries = queries.concat(string, "=", `${korisnik[string]}`)
+        }
+      }
+    })
+    //console.log(queries)
   }
 
   // Ovde menjaj, radi sta hoces ovo se poziva pri registraciji
   // Mozes i da pravis dva post req, kako god, nije mi bitno
   dodajKorisnika(korisnik: Korisnik): void {
     var tempUser = {
-        id: '0',
-        AT: 1,
-        ime: korisnik.ime,
-        prezime: korisnik.prezime,
-        slika: korisnik.slika,
-        korisnickoIme: korisnik.korisnickoIme,
-        lozinka: korisnik.lozinka,
-        datumRodjenja: korisnik.datumRodjenja,
-        grad: korisnik.grad,
-        drzava: korisnik.drzava,
-        email: korisnik.email,
-        procitaneKnjige: '[]',
-        citamKnjige: '[]',
-        zaCitanjeKnjige: '[]'
+      id: '0',
+      AT: 1,
+      ime: korisnik.ime,
+      prezime: korisnik.prezime,
+      slika: korisnik.slika,
+      korisnickoIme: korisnik.korisnickoIme,
+      lozinka: korisnik.lozinka,
+      datumRodjenja: korisnik.datumRodjenja,
+      grad: korisnik.grad,
+      drzava: korisnik.drzava,
+      email: korisnik.email,
+      procitaneKnjige: '[]',
+      citamKnjige: '[]',
+      zaCitanjeKnjige: '[]'
     }
     this.axiosRequest.post('API/users', korisnik)
-    .then(response => {
-      console.log(response)
-    })
-    .catch(err => {
-      console.log(err)
-    })
+      .then(response => {
+        console.log(response)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   // NOT TESTED
   obrisiKorisnika(korisnik: Korisnik): void {
     this.axiosRequest.delete(`API/users?id=${korisnik.id}`)
-    .then(response => {
-      console.log(response)
-    })
-    .catch(err => {
-      console.log(err)
-    })
+      .then(response => {
+        console.log(response)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   // Called on user input
@@ -84,7 +103,7 @@ export class UserService {
 
     await this.axiosRequest.get(`API/users?${searchParam}=${searchQuery}`)
       .then(response => {
-          response.data.forEach(element => {
+        response.data.forEach(element => {
           element.procitaneKnjige = JSON.parse(element.procitaneKnjige)
           element.citamKnjige = JSON.parse(element.citamKnjige)
           element.zaCitanjeKnjige = JSON.parse(element.zaCitanjeKnjige)
@@ -94,7 +113,7 @@ export class UserService {
       .catch(err => {
         console.log(err)
       })
-      return tempKorisnikLista
+    return tempKorisnikLista
   }
 
   // Called from within the app by the app
