@@ -2,10 +2,6 @@ import express from 'express'
 import pool from './database'
 import { v4 as uuidv4 } from 'uuid'
 import cors from 'cors'
-import { pathToFileURL } from 'url';
-import { userInfo } from 'os';
-
-
 
 const router = express.Router()
 router.use(cors())
@@ -121,32 +117,28 @@ router.get('/:korisnickoIme/:lozinka', (req, res) => {
 
 
 // sql upit ka bazi da na osnovu unetih parametara ubaci novi objekat u bazu podataka
-// router.post('', upload.single('image'), (req, res) => {
 router.post('', (req, res) => {
-    const user = JSON.parse(req.body.data);
+    const user = req.body
     var unique = true
     user.id = uuidv4()
-
-    const file:any = req.files;
-    
-    console.log(file.image);
 
     // Save image in folder, with name 'path/username.format'
 
     // Check if user.id unique in DB
 
-    // if (unique) {
-    //     pool.getConnection((err, connection) => {
-    //         if (err) throw err
-    //         var sqlQuery = `INSERT INTO users (\`id\`, \`AT\`, \`ime\`, \`prezime\`, \`slika\`, \`korisnickoIme\`, \`lozinka\`, \`datumRodjenja\`, \`grad\`, \`drzava\`, \`email\`, \`procitaneKnjige\`, \`citamKnjige\`, \`zaCitanjeKnjige\`) VALUES 
-    //     ('${user.id}', ${user.AT}, '${user.ime}', '${user.prezime}', '${user.slika}', '${user.korisnickoIme}', '${user.lozinka}', '${user.datumRodjenja}', '${user.grad}', '${user.drzava}', '${user.email}', '${user.procitaneKnjige}', '${user.citamKnjige}','${user.zaCitanjeKnjige}')`
-    //         connection.query(sqlQuery, (err, rows, fields) => {
-    //             if (err) throw err
-    //             res.json({ msg: `Uspesno dodat korisnik sa korisnickim imenom: ${user.korisnickoIme}` })
-    //             connection.release()
-    //         })
-    //     })
-    // }
+    if (unique) {
+        pool.getConnection((err, connection) => {
+            if (err) throw err
+            var sqlQuery = `INSERT INTO users (\`id\`, \`AT\`, \`ime\`, \`prezime\`, \`slika\`, \`korisnickoIme\`, \`lozinka\`, \`datumRodjenja\`, \`grad\`, \`drzava\`, \`email\`, \`procitaneKnjige\`, \`citamKnjige\`, \`zaCitanjeKnjige\`) VALUES 
+        ('${user.id}', ${user.AT}, '${user.ime}', '${user.prezime}', '${user.slika}', '${user.korisnickoIme}', '${user.lozinka}', '${user.datumRodjenja}', '${user.grad}', '${user.drzava}', '${user.email}', '${user.procitaneKnjige}', '${user.citamKnjige}','${user.zaCitanjeKnjige}')`
+            connection.query(sqlQuery, (err, rows, fields) => {
+                if (err) throw err
+
+                res.json({ msg: `Uspesno dodat korisnik sa korisnickim imenom: ${user.korisnickoIme}` })
+                connection.release()
+            })
+        })
+    }
 })
 
 // sql upit ka bazi da na osnovu parametara unese nove vrednosti u objekat
