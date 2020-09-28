@@ -17,6 +17,18 @@ export class BookService {
     })
   }
 
+  async imageExists(path:String): Promise<boolean> {
+    var returnBool = false
+    await this.axiosRequest.get(`API/image?path=${path}`)
+    .then(res => {
+      returnBool = (res.status == 200) ? true : false
+    })
+    .catch(err => {
+      console.log(err)
+    })
+    return returnBool
+  }
+
   // Method to add a book in database
   dodajKnjigu(knjiga: Knjiga): void {
     this.knjigeLista.push(knjiga)

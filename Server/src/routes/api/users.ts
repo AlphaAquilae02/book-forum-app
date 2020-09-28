@@ -122,6 +122,16 @@ router.post('', (req, res) => {
     var unique = true
     user.id = uuidv4()
 
+<<<<<<< Updated upstream
+=======
+    const file:any = req.files;
+    var filePath: string = file.image.file.replace(/[\\]/g, '%2F') // ovo saljes na user.slika
+    filePath = '/image/'.concat(filePath)
+    
+    console.log(file.image);
+    console.log(`File Path: ${filePath}`)
+
+>>>>>>> Stashed changes
     // Save image in folder, with name 'path/username.format'
 
     // Check if user.id unique in DB
@@ -185,20 +195,3 @@ router.delete('', (req, res) => {
 
 module.exports = router
 export default router
-
-/*const user = {
-        id: req.body.id,
-        AT: req.body.AT,
-        ime: req.body.ime,
-        prezime: req.body.prezime,
-        slika: req.body.slika,
-        korisnickoIme: req.body.korisnickoIme,
-        lozinka: req.body.lozinka,
-        datumRodjenja: req.body.datumRodjenja,
-        grad: req.body.grad,
-        drzava: req.body.drzava,
-        email: req.body.email,
-        procitaneKnjige: req.body.procitaneKnjige,
-        citamKnjige: req.body.citamKnjige,
-        zaCitanjeKnjige: req.body.zaCitanjeKnjige
-    }*/

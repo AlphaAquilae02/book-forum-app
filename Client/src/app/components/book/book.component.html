@@ -1,6 +1,7 @@
 <br>
 <mat-card class="mat-elevation-z8">
-    <img src="https://bit.ly/2G5Fz3u" alt="ninja" width="178" height="100"><br>
+    <img *ngIf="imageExists" src="{{ path }}" alt="{{ ucitanaKnjiga.naziv }}" width="300" height="300"><br>
+    <img *ngIf="!imageExists" src="assets/img/DefaultBook.jpg" alt="res/DefaultProfile.png" width="300" height="300"><br>
 
     <h3><b>{{ ucitanaKnjiga.naziv }}</b></h3>
     <div *ngIf="ulogovaniKorisnik.AT>0 && ucitanaKnjiga.odobrena">

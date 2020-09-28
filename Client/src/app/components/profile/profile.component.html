@@ -2,7 +2,9 @@
 <div>
   
   <mat-card class="mat-elevation-z8">
-    <img src="https://bit.ly/2G5Fz3u" alt="ninja" width="178" height="100"><br>
+    <!-- OVO RADI ZA SLIKU, NISTA NE MENJAJ!!! -->
+    <img *ngIf="imageExists" src="{{ path }}" alt="{{ korisnik.korisnickoIme }}" width="150" height="150"><br>
+    <img *ngIf="!imageExists" src="assets/img/DefaultProfile.png" alt="res/DefaultProfile.png" width="150" height="150"><br>
     <h3>{{ korisnik.korisnickoIme }}</h3>
   </mat-card>
   <br>

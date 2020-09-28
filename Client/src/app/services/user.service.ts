@@ -14,8 +14,20 @@ export class UserService {
     this.fillPreduzeceLista() // temp za punjenje
     this.axiosRequest = axios.create({
       baseURL: 'http://localhost:5000/',
-      timeout: 1000
+      timeout: 1500
     })
+  }
+
+  async imageExists(path:String): Promise<boolean> {
+    var returnBool = false
+    await this.axiosRequest.get(`API/image?path=${path}`)
+    .then(res => {
+      returnBool = (res.status == 200) ? true : false
+    })
+    .catch(err => {
+      console.log(err)
+    })
+    return returnBool
   }
 
   // On user edit params

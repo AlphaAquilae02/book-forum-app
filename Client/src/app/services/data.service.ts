@@ -70,11 +70,6 @@ export class DataService {
   constructor() {
   }
 
-  /*  Ovde mozda treba da se stavi da kad god se zove ova metoda on odradi refresh na bazi
-   *  ali obavezno proveri da li tako da odradis jer bi se to pozvalo i prvi put kada podesavas 
-   *  session logged user!   
-   */
-
   setLoggedUserAT(at:number):void {
     this.loggedUserATSource.next(at)
   }

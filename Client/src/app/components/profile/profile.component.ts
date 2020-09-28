@@ -3,8 +3,6 @@ import { DataService } from 'src/app/services/data.service';
 import { Korisnik } from 'src/app/modules/Korisnik';
 import { BookService } from 'src/app/services/book.service';
 import { CommentService } from 'src/app/services/comment.service';
-import { Komentar } from 'src/app/modules/Komentar';
-import { Knjiga } from 'src/app/modules/Knjiga';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -40,6 +38,9 @@ export class ProfileComponent implements OnInit {
   tableSizeInitial: number
   tableMaxLength: number
 
+  imageExists: boolean
+  path: String
+
   constructor(private userService: UserService, private data: DataService, private bookService: BookService, private commentService: CommentService) {
     // For user comments display
     this.showUserComments = false
@@ -49,6 +50,11 @@ export class ProfileComponent implements OnInit {
     this.tableDataArray = [[], [], []]
     this.tableFullData = [[], [], []]
 
+<<<<<<< Updated upstream
+=======
+    this.imageExists = false
+
+>>>>>>> Stashed changes
     this.editButtonLabel = "Promeni podatke"
     this.editDisabled = true
 
@@ -66,11 +72,21 @@ export class ProfileComponent implements OnInit {
     // If korisnik not requested show currently logged user
     if (this.korisnik.id == "0")
       this.korisnik = this.data.dohvatiKorisnika()
+<<<<<<< Updated upstream
+=======
+    this.path = `API/image?path=${this.korisnik.slika}`
+>>>>>>> Stashed changes
     this.loadUserData()
   }
 
   // full pull everything method for data of currently displayed user
   async loadUserData() {
+<<<<<<< Updated upstream
+=======
+    if (this.korisnik.slika.length != 0) 
+      this.imageExists = await this.userService.imageExists(this.korisnik.slika)
+
+>>>>>>> Stashed changes
     this.showUserBooks = false
     this.showUserComments = false
     this.tableDataArray = [[], [], []]

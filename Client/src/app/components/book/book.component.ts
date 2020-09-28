@@ -27,6 +27,9 @@ export class BookComponent implements OnInit {
   ocena: number
   komentar: string
 
+  imageExists: boolean
+  path: String
+
   isReadingBookInfo: Array<any> // [bookId, progressValue, isReading]
 
   constructor(private commentService: CommentService, private data: DataService, private userService: UserService) {
@@ -34,10 +37,12 @@ export class BookComponent implements OnInit {
     this.commentsTableUserData = []
     this.commentsTableColumns = ['korisnikId', 'ocena', 'komentar']
     this.isReadingBookInfo = [0, 0, 0]
+    this.imageExists = false
   }
 
   ngOnInit() {
     this.data.loadedBook.subscribe(book => this.ucitanaKnjiga = book)
+    this.path = `API/image?path=${this.ucitanaKnjiga.slika}`
     this.prikaziKjigu()
   }
 
@@ -48,6 +53,12 @@ export class BookComponent implements OnInit {
     this.loadToggles()
     this.loadComments()
     this.loadUserComment()
+    this.checkImage()
+  }
+
+  async checkImage(): Promise<void> {
+    if (this.ucitanaKnjiga.slika.length != 0)
+      this.imageExists = await this.userService.imageExists(this.ucitanaKnjiga.slika)
   }
 
   // load toggles

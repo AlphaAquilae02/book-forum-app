@@ -23,6 +23,7 @@ app.use('/api/users', require('./routes/api/users'))
 app.use('/api/books', require('./routes/api/books'))
 app.use('/api/events', require('./routes/api/events'))
 app.use('/api/comments', require('./routes/api/comments'))
+app.use('/api/image', require('./routes/api/image'))
 
 const server = http.createServer(app)
 
