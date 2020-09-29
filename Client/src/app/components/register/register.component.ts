@@ -18,6 +18,7 @@ export class RegisterComponent implements OnInit {
   passwordCheck:boolean
   emailCheck:boolean
 
+  file = null;
 
   constructor(private router:Router, private userService:UserService, private validatorService: ValidatorService) {
     this.siteKey = "6Le2UcUZAAAAAHKv4dh2moTO_XPyNeDIbb4pY7ew"
@@ -44,12 +45,16 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onFileSelected(event){
+    this.file = <File>event.target.files[0];
+  }
+
   // Ovde menjaj, radi sta hoces
   // Slika nek se cuva u nekom folderu, nije bitno kako ti namestis ja cu lagano promeniti path
   // Ime slike mora da bude 'username.format'
   // this.korisnik.slika u sustini ne mora nista da ima, obrisacu taj parametar kasnije
   register():void {
-    this.userService.dodajKorisnika(this.korisnik)
+    this.userService.dodajKorisnika(this.korisnik, this.file)
     console.log(this.korisnik)
     this.router.navigate(['/login'])
   }

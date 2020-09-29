@@ -8,23 +8,19 @@ router.use(cors())
 
 // not allowed multiple query param search
 router.get('', (req, res) => {
-    //console.log(req.params)
-
     let books: { id: any; slika: any; naziv: any; autor: any; datumIzdavanja: any; zanr: any; opis: string; prosecnaOcena: any; }[] = []
 
     let sqlQuery: string = ''
-    if (req.query.autor ? true : false) {
+    if (req.query.autor ? true : false)
         sqlQuery = `SELECT * FROM books WHERE autor LIKE "%${req.query.autor}%"`
-    }
-    else if (req.query.naziv ? true : false) {
+    else if (req.query.naziv ? true : false)
         sqlQuery = `SELECT * FROM books WHERE naziv LIKE "%${req.query.naziv}%"`
-    }
-    else if (req.query.zanr ? true : false) {
+    else if (req.query.zanr ? true : false)
         sqlQuery = `SELECT * FROM books WHERE zanr LIKE "%${req.query.zanr}%"`
-    }
-    else {
+    else if (req.query.odobrena ? true : false)
+        sqlQuery = `SELECT * FROM books WHERE odobrena=0`
+    else
         sqlQuery = 'SELECT * FROM books'
-    }
 
     if (sqlQuery.length != 0) {
         pool.getConnection((err, connection) => {
@@ -59,9 +55,34 @@ router.get('', (req, res) => {
     }
 })
 
+router.get('/genres/all', (req, res) => {
+
+    let zanroviLista: Array<any> = []
+
+    let sqlQuery: string = `SELECT * FROM zanrovi`
+
+    if (sqlQuery.length != 0) {
+        pool.getConnection((err, connection) => {
+            if (err) throw err
+            connection.query(sqlQuery, (err, rows, fields) => {
+                if (err) throw err
+
+                rows.forEach((element: any) => {
+                    zanroviLista.push(element.tip)
+                })
+                res.json(zanroviLista)
+                connection.release()
+            })
+        })
+    }
+    else {
+        res.json({ msg: `Error` })
+    }
+})
+
 router.get('/:id', (req, res) => {
 
-    let books: { id: any; slika: any; naziv: any; autor: any; datumIzdavanja: any; zanr: any; opis: string; prosecnaOcena: any; }[] = []
+    let books: Array<any> = []
 
     let sqlQuery: string = `SELECT * FROM books WHERE id="${req.params.id}"`
 
@@ -127,8 +148,8 @@ router.post('', (req, res) => {
     if (unique) {
         pool.getConnection((err, connection) => {
             if (err) throw err
-            var sqlQuery = `INSERT INTO users (\`id\`, \`slika\`, \`naziv\`, \`autor\`, \`datumIzdavanja\`, \`zanr\`, \`opis\`, \`prosecnaOcena\`, \`brStrana\`, \`odobrena\`) VALUES 
-            ('${book.id}', '${book.slika}', '${book.naziv}', '${book.autor}', '${book.datumIzdavanja}', '${book.zanr}', '${book.opis}', ${book.prosecnaOcena}, ${book.brStrana}, ${book.odobrena})`
+            var sqlQuery = `INSERT INTO books (\`id\`, \`slika\`, \`naziv\`, \`autor\`, \`datumIzdavanja\`, \`zanr\`, \`opis\`, \`prosecnaOcena\`, \`brStrana\`, \`odobrena\`) VALUES 
+            ('${book.id}', '${book.slika}', '${book.naziv}', '${JSON.stringify(book.autor)}', '${book.datumIzdavanja}', '${JSON.stringify(book.zanr)}', '${book.opis}', ${book.prosecnaOcena}, ${book.brStrana}, ${book.odobrena})`
             connection.query(sqlQuery, (err, rows, fields) => {
                 if (err) throw err
 
@@ -143,18 +164,34 @@ router.post('', (req, res) => {
 router.put('', (req, res) => {
 
     const book = req.body
+    console.log(book)
 
     pool.getConnection((err, connection) => {
         if (err) throw err
 
-        var sqlQuery = `UPDATE users SET `
+        var sqlQuery = `UPDATE books SET `
 
         for (const property in book) {
-            if (property != 'id' || 'AT')
-                sqlQuery = sqlQuery.concat(`${property} = '${book[property]}', `);
+            if (property != 'id' || 'AT') {
+                console.log(typeof book[property])
+                if (typeof book[property] === 'boolean') {
+                    sqlQuery = sqlQuery.concat(`${property} = ${book[property]}, `)
+                    console.log('in boolean')
+                }
+                else if (typeof book[property] !== 'string') {
+                    sqlQuery = sqlQuery.concat(`${property} = '${JSON.stringify(book[property])}', `)
+                }
+                else {
+                    sqlQuery = sqlQuery.concat(`${property} = '${book[property]}', `)
+                    console.log('in else')
+                }
+            }
         }
+
         sqlQuery = sqlQuery.slice(0, -2);
-        sqlQuery = sqlQuery.concat(` WHERE id = ${req.query.id}`)
+        sqlQuery = sqlQuery.concat(` WHERE id = "${req.query.id}"`)
+
+        console.log(`sqlQuery: ${sqlQuery}`)
 
         connection.query(sqlQuery, (err, rows, fields) => {
             if (err) throw err

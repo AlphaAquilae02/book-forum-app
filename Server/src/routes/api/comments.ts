@@ -17,13 +17,7 @@ router.get('', (req, res) => {
     }
     else if (req.query.korisnikId ? true : false) {
         sqlQuery = `SELECT * FROM comment WHERE korisnikId="${req.query.korisnikId}"`
-    }/*
-    else if (req.query.korisnickoIme ? true : false) {
-        sqlQuery = `SELECT * FROM users WHERE korisnickoIme LIKE "%${req.query.korisnickoIme}%"`
     }
-    else if (req.query.id ? true : false) {
-        sqlQuery = `SELECT * FROM users WHERE id="${req.query.korisnickoIme}"`
-    }*/
     else {
         sqlQuery = 'SELECT * FROM comment'
     }
@@ -92,7 +86,7 @@ router.post('', (req, res) => {
     if (unique) {
         pool.getConnection((err, connection) => {
             if (err) throw err
-            var sqlQuery = `INSERT INTO users (\`id\`, \`korisnikId\`, \`knjigaId\`, \`komentar\`, \`ocena\`) VALUES 
+            var sqlQuery = `INSERT INTO comment (\`id\`, \`korisnikId\`, \`knjigaId\`, \`komentar\`, \`ocena\`) VALUES 
             ('${comment.id}', '${comment.korisnikId}', '${comment.knjigaId}', '${comment.komentar}', '${comment.ocena}')`
             connection.query(sqlQuery, (err, rows, fields) => {
                 if (err) throw err
@@ -112,11 +106,17 @@ router.put('', (req, res) => {
     pool.getConnection((err, connection) => {
         if (err) throw err
 
-        var sqlQuery = `UPDATE users SET `
+        var sqlQuery = `UPDATE comment SET `
 
         for (const property in user) {
-            if (property != 'id' || 'AT')
-                sqlQuery = sqlQuery.concat(`${property} = '${user[property]}', `);
+            if (property != 'id' || 'AT') {
+                if (typeof user[property] !== 'string') {
+                    sqlQuery = sqlQuery.concat(`${property} = '${JSON.stringify(user[property])}', `)
+                }
+                else {
+                    sqlQuery = sqlQuery.concat(`${property} = '${user[property]}', `)
+                }
+            }
         }
         sqlQuery = sqlQuery.slice(0, -2);
         sqlQuery = sqlQuery.concat(` WHERE id = "${req.query.id}"`)
@@ -124,11 +124,10 @@ router.put('', (req, res) => {
         connection.query(sqlQuery, (err, rows, fields) => {
             if (err) throw err
 
-            res.json({ msg: `Uspesno azuriran korisnik sa id: ${req.query.id}` })
+            res.json({ msg: `Uspesno azuriran komentar sa id: ${req.query.id}` })
             connection.release()
         })
     })
-
 })
 
 // sql upit ka bazi da se na osnovu parametra obrise objekat iz baze sa odgovarajucim id

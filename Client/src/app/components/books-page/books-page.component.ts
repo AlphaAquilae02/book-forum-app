@@ -5,6 +5,7 @@ import { BookComponent } from '../book/book.component';
 import { DataService } from 'src/app/services/data.service';
 import { Knjiga } from 'src/app/modules/Knjiga';
 import { Table } from 'src/app/modules/Table';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-books-page',
@@ -25,7 +26,7 @@ export class BooksPageComponent implements OnInit, OnDestroy {
   showBooksTableParams: Table
   showBooksTable: boolean
 
-  constructor(private location: Location, private bookService: BookService, private data: DataService) {
+  constructor(private location: Location, private bookService: BookService, private data: DataService, private userService: UserService) {
     this.showBook = false
     this.showAddBook = false
   }
@@ -72,12 +73,18 @@ export class BooksPageComponent implements OnInit, OnDestroy {
     this.showAddBook = show
   }
 
-  dodajKnjige() {
+  async dodajKnjige() {
+    // testing purposes
+    //this.userService.saveUpdates( await this.userService.nadjiKorisnikaId("63e83b8d-55bf-477d-909f-410273e77f04"))
+    //this.userService.updateUser(this.data.dohvatiKorisnika(), ['ime', 'prezime'])
+
+    // ovde stavi input pa da on kada stavi bude json pa da se to salje tamo i da se doda u bazu takav json file :3 
     console.log("Dodaj knjige")
   }
 
-  odobriKnjige() {
-    // ovde stavi da kad klikne izadje tabela sa svim neodobrenim knjigama!
+  async odobriKnjige() {
+    this.data.setTableData( await this.bookService.nadjiKnjigu('odobrena', '0'))
+    this.data.setShowTable(true)
     console.log("Odobri knjige")
   }
   

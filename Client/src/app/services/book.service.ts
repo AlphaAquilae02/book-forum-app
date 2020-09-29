@@ -10,7 +10,6 @@ export class BookService {
   axiosRequest: AxiosInstance
 
   constructor() {
-    this.fillKnjigeLista()
     this.axiosRequest = axios.create({
       baseURL: 'http://localhost:5000/',
       timeout: 1000
@@ -29,9 +28,46 @@ export class BookService {
     return returnBool
   }
 
+  async getGenres(): Promise<Array<string>> {
+    var temp: Array<string> = []
+    await this.axiosRequest.get(`API/books/genres/all`)
+    .then(res => {
+      res.data.forEach(element => {
+        temp.push(element)
+      });
+    })
+    .catch(err => {
+      console.log(err)
+    })
+    return temp
+  }
+
   // Method to add a book in database
   dodajKnjigu(knjiga: Knjiga): void {
-    this.knjigeLista.push(knjiga)
+    this.axiosRequest.post('API/books', knjiga)
+    .then(response => {
+      console.log(response)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+
+  updateBook(book: Knjiga, params: Array<string>): void {
+    var updatedParams: any = {}
+    params.forEach( param => {
+      // if ( typeof updatedParams[param] === 'boolean')
+      //   updatedParams[param] = book[param] ? 1 : 0
+      updatedParams[param] = book[param]
+    });
+
+    this.axiosRequest.put(`API/books?id=${book.id}`, updatedParams)
+      .then(response => {
+        console.log(response)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   // Method to find the book based on param 'id'
@@ -99,7 +135,7 @@ export class BookService {
             naziv: element.naziv,
             autor: JSON.parse(element.autor),
             datumIzdavanja: element.datumIzdavanja,
-            zanr: JSON.parse(element.autor),
+            zanr: JSON.parse(element.zanr),
             opis: element.opis,
             prosecnaOcena: element.prosecnaOcena,
             brStrana: element.brStrana,
@@ -124,59 +160,5 @@ export class BookService {
         console.log(err)
       })
     return bookName
-  }
-
-  // Temporary method for testing purposes
-  fillKnjigeLista(): void {
-    this.knjigeLista = [
-      {
-        id: '1',
-        slika: 'asd',
-        naziv: 'Na drini cuprija',
-        autor: ['Ivo Andric'],
-        datumIzdavanja: '01/03/1945',
-        zanr: ['Istorija', 'Fikcija'],
-        opis: 'bla bla bla',
-        prosecnaOcena: 4.5,
-        brStrana: 574,
-        odobrena: true
-      },
-      {
-        id: '2',
-        slika: 'asd',
-        naziv: 'The Revenant',
-        autor: ['Leo'],
-        datumIzdavanja: '01/03/2015',
-        zanr: ['Fantastika'],
-        opis: 'blu blu blu',
-        prosecnaOcena: 4.2,
-        brStrana: 300,
-        odobrena: true
-      },
-      {
-        id: '3',
-        slika: 'asd',
-        naziv: 'What If?',
-        autor: ['Neka likusa'],
-        datumIzdavanja: '01/03/2020',
-        zanr: ['Fantastika'],
-        opis: 'ble ble ble',
-        prosecnaOcena: 3.2,
-        brStrana: 800,
-        odobrena: false
-      },
-      {
-        id: '4',
-        slika: 'asd',
-        naziv: 'Avengers',
-        autor: ['MARVEL'],
-        datumIzdavanja: '01/03/1998',
-        zanr: ['Fantastika', 'Fikcija'],
-        opis: 'ble ble ble',
-        prosecnaOcena: 4.2,
-        brStrana: 50,
-        odobrena: true
-      }
-    ]
   }
 }

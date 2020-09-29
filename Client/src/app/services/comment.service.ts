@@ -13,7 +13,6 @@ export class CommentService {
   axiosRequest: AxiosInstance
 
   constructor(private data:DataService) {
-    this.fillKomentariLista()
     this.axiosRequest = axios.create({
       baseURL: 'http://localhost:5000/',
       timeout: 1000
@@ -30,16 +29,35 @@ export class CommentService {
       ocena: ocena
     })
   }
+  
+  addUserComment(comment: Komentar) : void {
+    this.axiosRequest.post('API/comments', comment)
+    .then(response => {
+      console.log(response)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+
+  updateUserComment(comment: Komentar, params: Array<string>): void {
+    var updatedParams: any = {}
+    params.forEach( param => {
+      updatedParams[param] = comment[param]
+    });
+
+    this.axiosRequest.put(`API/users?id=${comment.id}`, updatedParams)
+      .then(response => {
+        console.log(response)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
 
   // Method to delete a comment in database
   obrisiKomentar():void {
 
-  }
-
-  // Method to edit a comment in database
-  izmeniKomentar(komentar:string, ocena:number, korisnikId:string, knjigaId:string):void {
-    this.komentarLista.filter(x => x.korisnikId == korisnikId).filter(y => y.knjigaId == knjigaId)[0].komentar = komentar
-    this.komentarLista.filter(x => x.korisnikId == korisnikId).filter(y => y.knjigaId == knjigaId)[0].ocena = ocena
   }
 
   // Method to find the comment in database based on 'user.id' and 'book.id' params
@@ -51,22 +69,7 @@ export class CommentService {
     else return null
   }
 
-  // Method returns full list of comments based on 'user.id' param
-  async nadjiKorisnikKomentare(korisnik:Korisnik): Promise<Array<Komentar>> {
-    var tempCommentsList: Array<Komentar> = []
-
-    await this.axiosRequest.get(`API/comments?korisnikId=${korisnik.id}`)
-      .then(response => {
-          response.data.forEach(element => {
-          tempCommentsList.push(element)
-        });
-      })
-      .catch(err => {
-        console.log(err)
-      })
-    return tempCommentsList
-  }
-
+  // returns full list of comments of specific user
   async getUserComments(korisnikId: string): Promise<Array<any>> {
     let userComments: Array<any> = []
     await this.axiosRequest.get(`API/comments/${korisnikId}`)
@@ -79,9 +82,8 @@ export class CommentService {
     return userComments
   }
 
-  // Method returns full list of comments based on 'book' param
-  async nadjiKnjigaKomentare(knjiga:Knjiga): Promise<Array<Komentar>>{
-
+  // returns full list of comments of specific book
+  async getAllBookComments(knjiga:Knjiga): Promise<Array<Komentar>>{
     var tempCommentsList: Array<any> = []
 
     await this.axiosRequest.get(`API/comments?knjigaId=${knjiga.id}`)
@@ -94,32 +96,5 @@ export class CommentService {
         console.log(err)
       })
       return tempCommentsList
-  }
-
-  // Temporary method for testing purposes
-  fillKomentariLista():void {
-    this.komentarLista = [
-      {
-        id: '1',
-        korisnikId: '1',
-        knjigaId: '1',
-        komentar: 'Evo meni se ova knjiga nije svidela.',
-        ocena: 2
-      },
-      {
-        id: '2',
-        korisnikId: '2',
-        knjigaId: '1',
-        komentar: 'Glamorous AF',
-        ocena: 4.5
-      },
-      {
-        id: '3',
-        korisnikId: '2',
-        knjigaId: '2',
-        komentar: 'Did not understant a single word, except "SEX".',
-        ocena: 5
-      },
-    ]
   }
 }

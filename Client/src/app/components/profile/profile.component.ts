@@ -50,11 +50,8 @@ export class ProfileComponent implements OnInit {
     this.tableDataArray = [[], [], []]
     this.tableFullData = [[], [], []]
 
-<<<<<<< Updated upstream
-=======
     this.imageExists = false
 
->>>>>>> Stashed changes
     this.editButtonLabel = "Promeni podatke"
     this.editDisabled = true
 
@@ -69,24 +66,20 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    // If korisnik not requested show currently logged user
-    if (this.korisnik.id == "0")
-      this.korisnik = this.data.dohvatiKorisnika()
-<<<<<<< Updated upstream
-=======
-    this.path = `API/image?path=${this.korisnik.slika}`
->>>>>>> Stashed changes
     this.loadUserData()
+    this.path = `API/image?path=${this.korisnik.slika}`
   }
 
   // full pull everything method for data of currently displayed user
   async loadUserData() {
-<<<<<<< Updated upstream
-=======
+    if (this.korisnik.id == "0") {
+      this.korisnik = await this.userService.nadjiKorisnikaId(this.data.dohvatiKorisnika().id)
+      this.data.postaviKorisnika(this.korisnik)
+    }
+
     if (this.korisnik.slika.length != 0) 
       this.imageExists = await this.userService.imageExists(this.korisnik.slika)
 
->>>>>>> Stashed changes
     this.showUserBooks = false
     this.showUserComments = false
     this.tableDataArray = [[], [], []]
@@ -139,7 +132,7 @@ export class ProfileComponent implements OnInit {
   editBtn(): void {
     this.editDisabled = !this.editDisabled
     if (this.editDisabled) {
-      this.userService.sacuvajKorisnika(this.korisnik)
+      this.userService.updateUser(this.korisnik, ['ime', 'prezime', 'datumRodjenja', 'grad', 'email'])
       this.editButtonLabel = "Promeni podatke"
     }
     else

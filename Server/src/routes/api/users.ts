@@ -2,6 +2,7 @@ import express from 'express'
 import pool from './database'
 import { v4 as uuidv4 } from 'uuid'
 import cors from 'cors'
+import { type } from 'os'
 
 const router = express.Router()
 router.use(cors())
@@ -115,23 +116,19 @@ router.get('/:korisnickoIme/:lozinka', (req, res) => {
     }
 })
 
-
 // sql upit ka bazi da na osnovu unetih parametara ubaci novi objekat u bazu podataka
 router.post('', (req, res) => {
     const user = req.body
     var unique = true
     user.id = uuidv4()
 
-<<<<<<< Updated upstream
-=======
-    const file:any = req.files;
+    const file: any = req.files;
     var filePath: string = file.image.file.replace(/[\\]/g, '%2F') // ovo saljes na user.slika
     filePath = '/image/'.concat(filePath)
-    
+
     console.log(file.image);
     console.log(`File Path: ${filePath}`)
 
->>>>>>> Stashed changes
     // Save image in folder, with name 'path/username.format'
 
     // Check if user.id unique in DB
@@ -155,15 +152,22 @@ router.post('', (req, res) => {
 router.put('', (req, res) => {
 
     const user = req.body
+    console.log(user)
 
     pool.getConnection((err, connection) => {
         if (err) throw err
 
-        var sqlQuery = `UPDATE users SET `
+        var sqlQuery = `UPDATE comment SET `
 
         for (const property in user) {
-            if (property != 'id' || 'AT')
-                sqlQuery = sqlQuery.concat(`${property} = '${user[property]}', `);
+            if (property != 'id' || 'AT') {
+                if (typeof user[property] !== 'string') {
+                    sqlQuery = sqlQuery.concat(`${property} = '${JSON.stringify(user[property])}', `)
+                }
+                else {
+                    sqlQuery = sqlQuery.concat(`${property} = '${user[property]}', `)
+                }
+            }
         }
         sqlQuery = sqlQuery.slice(0, -2);
         sqlQuery = sqlQuery.concat(` WHERE id = "${req.query.id}"`)
@@ -171,7 +175,7 @@ router.put('', (req, res) => {
         connection.query(sqlQuery, (err, rows, fields) => {
             if (err) throw err
 
-            res.json({ msg: `Uspesno azuriran korisnik sa id: ${req.query.id}` })
+            res.json({ msg: `Uspesno azuriran komentar sa id: ${req.query.id}` })
             connection.release()
         })
     })
@@ -183,11 +187,11 @@ router.delete('', (req, res) => {
     var id = req.query.id ? req.query.id.valueOf() : 0
     pool.getConnection((err, connection) => {
         if (err) throw err
-        var sqlQuery = `DELETE FROM users WHERE id='${id}'`
+        var sqlQuery = `DELETE FROM comment WHERE id='${id}'`
         connection.query(sqlQuery, (err, rows, fields) => {
             if (err) throw err
 
-            res.json({ msg: `Uspesno obrisan korisnik sa id: ${id}` })
+            res.json({ msg: `Uspesno obrisan comment sa id: ${id}` })
             connection.release()
         })
     })

@@ -11,7 +11,6 @@ export class UserService {
   axiosRequest: AxiosInstance
 
   constructor(private data: DataService) {
-    this.fillPreduzeceLista() // temp za punjenje
     this.axiosRequest = axios.create({
       baseURL: 'http://localhost:5000/',
       timeout: 1500
@@ -30,72 +29,35 @@ export class UserService {
     return returnBool
   }
 
-  // On user edit params
-  sacuvajKorisnika(korisnik: Korisnik): void {
-    console.log(korisnik)
-    var tempUser = {
-      ime: korisnik.ime,
-      prezime: korisnik.prezime,
-      datumRodjenja: korisnik.datumRodjenja,
-      grad: korisnik.grad,
-      email: korisnik.email
-    }
+  updateUser(korisnik: Korisnik, params: Array<string>): void {
+    var updatedParams: any = {}
+    params.forEach( param => {
+      updatedParams[param] = korisnik[param]
+    });
 
-    this.axiosRequest.put(`API/users?id=${korisnik.id}`, tempUser)
+    this.axiosRequest.put(`API/users?id=${korisnik.id}`, updatedParams)
       .then(response => {
         console.log(response)
       })
       .catch(err => {
         console.log(err)
       })
-
   }
 
-  // skontaj ovo u najmladjem if da bi mogao da hvatas razlike
-  // i time saljes update req samo onoga sto je zapravo promenjeno
-  saveUpdates(korisnik: Korisnik): void {
-    console.log(korisnik)
-    var original: Korisnik = this.data.dohvatiKorisnika()
-    console.log(Object.keys(original))
-    var queries: string = ""
-    Object.keys(original).forEach( string => {
-      //console.log(string)
-      if(string != "id" && string != "AT") {
-        if (korisnik[string] != original[string]) {
-          console.log(string)
-          //queries = queries.concat(string, "=", `${korisnik[string]}`)
-        }
-      }
+  dodajKorisnika(korisnik: Korisnik, file: any): void {
+    const fd = new FormData();
+    
+    const ext = file.name.split('.').slice(-1)[0];
+    fd.append('image', file, `${korisnik.korisnickoIme}.${ext}`);
+    fd.append('data', JSON.stringify(korisnik));
+
+    this.axiosRequest.post('API/users', fd)
+    .then(response => {
+      console.log(response)
     })
-    //console.log(queries)
-  }
-
-  // Ovde menjaj, radi sta hoces ovo se poziva pri registraciji
-  // Mozes i da pravis dva post req, kako god, nije mi bitno
-  dodajKorisnika(korisnik: Korisnik): void {
-    var tempUser = {
-      id: '0',
-      AT: 1,
-      ime: korisnik.ime,
-      prezime: korisnik.prezime,
-      slika: korisnik.slika,
-      korisnickoIme: korisnik.korisnickoIme,
-      lozinka: korisnik.lozinka,
-      datumRodjenja: korisnik.datumRodjenja,
-      grad: korisnik.grad,
-      drzava: korisnik.drzava,
-      email: korisnik.email,
-      procitaneKnjige: '[]',
-      citamKnjige: '[]',
-      zaCitanjeKnjige: '[]'
-    }
-    this.axiosRequest.post('API/users', korisnik)
-      .then(response => {
-        console.log(response)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    .catch(err => {
+      console.log(err)
+    })
   }
 
   // NOT TESTED
@@ -183,44 +145,6 @@ export class UserService {
       })
 
     return logged
-  }
-
-  /* Totalno nebitne metode, privremeno u upotrebi radi pravljenja funkcionalnosti ostatka app */
-  fillPreduzeceLista(): void {
-    this.korisnikLista = [
-      {
-        id: '1',
-        AT: 1,
-        ime: 'Dusan',
-        prezime: 'Tomanic',
-        slika: 'nah',
-        korisnickoIme: 'tduca998',
-        lozinka: '1234',
-        datumRodjenja: '11/02/1998',
-        grad: 'Stara Pazova',
-        drzava: 'Srbija',
-        email: 'tduca998@gmail.com',
-        procitaneKnjige: [],
-        citamKnjige: [['1', 10, 1], ['2', 15, 0]],
-        zaCitanjeKnjige: []
-      },
-      {
-        id: '2',
-        AT: 2,
-        ime: 'Rory',
-        prezime: 'Wolk',
-        slika: 'gay',
-        korisnickoIme: 'rorynius',
-        lozinka: 'asd',
-        datumRodjenja: '20/05/1970',
-        grad: 'San Francisco',
-        drzava: 'USA',
-        email: 'rory@wolk.com',
-        procitaneKnjige: ['2', '3'],
-        citamKnjige: [['1', 20, 1]],
-        zaCitanjeKnjige: ['1']
-      }
-    ]
   }
 
 }

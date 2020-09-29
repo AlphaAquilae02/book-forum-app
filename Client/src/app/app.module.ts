@@ -18,6 +18,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import { MatProgressBarModule } from '@angular/material/progress-bar'
 import { NgxCaptchaModule } from 'ngx-captcha'
 import { MatRadioModule } from '@angular/material/radio'
+import { MatSelectModule } from '@angular/material/select'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
@@ -77,7 +78,8 @@ import { TableComponent } from './components/table/table.component'
     MatSlideToggleModule,
     MatProgressBarModule,
     NgxCaptchaModule,
-    MatRadioModule
+    MatRadioModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

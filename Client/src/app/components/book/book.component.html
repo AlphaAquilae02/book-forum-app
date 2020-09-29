@@ -7,7 +7,7 @@
     <div *ngIf="ulogovaniKorisnik.AT>0 && ucitanaKnjiga.odobrena">
         <mat-slide-toggle [(ngModel)]="procitao" (ngModelChange)="toggledProcitao()" [disabled]="procitao">Procitao</mat-slide-toggle>
         <mat-slide-toggle [(ngModel)]="isReadingBookInfo[2]" (ngModelChange)="toggledCita($event, true)" [disabled]="procitao">Trenutno citam</mat-slide-toggle>
-        <mat-slide-toggle [(ngModel)]="zaCitanje" (ngModelChange)="toggledZaCitanje(true)" [disabled]="citam">Procitacu je</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="zaCitanje" (ngModelChange)="toggledZaCitanje(true)" [disabled]="procitao || citam">Procitacu je</mat-slide-toggle>
     </div>
     <div *ngIf="isReadingBookInfo[2] && ucitanaKnjiga.odobrena">
         <br>
@@ -68,13 +68,15 @@
         <h3><b>Ostavi komentar:</b></h3>
         <mat-form-field appearance="legacy">
             <mat-label>ocena:</mat-label>
-            <input matInput type="number" appereance="textfield" [(ngModel)]="ocena" value="{{ ocena }}">
+            <input matInput type="number" appereance="textfield" [(ngModel)]="userComment.ocena" value="{{ userComment.ocena }}">
         </mat-form-field>
         <br>
         <mat-form-field appearance="legacy" class="customInput">
             <mat-label>Komentar:</mat-label>
-            <input matInput type="text" [(ngModel)]="komentar" value="{{ komentar }}">
+            <input matInput type="text" maxlength="1000" [(ngModel)]="userComment.komentar" value="{{ userComment.komentar }}">
+            <mat-hint align="end">{{ userComment.komentar.length }} / 1000</mat-hint>
         </mat-form-field>
+        <br>
         <button mat-raised-button (click)="saveUserComment()">SACUVAJ</button>
         <br>
     </div>

@@ -11,7 +11,7 @@ export interface Korisnik {
     grad:string
     drzava:string
     email:string
-    procitaneKnjige: Array<string>
-    citamKnjige: Array<Array<any>>
-    zaCitanjeKnjige: Array<string>
+    procitaneKnjige: Array<string> // [id, id, ... ]
+    citamKnjige: Array<Array<any>> // [[id, brStrane, citam], [], ... ] citam = 1 || 0 , citam = true = 1
+    zaCitanjeKnjige: Array<string> // [id, id, ... ]
 }

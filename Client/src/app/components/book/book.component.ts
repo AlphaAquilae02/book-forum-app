@@ -18,6 +18,7 @@ export class BookComponent implements OnInit {
   commentsTableUserData: Array<any>
   commentsTableColumns: string[]
   ulogovaniKorisnik: Korisnik
+  userComment: Komentar
 
   procitao: boolean
   citam: boolean
@@ -38,6 +39,13 @@ export class BookComponent implements OnInit {
     this.commentsTableColumns = ['korisnikId', 'ocena', 'komentar']
     this.isReadingBookInfo = [0, 0, 0]
     this.imageExists = false
+    this.userComment = {
+      id: "",
+      korisnikId: "",
+      knjigaId: "",
+      komentar: "",
+      ocena: 0
+    }
   }
 
   ngOnInit() {
@@ -47,11 +55,11 @@ export class BookComponent implements OnInit {
   }
 
   // Loads data to display on view
-  prikaziKjigu(): void {
+  async prikaziKjigu(): Promise<void> {
     this.ulogovaniKorisnik = this.data.dohvatiKorisnika()
 
     this.loadToggles()
-    this.loadComments()
+    await this.loadComments()
     this.loadUserComment()
     this.checkImage()
   }
@@ -74,13 +82,15 @@ export class BookComponent implements OnInit {
     })
     if (!loaded)
       this.isReadingBookInfo = [this.ucitanaKnjiga.id, 0, 0]
+    if (this.procitao)
+      this.isReadingBookInfo[1] = this.ucitanaKnjiga.brStrana
     this.zaCitanje = this.ulogovaniKorisnik.zaCitanjeKnjige.includes(this.ucitanaKnjiga.id)
   }
 
   // load comments for currently loaded book
   async loadComments(): Promise<void> {
-    this.commentsTableData = await this.commentService.nadjiKnjigaKomentare(this.ucitanaKnjiga)
-    this.commentsTableData.forEach( async (obj) => {
+    this.commentsTableData = await this.commentService.getAllBookComments(this.ucitanaKnjiga)
+    this.commentsTableData.forEach(async (obj) => {
       var tempUser = await this.userService.nadjiKorisnikaId(obj.korisnikId)
       this.commentsTableUserData.push(tempUser.korisnickoIme)
     })
@@ -91,23 +101,33 @@ export class BookComponent implements OnInit {
 
   // load user comment into input fields
   loadUserComment() {
-    this.komentar = ""
-    this.ocena = 0
-    this.commentsTableData.forEach( obj => {
-      if (obj.korisnikId == this.ulogovaniKorisnik.id) {
-        this.komentar = obj.komentar
-        this.ocena = obj.ocena
-      }
+    this.userComment.korisnikId = this.ulogovaniKorisnik.id
+    this.userComment.knjigaId = this.ucitanaKnjiga.id
+
+    this.commentsTableData.forEach(obj => {
+      if (obj.korisnikId == this.ulogovaniKorisnik.id)
+        this.userComment = obj
     })
   }
 
   // Saves freshly edited/added comment
   saveUserComment(): void {
-    if (this.commentService.nadjiKomentar(this.ulogovaniKorisnik.id, this.ucitanaKnjiga.id) != null)
-      this.commentService.izmeniKomentar(this.komentar, this.ocena, this.ulogovaniKorisnik.id, this.ucitanaKnjiga.id)
-    else 
-      this.commentService.dodajKomentar(this.ulogovaniKorisnik.id, this.ucitanaKnjiga.id, this.ocena, this.komentar)
-    this.loadComments()
+    var exists = false
+    this.commentsTableData.forEach( obj => {
+      if ( obj.korisnikId == this.userComment.korisnikId) {
+        exists = true
+      }
+    })
+
+    if (exists) {
+      this.commentService.updateUserComment(this.userComment, ['ocena', 'komentar'])
+      console.log('update')
+    }
+    else {
+      this.commentService.addUserComment(this.userComment)
+      console.log('add')
+    } 
+    //this.loadComments()
   }
 
   // Returns all names based on param id
@@ -126,13 +146,9 @@ export class BookComponent implements OnInit {
     this.toggledCita(this.isReadingBookInfo[2], true)
   }
 
-  toggledCita(event, save:boolean): void {
+  toggledCita(event, save: boolean): void {
     this.isReadingBookInfo[2] = event ? 1 : 0
-    if (event) {
-      this.citam = true
-      this.zaCitanje = false
-      this.toggledZaCitanje(false)
-    }
+    this.citam = event
 
     // update cita array
     var match = false
@@ -146,7 +162,7 @@ export class BookComponent implements OnInit {
     if (!match)
       this.ulogovaniKorisnik.citamKnjige.push(this.isReadingBookInfo)
 
-      if (save) this.saveChanges()
+    this.userService.updateUser(this.ulogovaniKorisnik, ['citamKnjige'])
   }
 
   toggledZaCitanje(save: boolean): void {
@@ -163,7 +179,7 @@ export class BookComponent implements OnInit {
     if (!match)
       this.ulogovaniKorisnik.zaCitanjeKnjige.push(this.ucitanaKnjiga.id)
 
-    if (save) this.saveChanges()
+    this.userService.updateUser(this.ulogovaniKorisnik, ['zaCitanjeKnjige'])
   }
 
   toggledProcitao(): void {
@@ -186,13 +202,7 @@ export class BookComponent implements OnInit {
       this.ulogovaniKorisnik.procitaneKnjige.push(this.ucitanaKnjiga.id)
     }
 
-    this.saveChanges()
-  }
-
-  saveChanges(): void {
-    //this.userService.sacuvajKorisnika(this.ulogovaniKorisnik)
-    this.userService.saveUpdates(this.ulogovaniKorisnik)
-    console.log(this.ulogovaniKorisnik)
+    this.userService.updateUser(this.ulogovaniKorisnik, ['procitaneKnjige', 'citamKnjige'])
   }
 
   async openUserTroughComments(korisnikId: string) {

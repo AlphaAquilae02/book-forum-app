@@ -76,22 +76,13 @@ export class DataService {
 
   postaviKorisnika(korisnik: Korisnik): void {
     sessionStorage.setItem('ulogovaniKorisnik', JSON.stringify(korisnik))
-    this.updateInitialUserData(korisnik)
     this.loggedUserATSource.next(korisnik.AT)
   }
 
   dohvatiKorisnika(): Korisnik {
     return JSON.parse(sessionStorage.getItem('ulogovaniKorisnik'));
   }
-
-  updateInitialUserData(updatedOriginal: Korisnik) {
-    sessionStorage.setItem('initialUserData', JSON.stringify(updatedOriginal))
-  }
-
-  getInitialUserData(): Korisnik {
-    return JSON.parse(sessionStorage.getItem('initialUserData'));
-  }
-
+  
   changeRequestedUser(newRequestedUser: string) {
     this.requestedUserSource.next(newRequestedUser)
   }

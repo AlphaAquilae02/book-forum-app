@@ -50,11 +50,9 @@ export class TableComponent implements OnInit {
   buttonClick(obj: any) {
     switch (this.AT) {
       case 2: console.log("Moderator click")
-        console.log(obj)
         obj["odobrena"] = true
-        if (obj["odobrena"])
-          // Sacuvaj knjigu
-          break
+        this.bookService.updateBook(obj, ['odobrena'])
+        break
       case 3: console.log("Admin click")
         console.log(obj)
     }
