@@ -4,7 +4,7 @@
     <img *ngIf="!imageExists" src="assets/img/DefaultBook.jpg" alt="res/DefaultProfile.png" width="300" height="300"><br>
 
     <h3><b>{{ ucitanaKnjiga.naziv }}</b></h3>
-    <div *ngIf="ulogovaniKorisnik.AT>0 && ucitanaKnjiga.odobrena">
+    <div *ngIf="ulogovaniKorisnik.AT>1 && ucitanaKnjiga.odobrena">
         <mat-slide-toggle [(ngModel)]="procitao" (ngModelChange)="toggledProcitao()" [disabled]="procitao">Procitao</mat-slide-toggle>
         <mat-slide-toggle [(ngModel)]="isReadingBookInfo[2]" (ngModelChange)="toggledCita($event, true)" [disabled]="procitao">Trenutno citam</mat-slide-toggle>
         <mat-slide-toggle [(ngModel)]="zaCitanje" (ngModelChange)="toggledZaCitanje(true)" [disabled]="procitao || citam">Procitacu je</mat-slide-toggle>
@@ -23,7 +23,7 @@
     <mat-divider></mat-divider><br>
 
     <label><b>Datum izdavanja:</b></label>
-    <label class="customLabel">{{ ucitanaKnjiga.datumIzdavanja }}</label>
+    <label class="customLabel">{{ formatedDate }}</label>
     <mat-divider></mat-divider><br>
 
     <label><b>Zanr:</b></label>
@@ -35,16 +35,21 @@
     <mat-divider></mat-divider><br>
 
     <label><b>Ocena:</b></label>
-    <label class="customLabel">{{ ucitanaKnjiga.prosecnaOcena }}</label>
+    <label class="customLabel">{{ ucitanaKnjiga.prosecnaOcena | number:'1.2-2' }}</label>
     <mat-divider></mat-divider><br>
+    <div *ngIf="ulogovaniKorisnik.AT==4">
+        <br>
+        <button mat-raised-button (click)="editBookInfo()">Promeni detalje</button>
+        <br>
+    </div>
 
     <table mat-table *ngIf="showTable" [dataSource]='commentsTableData' class="specialTable">
 
         <ng-container matColumnDef="korisnikId">
             <th mat-header-cell *matHeaderCellDef> Korisnik: </th>
             <td mat-cell *matCellDef="let obj; index as i">
-                <a *ngIf="ulogovaniKorisnik.AT!=0" [routerLink]="" (click)='openUserTroughComments(obj.korisnikId)'>{{ commentsTableUserData[i] }}</a>
-                <Label *ngIf="ulogovaniKorisnik.AT==0">Anonymous</Label>
+                <a *ngIf="ulogovaniKorisnik.AT>1" [routerLink]="" (click)='openUserTroughComments(obj.korisnikId)'>{{ commentsTableUserData[i] }}</a>
+                <Label *ngIf="ulogovaniKorisnik.AT<=1">Anonymous</Label>
             </td>
         </ng-container>
 
@@ -62,7 +67,7 @@
         <tr mat-row *matRowDef="let row; columns: commentsTableColumns;"></tr>
     </table>
 
-    <div *ngIf="isReadingBookInfo[1]/ucitanaKnjiga.brStrana*100 > 50 && ucitanaKnjiga.odobrena && ulogovaniKorisnik.AT!=0">
+    <div *ngIf="isReadingBookInfo[1]/ucitanaKnjiga.brStrana*100 > 50 && ucitanaKnjiga.odobrena && ulogovaniKorisnik.AT>1">
         <br>
         <mat-divider></mat-divider>
         <h3><b>Ostavi komentar:</b></h3>

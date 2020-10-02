@@ -4,6 +4,7 @@ import { Korisnik } from 'src/app/modules/Korisnik';
 import { BookService } from 'src/app/services/book.service';
 import { CommentService } from 'src/app/services/comment.service';
 import { UserService } from 'src/app/services/user.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-profile',
@@ -12,6 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class ProfileComponent implements OnInit {
   @Input() korisnik: Korisnik
+  ulogovaniKorisnik: Korisnik
 
   // For user comments display
   userComments: Array<any>
@@ -41,6 +43,8 @@ export class ProfileComponent implements OnInit {
   imageExists: boolean
   path: String
 
+  formatedDate: string
+
   constructor(private userService: UserService, private data: DataService, private bookService: BookService, private commentService: CommentService) {
     // For user comments display
     this.showUserComments = false
@@ -63,6 +67,8 @@ export class ProfileComponent implements OnInit {
     this.tableSizeOptions = [1, 5, 15, 50]
 
     this.data.loadedUser.subscribe(user => this.korisnik = user)
+    this.ulogovaniKorisnik = this.data.dohvatiKorisnika()
+    
   }
 
   ngOnInit() {
@@ -77,7 +83,10 @@ export class ProfileComponent implements OnInit {
       this.data.postaviKorisnika(this.korisnik)
     }
 
-    if (this.korisnik.slika.length != 0) 
+    this.ulogovaniKorisnik = this.data.dohvatiKorisnika()
+    this.formatedDate = "" + moment(this.korisnik.datumRodjenja).format("YYYY-MM-DD")
+
+    if (this.korisnik.slika.length != 0)
       this.imageExists = await this.userService.imageExists(this.korisnik.slika)
 
     this.showUserBooks = false
@@ -94,18 +103,21 @@ export class ProfileComponent implements OnInit {
 
     // populates tableDataArray[1] with currently reading books
     for (var i = 0; i < this.korisnik.citamKnjige.length; i++) {
-      this.tableDataArray[1].push({
-        id: this.korisnik.citamKnjige[i][0],
-        naziv: await this.bookService.getBookName(this.korisnik.citamKnjige[i][0])
-      })
+      if (this.korisnik.citamKnjige[i][2] == 1)
+        this.tableDataArray[1].push({
+          id: this.korisnik.citamKnjige[i][0],
+          naziv: await this.bookService.getBookName(this.korisnik.citamKnjige[i][0])
+        })
     }
 
     // populates tableDataArray[2] with books to be read
     for (var i = 0; i < this.korisnik.zaCitanjeKnjige.length; i++) {
-      this.tableDataArray[2].push({
-        id: this.korisnik.zaCitanjeKnjige[i],
-        naziv: await this.bookService.getBookName(this.korisnik.zaCitanjeKnjige[i])
-      })
+      if (!this.korisnik.procitaneKnjige.includes(this.korisnik.zaCitanjeKnjige[i])) {
+        this.tableDataArray[2].push({
+          id: this.korisnik.zaCitanjeKnjige[i],
+          naziv: await this.bookService.getBookName(this.korisnik.zaCitanjeKnjige[i])
+        })
+      }
     }
 
     // copy pulled data into placeholder
@@ -132,6 +144,7 @@ export class ProfileComponent implements OnInit {
   editBtn(): void {
     this.editDisabled = !this.editDisabled
     if (this.editDisabled) {
+      this.korisnik.datumRodjenja = moment(this.formatedDate).format("YYYY-M-D")
       this.userService.updateUser(this.korisnik, ['ime', 'prezime', 'datumRodjenja', 'grad', 'email'])
       this.editButtonLabel = "Promeni podatke"
     }
@@ -139,10 +152,19 @@ export class ProfileComponent implements OnInit {
       this.editButtonLabel = "Sacuvaj podatke"
   }
 
+  onAuthChange() {
+    if (this.korisnik.AT > 3)
+      this.korisnik.AT = 2
+  }
+
+  saveAuthChange() {
+    this.korisnik.datumRodjenja = moment(this.formatedDate).format("YYYY-M-D")
+      this.userService.updateUser(this.korisnik, ['AT'])
+  }
+
   // Method of authentification used to change value on field which controls display of "EDIT" button
   authenticateUser() {
-    var ulogovaniKorisnik = this.data.dohvatiKorisnika()
-    if (this.korisnik.id == ulogovaniKorisnik.id)
+    if (this.korisnik.id == this.ulogovaniKorisnik.id)
       this.showEditButton = true
     else this.showEditButton = false
   }

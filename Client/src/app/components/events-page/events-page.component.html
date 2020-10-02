@@ -1,4 +1,4 @@
 <div class="content">
-    <app-table [tableParams]="showEventsTableParams"></app-table>
+    <app-table *ngIf="showTable" [tableParams]="showEventsTableParams"></app-table>
     <br>
 </div>

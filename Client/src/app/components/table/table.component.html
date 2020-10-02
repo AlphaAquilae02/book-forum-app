@@ -9,15 +9,17 @@
                     <a *ngIf="string == tableParams.linkParam" [routerLink]=""
                         (click)='openSelected(Object[string])'>{{ Object[string] }}</a>
                     <Label *ngIf="string != tableParams.linkParam && string != 'button'">{{ Object[string] }}</Label>
-                    <Button *ngIf="string == 'button' && AT > 1 && Object['odobrena'] == false"
+                    <Button *ngIf="string == 'button' && AT == 3 && Object['odobrena'] == false"
                         (click)="buttonClick(Object)">{{ tableParams.buttonLabel }}</Button>
+                        <Button *ngIf="string == 'button' && AT > 3 && Object['AT'] == 1"
+                            (click)="buttonClick(Object)">{{ tableParams.buttonLabel }}</Button>
                 </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="tableParams.searchParams"></tr>
             <tr mat-row *matRowDef="let row; columns: tableParams.searchParams;"></tr>
         </table>
-        <mat-paginator [length]="tableParams.tableData.length" [pageSize]="tableSizeOptions[1]"
+        <mat-paginator [length]="tableFullData.length" [pageSize]="tableSizeOptions[1]"
             [pageSizeOptions]="tableSizeOptions" (page)="onPageChanged($event)"></mat-paginator>
     </mat-card>
 </div>

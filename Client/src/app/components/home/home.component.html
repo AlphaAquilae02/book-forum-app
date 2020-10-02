@@ -6,7 +6,7 @@
     <mat-tab label="Desavanja">
         <app-events-page *ngIf="selectedTab.value == 1"></app-events-page>
     </mat-tab>
-    <mat-tab *ngIf="AT" label="Profil">
+    <mat-tab *ngIf="AT>1" label="Profil">
         <app-profiles-page *ngIf="selectedTab.value == 2"></app-profiles-page>
     </mat-tab>
     <mat-tab>

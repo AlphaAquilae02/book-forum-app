@@ -26,6 +26,8 @@ export class BooksPageComponent implements OnInit, OnDestroy {
   showBooksTableParams: Table
   showBooksTable: boolean
 
+  file = null;
+
   constructor(private location: Location, private bookService: BookService, private data: DataService, private userService: UserService) {
     this.showBook = false
     this.showAddBook = false
@@ -54,6 +56,7 @@ export class BooksPageComponent implements OnInit, OnDestroy {
     this.data.loggedUserAT.subscribe(AT => this.AT = AT)
     if (this.requestedBook != "")
       this.openBook()
+    this.data.loadedBook.subscribe(book => this.ucitanaKnjiga = book)
   }
 
   ngOnDestroy(): void {
@@ -73,12 +76,19 @@ export class BooksPageComponent implements OnInit, OnDestroy {
     this.showAddBook = show
   }
 
-  async dodajKnjige() {
-    // testing purposes
-    //this.userService.saveUpdates( await this.userService.nadjiKorisnikaId("63e83b8d-55bf-477d-909f-410273e77f04"))
-    //this.userService.updateUser(this.data.dohvatiKorisnika(), ['ime', 'prezime'])
+  editBook() {
+    this.openAddBook(true)
+  }
 
-    // ovde stavi input pa da on kada stavi bude json pa da se to salje tamo i da se doda u bazu takav json file :3 
+  onFileSelected(event) {
+    if ("json" === (<string>(<File>event.target.files[0]).type).substr((<string>(<File>event.target.files[0]).type).indexOf("/")+1, (<string>(<File>event.target.files[0]).type).length-(<string>(<File>event.target.files[0]).type).indexOf("/")-1))
+      this.file = <File>event.target.files[0];
+  }
+
+  async dodajKnjige() {
+    if (this.file != null)
+      this.bookService.addMultiple(this.file)
+
     console.log("Dodaj knjige")
   }
 

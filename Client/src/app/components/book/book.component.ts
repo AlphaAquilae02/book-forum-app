@@ -1,10 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { Knjiga } from 'src/app/modules/Knjiga'
 import { CommentService } from 'src/app/services/comment.service'
 import { Komentar } from 'src/app/modules/Komentar'
 import { Korisnik } from 'src/app/modules/Korisnik'
 import { DataService } from 'src/app/services/data.service'
 import { UserService } from 'src/app/services/user.service'
+import * as moment from 'moment'
 
 @Component({
   selector: 'app-book',
@@ -13,6 +14,7 @@ import { UserService } from 'src/app/services/user.service'
 })
 export class BookComponent implements OnInit {
   @Input() ucitanaKnjiga: Knjiga;
+  @Output() editBook = new EventEmitter<any>()
 
   commentsTableData: Array<Komentar>
   commentsTableUserData: Array<any>
@@ -32,6 +34,7 @@ export class BookComponent implements OnInit {
   path: String
 
   isReadingBookInfo: Array<any> // [bookId, progressValue, isReading]
+  formatedDate: string
 
   constructor(private commentService: CommentService, private data: DataService, private userService: UserService) {
     this.commentsTableData = []
@@ -57,6 +60,8 @@ export class BookComponent implements OnInit {
   // Loads data to display on view
   async prikaziKjigu(): Promise<void> {
     this.ulogovaniKorisnik = this.data.dohvatiKorisnika()
+
+    this.formatedDate = "" + moment(this.ucitanaKnjiga.datumIzdavanja).format("D. MMMM YYYY.")
 
     this.loadToggles()
     await this.loadComments()
@@ -89,11 +94,14 @@ export class BookComponent implements OnInit {
 
   // load comments for currently loaded book
   async loadComments(): Promise<void> {
+    this.ucitanaKnjiga.prosecnaOcena = 0
     this.commentsTableData = await this.commentService.getAllBookComments(this.ucitanaKnjiga)
-    this.commentsTableData.forEach(async (obj) => {
+    for (let obj of this.commentsTableData) {
       var tempUser = await this.userService.nadjiKorisnikaId(obj.korisnikId)
       this.commentsTableUserData.push(tempUser.korisnickoIme)
-    })
+      this.ucitanaKnjiga.prosecnaOcena += obj.ocena
+    }
+    this.ucitanaKnjiga.prosecnaOcena = this.ucitanaKnjiga.prosecnaOcena / this.commentsTableData.length
     if (this.commentsTableData.length != 0)
       this.showTable = true
     else this.showTable = false
@@ -127,7 +135,7 @@ export class BookComponent implements OnInit {
       this.commentService.addUserComment(this.userComment)
       console.log('add')
     } 
-    //this.loadComments()
+    this.loadComments()
   }
 
   // Returns all names based on param id
@@ -143,6 +151,8 @@ export class BookComponent implements OnInit {
 
   // triggers on progressValueChange
   progressUpdated(): void {
+    if (this.isReadingBookInfo[2] > this.ucitanaKnjiga.brStrana)
+      this.isReadingBookInfo[2] = this.ucitanaKnjiga.brStrana
     this.toggledCita(this.isReadingBookInfo[2], true)
   }
 
@@ -203,6 +213,10 @@ export class BookComponent implements OnInit {
     }
 
     this.userService.updateUser(this.ulogovaniKorisnik, ['procitaneKnjige', 'citamKnjige'])
+  }
+
+  editBookInfo() {
+    this.editBook.emit()
   }
 
   async openUserTroughComments(korisnikId: string) {

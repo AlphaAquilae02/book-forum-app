@@ -43,8 +43,29 @@ export class BookService {
   }
 
   // Method to add a book in database
-  dodajKnjigu(knjiga: Knjiga): void {
-    this.axiosRequest.post('API/books', knjiga)
+  dodajKnjigu(knjiga: Knjiga, file: File): void {
+    console.log("dodata")
+
+    const fd = new FormData();
+    
+    const ext = file.name.split('.').slice(-1)[0];
+    fd.append('image', file, `${knjiga.naziv}.${ext}`);
+    fd.append('data', JSON.stringify(knjiga));
+
+    this.axiosRequest.post('API/books', fd)
+    .then(response => {
+      console.log(response)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+
+  addMultiple(file: File): void {
+    const fd = new FormData();
+    fd.append('file', file);
+
+    this.axiosRequest.post('API/books/multiple', fd)
     .then(response => {
       console.log(response)
     })
@@ -56,12 +77,13 @@ export class BookService {
   updateBook(book: Knjiga, params: Array<string>): void {
     var updatedParams: any = {}
     params.forEach( param => {
-      // if ( typeof updatedParams[param] === 'boolean')
-      //   updatedParams[param] = book[param] ? 1 : 0
       updatedParams[param] = book[param]
     });
 
-    this.axiosRequest.put(`API/books?id=${book.id}`, updatedParams)
+    const fd = new FormData();
+    fd.append('data', JSON.stringify(updatedParams));
+
+    this.axiosRequest.put(`API/books?id=${book.id}`, fd)
       .then(response => {
         console.log(response)
       })

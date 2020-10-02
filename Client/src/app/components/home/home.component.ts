@@ -49,7 +49,7 @@ export class HomeComponent implements OnInit {
   // Setting up tabs in main/home menu
   setTabs(): void {
     this.selectedTab.setValue(2)
-    if (this.AT == 0) {
+  if (this.AT <= 1) {
       this.logButton = 'Log In'
       this.selectedTab.setValue(0)
     }

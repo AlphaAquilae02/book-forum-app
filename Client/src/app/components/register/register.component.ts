@@ -10,25 +10,25 @@ import { ValidatorService } from 'src/app/services/validator.service'
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  siteKey:string
-  captchaCheck:boolean
-  korisnik:Korisnik
+  siteKey: string
+  captchaCheck: boolean
+  korisnik: Korisnik
 
-  usernameCheck:boolean
-  passwordCheck:boolean
-  emailCheck:boolean
+  usernameCheck: boolean
+  passwordCheck: boolean
+  emailCheck: boolean
 
   file = null;
 
-  constructor(private router:Router, private userService:UserService, private validatorService: ValidatorService) {
+  constructor(private router: Router, private userService: UserService, private validatorService: ValidatorService) {
     this.siteKey = "6Le2UcUZAAAAAHKv4dh2moTO_XPyNeDIbb4pY7ew"
     this.captchaCheck = false
-    
+
     this.korisnik = {
       id: '0', // nije bitno sta se salje jer server kreira id
-      AT: 1, // mora da se salje 1 jer je to podrazumevana vrednost autorization tokena
+      AT: 0, // mora da se salje 0 jer je to podrazumevana vrednost autorization tokena
       ime: '',
-      prezime:'',
+      prezime: '',
       slika: '', // implementirano kao string koji je u sustini path sa servera
       korisnickoIme: '',
       lozinka: '',
@@ -45,7 +45,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onFileSelected(event){
+  onFileSelected(event) {
     this.file = <File>event.target.files[0];
   }
 
@@ -53,26 +53,26 @@ export class RegisterComponent implements OnInit {
   // Slika nek se cuva u nekom folderu, nije bitno kako ti namestis ja cu lagano promeniti path
   // Ime slike mora da bude 'username.format'
   // this.korisnik.slika u sustini ne mora nista da ima, obrisacu taj parametar kasnije
-  register():void {
-    this.userService.dodajKorisnika(this.korisnik, this.file)
-    console.log(this.korisnik)
-    this.router.navigate(['/login'])
-  }
+  // async register(): Promise<void> {
 
-
-  // register():void {
-  //   this.usernameCheck = this.validatorService.validateUsername(this.korisnik.korisnickoIme)
-  //   this.passwordCheck = this.validatorService.validatePassword(this.korisnik.lozinka)
-  //   this.emailCheck = this.validatorService.validateEmail(this.korisnik.email)
-    
-  //   // input validation
-  //   if(this.usernameCheck && this.passwordCheck && this.emailCheck) {
-  //     this.userService.dodajKorisnika(this.korisnik)
-  //     this.router.navigate(['/login'])
-  //   }
+  //   this.userService.dodajKorisnika(this.korisnik, this.file)
+  //   this.router.navigate(['/login'])
   // }
 
-  back():void {
+
+  register():void {
+    this.usernameCheck = this.validatorService.validateUsername(this.korisnik.korisnickoIme)
+    this.passwordCheck = this.validatorService.validatePassword(this.korisnik.lozinka)
+    this.emailCheck = this.validatorService.validateEmail(this.korisnik.email)
+
+    // input validation
+    if(this.usernameCheck && this.passwordCheck && this.emailCheck) {
+      this.userService.dodajKorisnika(this.korisnik, this.file)
+      this.router.navigate(['/login'])
+    }
+  }
+
+  back(): void {
     this.router.navigate(['/login'])
   }
 

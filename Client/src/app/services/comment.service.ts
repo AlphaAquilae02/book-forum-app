@@ -31,7 +31,11 @@ export class CommentService {
   }
   
   addUserComment(comment: Komentar) : void {
-    this.axiosRequest.post('API/comments', comment)
+
+    const fd = new FormData();
+    fd.append('data', JSON.stringify(comment));
+
+    this.axiosRequest.post('API/comments', fd)
     .then(response => {
       console.log(response)
     })
@@ -40,13 +44,16 @@ export class CommentService {
     })
   }
 
-  updateUserComment(comment: Komentar, params: Array<string>): void {
+  async updateUserComment(comment: Komentar, params: Array<string>): Promise<void> {
     var updatedParams: any = {}
     params.forEach( param => {
       updatedParams[param] = comment[param]
     });
 
-    this.axiosRequest.put(`API/users?id=${comment.id}`, updatedParams)
+    const fd = new FormData();
+    fd.append('data', JSON.stringify(updatedParams));
+
+    await this.axiosRequest.put(`API/comments?id=${comment.id}`, fd)
       .then(response => {
         console.log(response)
       })

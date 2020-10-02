@@ -1,11 +1,14 @@
 <div class="content">
-  <br *ngIf="AT==2">
-  <button class="asd" mat-raised-button *ngIf="AT==2" (click)="dodajKnjige()">Dodaj knjige</button>
-  <button class="asd" mat-raised-button *ngIf="AT==2" (click)="odobriKnjige()">Odobri knjige</button>
-  <br *ngIf="AT==2">
+  <br *ngIf="AT>1">
+  <mat-card class="mat-elevation-z8" *ngIf="AT>1" >
+    <button *ngIf="AT>1" mat-raised-button (click)="showAddBook = true">Dodaj knjigu</button>
+    <button *ngIf="AT>2" mat-raised-button (click)="dodajKnjige()">Dodaj knjige</button>
+    <input *ngIf="AT>2"type="file" accept=".json" (change)="onFileSelected($event)">
+    <button *ngIf="AT==3"mat-raised-button (click)="odobriKnjige()">Odobri knjige</button>
+  </mat-card>
   <app-search [searchParams]="showBooksTableParams" (showAddOption)="showAddBook=$event"></app-search>
   <app-table *ngIf="showBooksTable" [tableParams]="showBooksTableParams" (linkClick)="openBook()"></app-table>
-  <app-book *ngIf="showBook"></app-book>
-  <app-add-book *ngIf="showAddBook && AT!=0"></app-add-book>
+  <app-book *ngIf="showBook" (editBook)="editBook()"></app-book>
+  <app-add-book [bookToBeEdited]="ucitanaKnjiga" *ngIf="showAddBook && AT>1"></app-add-book>
   <br>
 </div>

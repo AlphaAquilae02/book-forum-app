@@ -1,4 +1,9 @@
 <div class="content">
+    <br *ngIf="AT==4">
+    <mat-card class="mat-elevation-z8" *ngIf="AT==4">
+        <button mat-raised-button (click)="getAllUsersAuth()">Odobri registraciju korisnika</button>
+        <button mat-raised-button (click)="getAllMods()">Prikazi moderatore</button>
+    </mat-card>
     <app-search [searchParams]="showUserTableParams"></app-search>
     <app-table *ngIf="showUserTable" [tableParams]="showUserTableParams" (linkClick)="openProfile()"></app-table>
     <app-profile *ngIf="showUser"></app-profile>

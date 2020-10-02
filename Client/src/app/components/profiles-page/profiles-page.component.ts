@@ -19,6 +19,8 @@ export class ProfilesPageComponent implements OnInit, OnDestroy {
   showUserTable: boolean
   showUser: Boolean
 
+  AT: number
+
   constructor(private userService: UserService, private data: DataService) {
     this.showUser = false
   }
@@ -26,26 +28,38 @@ export class ProfilesPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.showUserTableParams = {
       searchObject: "profil",
-      searchParams: ["ime", "prezime", "korisnickoIme"],
+      searchParams: ["ime", "prezime", "korisnickoIme", "button"],
       linkParam: "korisnickoIme",
       tableData: [],
       headerMap: {
         ime: "Ime",
         prezime: "Prezime",
-        korisnickoIme: "Korisnicko Ime"
+        korisnickoIme: "Korisnicko Ime",
+        button: ""
       },
-      buttonLabel: ""
+      buttonLabel: "Odobri zahtev"
     }
     this.data.tableData.subscribe(tableData => this.showUserTableParams.tableData = tableData)
     this.data.setShowTable(false)
     this.data.showTable.subscribe(showTable => this.showUserTable = showTable)
 
     this.data.requestedUser.subscribe(requestedUser => this.requestedUser = requestedUser)
+    this.data.loggedUserAT.subscribe(AT => this.AT = AT)
     if (this.requestedUser != "")
       this.openProfile()
     else {
       this.showUser = true
     }
+  }
+
+  async getAllUsersAuth() {
+    this.data.setTableData( await this.userService.nadjiKorisnika('AT', '1'))
+    this.data.setShowTable(true)
+  }
+
+  async getAllMods() {
+    this.data.setTableData( await this.userService.nadjiKorisnika('AT', '3'))
+    this.data.setShowTable(true)
   }
 
   ngOnDestroy(): void {

@@ -35,7 +35,12 @@ export class UserService {
       updatedParams[param] = korisnik[param]
     });
 
-    this.axiosRequest.put(`API/users?id=${korisnik.id}`, updatedParams)
+    console.log(updatedParams)
+
+    const fd = new FormData();
+    fd.append('data', JSON.stringify(updatedParams));
+
+    this.axiosRequest.put(`API/users?id=${korisnik.id}`, fd)
       .then(response => {
         console.log(response)
       })
@@ -129,6 +134,7 @@ export class UserService {
   async korisnikLogIn(username: string, password: string): Promise<boolean> {
     let logged: boolean = false
     var user: Korisnik
+    console.log(`${username} ${password}`)
     await this.axiosRequest.get(`API/users/${username}/${password}`)
       .then(response => {
         user = response.data[0]

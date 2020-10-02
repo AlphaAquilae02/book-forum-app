@@ -1,6 +1,5 @@
 import express from 'express'
 import cors from 'cors'
-import { EDESTADDRREQ } from 'constants'
 
 const router = express.Router()
 router.use(cors())
@@ -12,7 +11,6 @@ router.get('', function (req, res) {
         res.sendFile(imageFolderPath + req.query.path);
     else res.sendStatus(404)
 });
-
 
 module.exports = router
 export default router

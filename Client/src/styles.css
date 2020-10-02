@@ -2,3 +2,20 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.background {
+    background-image: url('assets/img/BackgroundLibrary.jpg'); 
+    background-repeat: repeat-y;
+    background-color: #cccccc;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+}
+
+.mat-card, .mat-tab-label-container {
+    background-color:rgba(255, 255, 255, 0.9);
+}
+
+table, tbody, tr, th, td, .mat-paginator{
+    background: transparent !important;
+}

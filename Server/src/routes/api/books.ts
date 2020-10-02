@@ -2,6 +2,8 @@ import express from 'express'
 import pool from './database'
 import { v4 as uuidv4 } from 'uuid'
 import cors from 'cors'
+import fs from 'fs'
+import { rawListeners } from 'process'
 
 const router = express.Router()
 router.use(cors())
@@ -141,15 +143,19 @@ router.get('/name/:id', (req, res) => {
 
 // sql upit ka bazi da na osnovu unetih parametara ubaci novi objekat u bazu podataka
 router.post('', (req, res) => {
-    const book = req.body
+    const book = JSON.parse(req.body.data);
     var unique = true
-    book.id = uuidv4()
+
+    const file: any = (<any>req).files; // KOJI KURAC // linter proverava da ta klasa req nema to polje
+
+    var filePath: string = file.image.file.replace(/[\\]/g, '/') // ovo saljes na user.slika
+    filePath = filePath.replace('images/', '')
 
     if (unique) {
         pool.getConnection((err, connection) => {
             if (err) throw err
             var sqlQuery = `INSERT INTO books (\`id\`, \`slika\`, \`naziv\`, \`autor\`, \`datumIzdavanja\`, \`zanr\`, \`opis\`, \`prosecnaOcena\`, \`brStrana\`, \`odobrena\`) VALUES 
-            ('${book.id}', '${book.slika}', '${book.naziv}', '${JSON.stringify(book.autor)}', '${book.datumIzdavanja}', '${JSON.stringify(book.zanr)}', '${book.opis}', ${book.prosecnaOcena}, ${book.brStrana}, ${book.odobrena})`
+            ('${uuidv4()}', '${filePath}', '${book.naziv}', '${JSON.stringify(book.autor)}', '${book.datumIzdavanja}', '${JSON.stringify(book.zanr)}', '${book.opis}', ${book.prosecnaOcena}, ${book.brStrana}, ${book.odobrena})`
             connection.query(sqlQuery, (err, rows, fields) => {
                 if (err) throw err
 
@@ -160,11 +166,37 @@ router.post('', (req, res) => {
     }
 })
 
+// sql upit ka bazi da na osnovu unetih parametara ubaci novi objekat u bazu podataka
+router.post('/multiple', (req, res) => {
+    const multipleBooks: any = <File>(<any>req).files
+    var filePath = multipleBooks.file.file.replace(/[\\]/g, '/')
+    console.log(filePath)
+
+    let rawdata = fs.readFileSync(filePath);
+    let student = JSON.parse(rawdata.toString());
+
+    for (let obj of student.books) {
+        //console.log(obj.opis.replace(/[\']/g, '\'\''))
+        pool.getConnection((err, connection) => {
+            if (err) throw err
+            var sqlQuery = `INSERT INTO books (\`id\`, \`slika\`, \`naziv\`, \`autor\`, \`datumIzdavanja\`, \`zanr\`, \`opis\`, \`prosecnaOcena\`, \`brStrana\`, \`odobrena\`) VALUES 
+            ('${uuidv4()}', '', '${obj.naziv}', '${JSON.stringify(obj.autor)}', '${obj.datumIzdavanja}', '${JSON.stringify(obj.zanr)}', '${obj.opis.replace(/[\']/g, '\'\'')}', 0, 0, false)`
+            connection.query(sqlQuery, (err, rows, fields) => {
+                if (err) throw err
+
+                connection.release()
+            })
+        })
+    }
+
+    res.json(" msg: 'asd'")
+
+})
+
 // sql upit ka bazi da na osnovu parametara unese nove vrednosti u objekat
 router.put('', (req, res) => {
 
-    const book = req.body
-    console.log(book)
+    const book = JSON.parse(req.body.data);
 
     pool.getConnection((err, connection) => {
         if (err) throw err

@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Table } from 'src/app/modules/Table';
 import { BookService } from 'src/app/services/book.service';
 import { DataService } from 'src/app/services/data.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-table',
@@ -14,14 +15,15 @@ export class TableComponent implements OnInit {
 
   AT: number
   tableSizeOptions: Array<number> // Set of options for table size
+  tableFullData: Array<any>
 
-  constructor(private data: DataService, private bookService: BookService) { }
+  constructor(private data: DataService, private bookService: BookService, private userService: UserService) { }
 
   ngOnInit(): void {
     this.tableSizeOptions = [1, 5, 15, 50]
 
     this.data.loggedUserAT.subscribe(AT => this.AT = AT)
-    this.tableParams.tableData.slice(0, this.tableSizeOptions[1]);
+    this.tableFullData = this.tableParams.tableData.slice()
   }
 
   // emits that link inside table is clicked
@@ -48,12 +50,16 @@ export class TableComponent implements OnInit {
   }
 
   buttonClick(obj: any) {
+    console.log("button triggered")
     switch (this.AT) {
-      case 2: console.log("Moderator click")
+      case 3: console.log("Moderator click")
         obj["odobrena"] = true
         this.bookService.updateBook(obj, ['odobrena'])
         break
-      case 3: console.log("Admin click")
+      case 4: console.log("Admin click")
+        obj["AT"] = 2
+        this.userService.updateUser(obj, ['AT'])
+        break
         console.log(obj)
     }
   }
@@ -61,7 +67,7 @@ export class TableComponent implements OnInit {
   onPageChanged(e) {
     let firstCut = e.pageIndex * e.pageSize;
     let secondCut = firstCut + e.pageSize;
-    this.tableParams.tableData.slice(firstCut, secondCut);
+    this.tableParams.tableData = this.tableFullData.slice(firstCut, secondCut);
   }
 
 }

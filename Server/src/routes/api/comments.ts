@@ -79,7 +79,7 @@ router.get('/:korisnikId/', (req, res) => {
 
 // sql upit ka bazi da na osnovu unetih parametara ubaci novi objekat u bazu podataka
 router.post('', (req, res) => {
-    const comment = req.body
+    const comment = JSON.parse(req.body.data);
     var unique = true
     comment.id = uuidv4()
 
@@ -101,7 +101,7 @@ router.post('', (req, res) => {
 // sql upit ka bazi da na osnovu parametara unese nove vrednosti u objekat
 router.put('', (req, res) => {
 
-    const user = req.body
+    const user = JSON.parse(req.body.data);
 
     pool.getConnection((err, connection) => {
         if (err) throw err

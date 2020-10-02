@@ -6,6 +6,16 @@
     <img *ngIf="imageExists" src="{{ path }}" alt="{{ korisnik.korisnickoIme }}" width="150" height="150"><br>
     <img *ngIf="!imageExists" src="assets/img/DefaultProfile.png" alt="res/DefaultProfile.png" width="150" height="150"><br>
     <h3>{{ korisnik.korisnickoIme }}</h3>
+    <div *ngIf="ulogovaniKorisnik.AT == 4">
+    <br>
+    <mat-form-field appearance="legacy">
+      <mat-label>Nivo Autorizacije:</mat-label>
+      <input matInput type="number" [(ngModel)]="korisnik.AT" value="{{ korisnik.AT }}" (ngModelChange)="onAuthChange()">
+      <mat-hint align="start"><strong>0, 1 - gost<br>2 - korisnik<br>3 - moderator</strong></mat-hint>
+      </mat-form-field>
+      <br><br>
+      <button mt-raised-button (click)='saveAuthChange()'>Sacuvaj</button>
+    </div>
   </mat-card>
   <br>
 
@@ -23,10 +33,17 @@
     </mat-form-field>
     <br>
 
-    <mat-form-field appearance="legacy">
+    <mat-form-field *ngIf="false" appearance="legacy">
       <mat-label>Datum Rodjenja:</mat-label>
-      <input matInput [(ngModel)]="korisnik.datumRodjenja" value="{{ korisnik.datumRodjenja }}"
+      <input matInput [(ngModel)]="formatedDate" value="{{ formatedDate }}"
         disabled="{{ editDisabled }}">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="true" appearance="legacy">
+      <mat-label>Datum Rodjenja:</mat-label>
+      <input matInput [matDatepicker]="picker" [(ngModel)]="formatedDate" disabled="{{ editDisabled }}">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field appearance="legacy">
@@ -45,7 +62,7 @@
 
     <label>Last Active: OVDE DODAJ KADA JE POSLEDNJI PUT BIO LIVE</label><br>
     <label>Online: </label><span class="onlineIndicator"></span><br>
-    <button mt-raised-button *ngIf="showEditButton" (click)='editBtn()'>{{ editButtonLabel }}</button>
+    <button mt-raised-button *ngIf="ulogovaniKorisnik.id == korisnik.id" (click)='editBtn()'>{{ editButtonLabel }}</button>
   </mat-card>
   <br>
 
